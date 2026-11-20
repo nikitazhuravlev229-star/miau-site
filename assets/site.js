@@ -10,7 +10,7 @@
     if (p && p.catch) p.catch(function () {});
   });
 
-  /* 2. Сцена «Руки. Масло. Свечи.» на странице «Второй этаж» */
+  /* 2. Сцена (страница удалена, код не мешает) «Руки. Масло. Свечи.» на странице «Второй этаж» */
   var scene = document.querySelector('[data-scene]');
   if (scene) {
     var frames = scene.querySelectorAll('.fr');

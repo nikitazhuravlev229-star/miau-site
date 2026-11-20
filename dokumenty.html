@@ -7,7 +7,7 @@
 <meta name="description" content="MIAU — пространство красоты, тела и души в Москве, Фрунзенская набережная, 46. Маникюр, педикюр, макияж, массаж, йога, саундхилинг, практики.">
 <meta property="og:title" content="MIAU — документы">
 <meta property="og:image" content="assets/hero_poster.jpg">
-<link rel="icon" href="assets/flower2_wine.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
@@ -57,20 +57,29 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 .acc[open] summary::after{transform:rotate(45deg)}
 .acc summary:hover{color:#680517}
 </style>
+<link rel="preload" as="image" href="assets/emblem-wine.webp">
+<style>
+.intro{position:fixed;inset:0;z-index:100;background:#EFE4D6;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:introOut .8s ease 2.3s forwards}
+.intro img{width:min(58vw,340px);height:auto;opacity:0;animation:introIn 1.5s cubic-bezier(.33,1,.68,1) .2s forwards}
+@keyframes introIn{from{opacity:0;transform:scale(.9) rotate(-10deg);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes introOut{to{opacity:0;visibility:hidden}}
+.has-intro .load-1{animation-delay:2.6s}.has-intro .load-2{animation-delay:2.85s}.has-intro .load-img{animation-delay:2.3s}
+</style>
 </head>
 <body>
+<script>(function(){try{if(sessionStorage.getItem('miauIntro'))return;sessionStorage.setItem('miauIntro','1')}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.documentElement.classList.add('has-intro');var d=document.createElement('div');d.className='intro';d.setAttribute('aria-hidden','true');d.innerHTML='<img src="assets/emblem-wine.webp" alt="">';document.body.appendChild(d);setTimeout(function(){d.parentNode&&d.parentNode.removeChild(d);document.documentElement.classList.remove('has-intro')},3300)})();</script>
 <div style="background: #EFE4D6; overflow: hidden">
 
   <header class="wrap site-head">
     <a href="index.html" aria-label="MIAU — главная" style="line-height: 0"><img src="assets/logo-miau-beige.svg" alt="MIAU" style="height: 26px; width: auto"></a>
     <nav class="nav nav-desk" aria-label="Основное меню">
-      <a href="napravleniya.html">Направления</a><a href="vtoroy-etazh.html">Второй этаж</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a>
+      <a href="napravleniya.html">Направления</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a>
       <a class="btn btn-cream" href="kontakty.html" style="min-height: 44px; padding: 0 22px">Записаться</a>
     </nav>
     <details class="nav-mob">
       <summary><span class="nm-open">Меню</span><span class="nm-close">Закрыть</span></summary>
       <nav class="nav-sheet" aria-label="Меню">
-        <a href="index.html">Главная</a><a href="napravleniya.html">Направления</a><a href="vtoroy-etazh.html">Второй этаж</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a>
+        <a href="index.html">Главная</a><a href="napravleniya.html">Направления</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a>
         <a class="btn btn-cream" href="kontakty.html" style="margin-top: 24px; align-self: flex-start">Записаться</a>
         <p class="small" style="margin-top: auto; opacity: .7">Москва, Фрунзенская набережная, 46</p>
       </nav>
@@ -86,13 +95,13 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 
   <section class="wrap sec" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px 80px; align-items: start">
     <div>
-      <h2 class="h2 rv">Пять документов</h2>
+      <h2 class="h2 rv">Три документа</h2>
       <p class="body" style="margin-top: 16px">Тексты готовит юрист. Здесь структура каждого документа. Вопросы: [e-mail для обращений].</p>
     </div>
     <div style="grid-column: span 2; border-top: 1px solid rgba(104,5,23,.25)">
       
         <details class="acc" id="policy" style="border-bottom: 1px solid rgba(104,5,23,.25); scroll-margin-top: 24px">
-          <summary class="q">Политика конфиденциальности</summary>
+          <summary class="q">Политика конфиденциальности и cookie</summary>
           <div style="padding-bottom: 24px; display: flex; flex-direction: column; gap: 14px; max-width: 720px">
             <p class="small" style="color: #680517">Редакция от [дата]</p>
             
@@ -131,6 +140,26 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
                 <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
               </div>
             
+            
+              <div style="padding-top: 12px; border-top: 1px solid rgba(104,5,23,.15)">
+                <h3 class="h3" style="font-size: 22px">Что такое cookie</h3>
+                <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
+              </div>
+            
+              <div style="padding-top: 12px; border-top: 1px solid rgba(104,5,23,.15)">
+                <h3 class="h3" style="font-size: 22px">Какие cookie мы используем</h3>
+                <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
+              </div>
+            
+              <div style="padding-top: 12px; border-top: 1px solid rgba(104,5,23,.15)">
+                <h3 class="h3" style="font-size: 22px">Аналитика</h3>
+                <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
+              </div>
+            
+              <div style="padding-top: 12px; border-top: 1px solid rgba(104,5,23,.15)">
+                <h3 class="h3" style="font-size: 22px">Как отключить cookie</h3>
+                <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
+              </div>
           </div>
         </details>
       
@@ -173,7 +202,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
         </details>
       
         <details class="acc" id="oferta" style="border-bottom: 1px solid rgba(104,5,23,.25); scroll-margin-top: 24px">
-          <summary class="q">Публичная оферта</summary>
+          <summary class="q">Публичная оферта и правила сертификатов</summary>
           <div style="padding-bottom: 24px; display: flex; flex-direction: column; gap: 14px; max-width: 720px">
             <p class="small" style="color: #680517">Редакция от [дата]</p>
             
@@ -207,13 +236,6 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
                 <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
               </div>
             
-          </div>
-        </details>
-      
-        <details class="acc" id="sertifikaty" style="border-bottom: 1px solid rgba(104,5,23,.25); scroll-margin-top: 24px">
-          <summary class="q">Правила подарочных сертификатов</summary>
-          <div style="padding-bottom: 24px; display: flex; flex-direction: column; gap: 14px; max-width: 720px">
-            <p class="small" style="color: #680517">Редакция от [дата]</p>
             
               <div style="padding-top: 12px; border-top: 1px solid rgba(104,5,23,.15)">
                 <h3 class="h3" style="font-size: 22px">Номинал и направления</h3>
@@ -239,35 +261,6 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
                 <h3 class="h3" style="font-size: 22px">Утеря сертификата</h3>
                 <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
               </div>
-            
-          </div>
-        </details>
-      
-        <details class="acc" id="cookie" style="border-bottom: 1px solid rgba(104,5,23,.25); scroll-margin-top: 24px">
-          <summary class="q">Использование cookie</summary>
-          <div style="padding-bottom: 24px; display: flex; flex-direction: column; gap: 14px; max-width: 720px">
-            <p class="small" style="color: #680517">Редакция от [дата]</p>
-            
-              <div style="padding-top: 12px; border-top: 1px solid rgba(104,5,23,.15)">
-                <h3 class="h3" style="font-size: 22px">Что такое cookie</h3>
-                <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
-              </div>
-            
-              <div style="padding-top: 12px; border-top: 1px solid rgba(104,5,23,.15)">
-                <h3 class="h3" style="font-size: 22px">Какие cookie мы используем</h3>
-                <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
-              </div>
-            
-              <div style="padding-top: 12px; border-top: 1px solid rgba(104,5,23,.15)">
-                <h3 class="h3" style="font-size: 22px">Аналитика</h3>
-                <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
-              </div>
-            
-              <div style="padding-top: 12px; border-top: 1px solid rgba(104,5,23,.15)">
-                <h3 class="h3" style="font-size: 22px">Как отключить cookie</h3>
-                <p class="body" style="margin-top: 6px; opacity: .7">[Текст раздела]</p>
-              </div>
-            
           </div>
         </details>
       
@@ -283,19 +276,15 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
       </div>
       <nav class="small" aria-label="Разделы сайта" style="display: flex; flex-direction: column; gap: 8px">
         <span style="opacity: .55">Разделы</span>
-        <a href="napravleniya.html">Направления и цены</a><a href="vtoroy-etazh.html">Второй этаж</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a>
+        <a href="napravleniya.html">Направления и цены</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a>
       </nav>
       <div class="small" style="display: flex; flex-direction: column; gap: 8px">
         <span style="opacity: .55">Контакты</span>
         <span>Москва, Фрунзенская набережная, 46</span><span>[Часы работы]</span><a href="tel:+70000000000">[+7 000 000-00-00]</a><a href="kontakty.html">[Telegram]</a><a href="kontakty.html">[WhatsApp]</a>
       </div>
-      <nav class="small" aria-label="Документы" style="display: flex; flex-direction: column; gap: 8px">
-        <span style="opacity: .55">Документы</span>
-        <a href="dokumenty.html">Политика конфиденциальности</a><a href="dokumenty.html">Согласие на обработку персональных данных</a><a href="dokumenty.html">Публичная оферта</a><a href="dokumenty.html">Правила подарочных сертификатов</a><a href="dokumenty.html">Использование cookie</a>
-      </nav>
     </div>
     <div class="wrap small" style="padding-block: 20px 32px; border-top: 1px solid rgba(239,228,214,.15); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; opacity: .7">
-      <span>© 2026 MIAU</span><span>[ООО или ИП «…», ИНН …, ОГРН …]</span>
+      <span>© 2026 MIAU · <a href="dokumenty.html">Документы</a></span><span>[ООО или ИП «…», ИНН …, ОГРН …]</span>
     </div>
   </footer>
 </div>
