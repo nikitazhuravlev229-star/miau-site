@@ -4,9 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MIAU — документы</title>
-<meta name="description" content="MIAU — пространство красоты, тела и души в Москве, Фрунзенская набережная, 46. Маникюр, педикюр, макияж, массаж, йога, саундхилинг, практики.">
+<meta name="description" content="Документы MIAU: политика конфиденциальности и cookie, согласие на обработку персональных данных, публичная оферта.">
+<meta name="robots" content="noindex">
 <meta property="og:title" content="MIAU — документы">
-<meta property="og:image" content="assets/hero_poster.jpg">
+<meta property="og:image" content="https://nikitazhuravlev229-star.github.io/miau-site/assets/hero_poster.jpg">
+<meta property="og:description" content="Документы MIAU: политика конфиденциальности и cookie, согласие на обработку персональных данных, публичная оферта.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
 <link rel="icon" href="assets/favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
 <style>
@@ -46,11 +50,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 @media (max-width:960px){.nav-desk{display:none}.nav-mob{display:block}}
 .prow{display:grid;grid-template-columns:1fr 90px 110px 110px;gap:16px;align-items:center}
 @media (max-width:640px){.prow{grid-template-columns:1fr auto;row-gap:6px}.prow>:first-child{grid-column:1/-1}.prow-head{display:none}.prow>a{justify-self:start !important}}
-@keyframes rvUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
-@keyframes rvClip{from{clip-path:inset(16% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
-@supports (animation-timeline: view()){.rv{animation:rvUp linear both;animation-timeline:view();animation-range:entry 0% cover 28%}.zoom{animation:rvClip linear both;animation-timeline:view();animation-range:entry 0% cover 35%}}
 @media (max-width:640px){.sec{padding-block:56px}}
-@media (prefers-reduced-motion: reduce){.rv,.zoom{animation:none !important}}
 .acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;min-height:44px;padding:18px 0;font:400 24px/1.2 'Cormorant Garamond',Georgia,serif;color:#2A030C}
 .acc summary::-webkit-details-marker{display:none}
 .acc summary::after{content:"+";font:400 20px/1 'Montserrat',sans-serif;color:#680517;transition:transform .3s ease}
@@ -58,6 +58,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 .acc summary:hover{color:#680517}
 </style>
 <link rel="preload" as="image" href="assets/emblem-wine.webp">
+<link rel="stylesheet" href="assets/fx.css">
 <style>
 .intro{position:fixed;inset:0;z-index:100;background:#EFE4D6;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:introOut .8s ease 2.3s forwards}
 .intro img{width:min(58vw,340px);height:auto;opacity:0;animation:introIn 1.5s cubic-bezier(.33,1,.68,1) .2s forwards}
@@ -67,8 +68,8 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 </style>
 </head>
 <body>
-<script>(function(){try{if(sessionStorage.getItem('miauIntro'))return;sessionStorage.setItem('miauIntro','1')}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.documentElement.classList.add('has-intro');var d=document.createElement('div');d.className='intro';d.setAttribute('aria-hidden','true');d.innerHTML='<img src="assets/emblem-wine.webp" alt="">';document.body.appendChild(d);setTimeout(function(){d.parentNode&&d.parentNode.removeChild(d);document.documentElement.classList.remove('has-intro')},3300)})();</script>
-<div style="background: #EFE4D6; overflow: hidden">
+<script>(function(){if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))document.documentElement.classList.add('js-fx');try{if(sessionStorage.getItem('miauIntro'))return;sessionStorage.setItem('miauIntro','1')}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.documentElement.classList.add('has-intro');var d=document.createElement('div');d.className='intro';d.setAttribute('aria-hidden','true');d.innerHTML='<img src="assets/emblem-wine.webp" alt="">';document.body.appendChild(d);setTimeout(function(){d.parentNode&&d.parentNode.removeChild(d);document.documentElement.classList.remove('has-intro')},3300)})();</script>
+<div style="background: #EFE4D6; overflow-x: clip">
 
   <header class="wrap site-head">
     <a href="index.html" aria-label="MIAU — главная" style="line-height: 0"><img src="assets/logo-miau-beige.svg" alt="MIAU" style="height: 26px; width: auto"></a>
@@ -85,6 +86,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
       </nav>
     </details>
   </header>
+<main>
 
   <section style="background: #2A030C; color: #EFE4D6">
     <div class="wrap" style="padding-top: 160px; padding-bottom: 56px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px 80px">
@@ -267,6 +269,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
     </div>
   </section>
 
+</main>
   <footer style="background: #2A030C; color: #EFE4D6">
     <div class="wrap" style="padding-block: 64px 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 40px">
       <div style="display: flex; flex-direction: column; gap: 16px">
@@ -288,6 +291,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
     </div>
   </footer>
 </div>
+<script src="assets/lenis.min.js" defer></script>
 <script src="assets/site.js" defer></script>
 </body>
 </html>

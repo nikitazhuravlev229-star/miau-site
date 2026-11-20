@@ -4,9 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MIAU — манифест</title>
-<meta name="description" content="MIAU — пространство красоты, тела и души в Москве, Фрунзенская набережная, 46. Маникюр, педикюр, макияж, массаж, йога, саундхилинг, практики.">
+<meta name="description" content="Манифест MIAU от основательницы Ирины: красота начинается не с процедуры, а с состояния.">
+<meta name="robots" content="noindex">
 <meta property="og:title" content="MIAU — манифест">
-<meta property="og:image" content="assets/hero_poster.jpg">
+<meta property="og:image" content="https://nikitazhuravlev229-star.github.io/miau-site/assets/hero_poster.jpg">
+<meta property="og:description" content="Манифест MIAU от основательницы Ирины: красота начинается не с процедуры, а с состояния.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
 <link rel="icon" href="assets/favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
 <style>
@@ -48,13 +52,10 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 @media (max-width:960px){.nav-desk{display:none}.nav-mob{display:block}}
 .prow{display:grid;grid-template-columns:1fr 90px 110px 110px;gap:16px;align-items:center}
 @media (max-width:640px){.prow{grid-template-columns:1fr auto;row-gap:6px}.prow>:first-child{grid-column:1/-1}.prow-head{display:none}.prow>a{justify-self:start !important}}
-@keyframes rvUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
-@keyframes rvClip{from{clip-path:inset(16% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
-@supports (animation-timeline: view()){.rv{animation:rvUp linear both;animation-timeline:view();animation-range:entry 0% cover 28%}.zoom{animation:rvClip linear both;animation-timeline:view();animation-range:entry 0% cover 35%}}
 @media (max-width:640px){.sec{padding-block:56px}}
-@media (prefers-reduced-motion: reduce){.rv,.zoom{animation:none !important}}
 </style>
 <link rel="preload" as="image" href="assets/emblem-wine.webp">
+<link rel="stylesheet" href="assets/fx.css">
 <style>
 .intro{position:fixed;inset:0;z-index:100;background:#EFE4D6;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:introOut .8s ease 2.3s forwards}
 .intro img{width:min(58vw,340px);height:auto;opacity:0;animation:introIn 1.5s cubic-bezier(.33,1,.68,1) .2s forwards}
@@ -64,8 +65,8 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 </style>
 </head>
 <body>
-<script>(function(){try{if(sessionStorage.getItem('miauIntro'))return;sessionStorage.setItem('miauIntro','1')}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.documentElement.classList.add('has-intro');var d=document.createElement('div');d.className='intro';d.setAttribute('aria-hidden','true');d.innerHTML='<img src="assets/emblem-wine.webp" alt="">';document.body.appendChild(d);setTimeout(function(){d.parentNode&&d.parentNode.removeChild(d);document.documentElement.classList.remove('has-intro')},3300)})();</script>
-<div style="background: #EFE4D6; overflow: hidden">
+<script>(function(){if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))document.documentElement.classList.add('js-fx');try{if(sessionStorage.getItem('miauIntro'))return;sessionStorage.setItem('miauIntro','1')}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.documentElement.classList.add('has-intro');var d=document.createElement('div');d.className='intro';d.setAttribute('aria-hidden','true');d.innerHTML='<img src="assets/emblem-wine.webp" alt="">';document.body.appendChild(d);setTimeout(function(){d.parentNode&&d.parentNode.removeChild(d);document.documentElement.classList.remove('has-intro')},3300)})();</script>
+<div style="background: #EFE4D6; overflow-x: clip">
 
   <header class="wrap site-head">
     <a href="index.html" aria-label="MIAU — главная" style="line-height: 0"><img src="assets/logo-miau-beige.svg" alt="MIAU" style="height: 26px; width: auto"></a>
@@ -82,9 +83,10 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
       </nav>
     </details>
   </header>
+<main>
 
-  <section style="position: relative; height: 680px; background: #2A030C; color: #EFE4D6; overflow: hidden">
-    <img class="ph" src="assets/red-sweater.jpg" alt="" style="object-position: 60% 30%">
+  <section style="position: relative; height: 680px; background: #2A030C; color: #EFE4D6; overflow: hidden" data-scroll="pass">
+    <img class="ph" data-depth src="assets/irina-sweater.jpg" alt="Ирина, основательница MIAU" style="--depth:-140; object-position: 62% 4%">
     <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(42,3,12,.85) 0%, rgba(42,3,12,.35) 60%, rgba(42,3,12,.15) 100%)"></div>
     <div class="wrap" style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; gap: 20px; padding-bottom: 56px">
       <h1 class="h1" style="max-width: 960px">Ты приходишь сюда не стать другой. Ты приходишь снова почувствовать себя</h1>
@@ -93,8 +95,11 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   </section>
 
   <section class="wrap sec" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px 80px">
-    <h2 class="h2 rv">Для женщины целиком</h2>
-    <div style="display: flex; flex-direction: column; gap: 18px; max-width: 640px">
+    <div style="display: flex; flex-direction: column; gap: 40px">
+      <h2 class="h2 rv">Для женщины целиком</h2>
+      <div class="zoom" style="height: 560px; max-width: 520px"><img class="ph" src="assets/irina-sofa.jpg" alt="Ирина в пространстве MIAU" style="object-position: 50% 60%"></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px; max-width: 640px; align-self: center">
       <p class="lead">Мы сделали место, где не нужно делить себя на части.</p>
       <p class="body">Мы привыкли разделять себя на части. За лицом идём к косметологу, за телом — на массаж, за внутренним состоянием — на практику, за тишиной — в отдельное место.</p>
       <p class="body">В MIAU всё это под одной крышей. Можно сделать маникюр и подняться на массаж. Начать день с практики, выпить кофе, посидеть в тишине. Прийти уставшей и уйти отдохнувшей.</p>
@@ -109,7 +114,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   </section>
 
   <section class="wrap sec" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px 80px; align-items: start">
-    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+    <div class="stg" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
       
         <img src="assets/m-tiger.jpg" alt="" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
       
@@ -126,6 +131,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
     </div>
     <div>
       <h2 class="h2 rv" style="margin-bottom: 28px">Характер</h2>
+      <div class="stg">
       
         <div style="display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 14px 0; border-bottom: 1px solid rgba(104,5,23,.25)">
           <span class="h3" style="font-size: 26px">Женственная,</span><span class="h3" style="font-size: 26px; font-style: italic; color: #680517">но не приторная</span>
@@ -147,19 +153,21 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
           <span class="h3" style="font-size: 26px">Глубокая,</span><span class="h3" style="font-size: 26px; font-style: italic; color: #680517">но не тяжёлая</span>
         </div>
       
-      <p class="body" style="margin-top: 24px">Современная, свободная, немного дерзкая и очень живая. Красная помада и закрытые глаза в медитации. Сильные женщины и право иногда быть хрупкой.</p>
+      </div>
+      <p class="body fade" style="margin-top: 24px">Современная, свободная, немного дерзкая и очень живая. Красная помада и закрытые глаза в медитации. Сильные женщины и право иногда быть хрупкой.</p>
     </div>
   </section>
 
   <section style="background: #2A030C; color: #EFE4D6">
     <div class="wrap sec" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 28px">
-      <span aria-hidden="true" style="width: 1px; height: 72px; background: linear-gradient(180deg, rgba(201,164,106,0), #C9A46A)"></span>
+      <span class="draw" aria-hidden="true" style="width: 1px; height: 72px; background: linear-gradient(180deg, rgba(201,164,106,0), #C9A46A)"></span>
       <p class="h2 rv" style="max-width: 1000px">Предпринимательница. Мама. Любовница. Создательница. Муза. Сильная. Нежная. Дикая. Спокойная</p>
       <p class="lead" style="max-width: 560px">Выбирать одну не нужно. Здесь есть место для каждой.</p>
       <a class="btn btn-cream" href="kontakty.html">Записаться</a>
     </div>
   </section>
 
+</main>
   <footer style="background: #2A030C; color: #EFE4D6">
     <div class="wrap" style="padding-block: 64px 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 40px">
       <div style="display: flex; flex-direction: column; gap: 16px">
@@ -181,6 +189,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
     </div>
   </footer>
 </div>
+<script src="assets/lenis.min.js" defer></script>
 <script src="assets/site.js" defer></script>
 </body>
 </html>

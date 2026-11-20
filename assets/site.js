@@ -1,60 +1,95 @@
-/* MIAU — общий скрипт сайта */
+/* MIAU — общий скрипт сайта: видео, плавная прокрутка, анимации, меню */
 (function () {
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var D = document, H = D.documentElement;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fx = H.classList.contains('js-fx');
 
   /* 1. Видео первого экрана: без звука, по кругу; при «уменьшить движение» — стоп-кадр */
-  document.querySelectorAll('video').forEach(function (v) {
+  D.querySelectorAll('video').forEach(function (v) {
     v.muted = true;
     if (reduce) { v.removeAttribute('autoplay'); v.pause(); return; }
     var p = v.play && v.play();
     if (p && p.catch) p.catch(function () {});
   });
 
-  /* 2. Сцена (страница удалена, код не мешает) «Руки. Масло. Свечи.» на странице «Второй этаж» */
-  var scene = document.querySelector('[data-scene]');
-  if (scene) {
-    var frames = scene.querySelectorAll('.fr');
-    var word = scene.querySelector('[data-word]');
-    var line = scene.querySelector('[data-line]');
-    var words = ['Руки.', 'Масло.', 'Свечи.'];
-    var lines = ['Закрываешь дверь кабинета. Телефон остаётся снаружи.', 'Тёплое масло и уверенные руки мастера.', 'Свечи, тишина и час, который никто не отнимет.'];
-    var cur = -1;
-    var onScroll = function () {
-      var r = scene.getBoundingClientRect();
-      var span = Math.max(1, r.height - window.innerHeight);
-      var p = Math.min(1, Math.max(0, -r.top / span));
-      var i = Math.min(2, Math.floor(p * 3));
-      if (i === cur) return;
-      cur = i;
-      frames.forEach(function (f, k) { f.style.opacity = k === i ? 1 : 0; });
-      if (word) word.textContent = words[i];
-      if (line) line.textContent = lines[i];
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  }
-
-  /* 3. Появление блоков при скролле, если браузер не умеет animation-timeline */
-  var supports = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()');
-  if (!supports && !reduce && 'IntersectionObserver' in window) {
-    var st = document.createElement('style');
-    st.textContent = '.io .rv{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.33,1,.68,1),transform .9s cubic-bezier(.33,1,.68,1)}' +
-      '.io .zoom{clip-path:inset(16% 0 0 0);transition:clip-path 1.1s cubic-bezier(.33,1,.68,1)}' +
-      '.io .in{opacity:1 !important;transform:none !important;clip-path:inset(0 0 0 0) !important}';
-    document.head.appendChild(st);
-    document.documentElement.classList.add('io');
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -10% 0px' });
-    document.querySelectorAll('.rv, .zoom').forEach(function (el) { io.observe(el); });
-  }
-
-  /* 4. Мобильное меню: закрыть по Escape и после выбора пункта */
-  var menu = document.querySelector('.nav-mob');
+  /* 2. Мобильное меню: закрыть по Escape и после выбора пункта */
+  var menu = D.querySelector('.nav-mob');
   if (menu) {
     menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { menu.open = false; }); });
-    document.addEventListener('keydown', function (e) {
+    D.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && menu.open) { menu.open = false; menu.querySelector('summary').focus(); }
     });
   }
+
+  if (!fx) return;
+
+  /* 3. Плавная прокрутка (Lenis): только колесо мыши, на телефоне — родной скролл */
+  if (window.Lenis) {
+    var lenis = new Lenis({ lerp: 0.09, anchors: true });
+    (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+    if (menu) menu.addEventListener('toggle', function () { menu.open ? lenis.stop() : lenis.start(); });
+  }
+
+  /* 4. Заголовки делим на слова (только если внутри чистый текст) */
+  D.querySelectorAll('.h1, .d1, .h2.rv').forEach(function (el) {
+    if (el.children.length || el.classList.contains('focus-words') || el.hasAttribute('data-word')) return;
+    var words = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    words.forEach(function (w, i) {
+      var m = D.createElement('span'), s = D.createElement('span');
+      m.className = 'wm'; s.className = 'wi'; s.textContent = w; s.style.setProperty('--i', i);
+      m.appendChild(s); el.appendChild(m); el.appendChild(D.createTextNode(' '));
+    });
+    el.classList.add('split');
+  });
+
+  /* слова цитаты — для проявления из размытия */
+  D.querySelectorAll('.focus-words').forEach(function (el) {
+    var words = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    words.forEach(function (w, i) {
+      var s = D.createElement('span'); s.className = 'w'; s.style.setProperty('--i', i); s.textContent = w;
+      el.appendChild(s); el.appendChild(D.createTextNode(' '));
+    });
+    el.style.setProperty('--n', words.length);
+  });
+
+  /* порядковые номера детей в группах карточек */
+  D.querySelectorAll('.stg').forEach(function (g) {
+    [].forEach.call(g.children, function (c, i) { c.style.setProperty('--i', i); });
+  });
+
+  /* 5. Первый экран: заголовок выезжает сразу (или после интро-логотипа) */
+  var heroDelay = H.classList.contains('has-intro') ? 2500 : 150;
+  var firstTitle = D.querySelector('.d1.split, section:first-of-type .h1.split, main > section:first-child .h1.split');
+  if (firstTitle) setTimeout(function () { firstTitle.classList.add('in'); }, heroDelay);
+
+  /* 6. Появление при прокрутке (один раз) */
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -12% 0px' });
+  D.querySelectorAll('.split, .zoom, .stg, .draw, .fade').forEach(function (el) {
+    if (el !== firstTitle) io.observe(el);
+  });
+
+  /* 7. Прогресс прокрутки --p (0..1) для [data-scroll]:
+     pin  — высокая секция со sticky-сценой: 0 когда секция у верха экрана, 1 когда сцена отпускается
+     pass — обычный блок: 0 когда появился снизу, 1 когда ушёл вверх */
+  var els = [].slice.call(D.querySelectorAll('[data-scroll]')), queued = false;
+  function clamp(v) { return Math.min(1, Math.max(0, v)); }
+  function run() {
+    queued = false;
+    var vh = innerHeight;
+    els.forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      var p = el.dataset.scroll === 'pin'
+        ? clamp(-r.top / Math.max(1, el.offsetHeight - vh))
+        : clamp((vh - r.top) / (vh + r.height));
+      if (el._p !== p) { el._p = p; el.style.setProperty('--p', p.toFixed(4)); }
+    });
+  }
+  function req() { if (!queued) { queued = true; requestAnimationFrame(run); } }
+  addEventListener('scroll', req, { passive: true });
+  addEventListener('resize', req);
+  run();
 })();

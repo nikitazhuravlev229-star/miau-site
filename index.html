@@ -4,9 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MIAU — пространство красоты, тела и души</title>
-<meta name="description" content="MIAU — пространство красоты, тела и души в Москве, Фрунзенская набережная, 46. Маникюр, педикюр, макияж, массаж, йога, саундхилинг, практики.">
+<meta name="description" content="MIAU — пространство красоты, тела и души в Москве на Фрунзенской набережной, 46. Маникюр, педикюр, макияж, массаж, йога, саундхилинг и практики в одном доме.">
+<meta name="robots" content="noindex">
 <meta property="og:title" content="MIAU — пространство красоты, тела и души">
-<meta property="og:image" content="assets/hero_poster.jpg">
+<meta property="og:image" content="https://nikitazhuravlev229-star.github.io/miau-site/assets/hero_poster.jpg">
+<meta property="og:description" content="MIAU — пространство красоты, тела и души в Москве на Фрунзенской набережной, 46. Маникюр, педикюр, макияж, массаж, йога, саундхилинг и практики в одном доме.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
 <link rel="icon" href="assets/favicon.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
 <style>
@@ -48,7 +52,6 @@ a.zoom:hover .ph,a:hover .zoom .ph{transform:scale(1.035)}
 .load-1{animation:rise 1s cubic-bezier(.33,1,.68,1) .35s both}
 .load-2{animation:rise 1s cubic-bezier(.33,1,.68,1) .6s both}
 .load-img{animation:slowZoom 2.4s cubic-bezier(.33,1,.68,1) both}
-@supports (animation-timeline: view()){.draw{transform-origin:top;animation:drawDown linear both;animation-timeline:view();animation-range:entry 0% cover 35%}}
 @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
 footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration:underline}
 .site-head{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:8px 32px;padding-top:22px;color:#EFE4D6}
@@ -64,16 +67,13 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 @media (max-width:960px){.nav-desk{display:none}.nav-mob{display:block}}
 .prow{display:grid;grid-template-columns:1fr 90px 110px 110px;gap:16px;align-items:center}
 @media (max-width:640px){.prow{grid-template-columns:1fr auto;row-gap:6px}.prow>:first-child{grid-column:1/-1}.prow-head{display:none}.prow>a{justify-self:start !important}}
-@keyframes rvUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
-@keyframes rvClip{from{clip-path:inset(16% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
-@supports (animation-timeline: view()){.rv{animation:rvUp linear both;animation-timeline:view();animation-range:entry 0% cover 28%}.zoom{animation:rvClip linear both;animation-timeline:view();animation-range:entry 0% cover 35%}}
 @media (max-width:640px){.sec{padding-block:56px}}
-@media (prefers-reduced-motion: reduce){.rv,.zoom{animation:none !important}}
 @media (max-width:640px){.dirs{display:flex !important;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:-20px;padding-inline:20px}.dirs::-webkit-scrollbar{display:none}.dirs>*{flex:0 0 80%;scroll-snap-align:center}}
 .cert-card{transition:transform 1s cubic-bezier(.2,.7,.2,1)}.cert-stage:hover .cert-card{transform:rotate(0) scale(1.02) !important}
 @media (max-width:640px){.cert-stage{height:380px !important}}
 </style>
 <link rel="preload" as="image" href="assets/emblem-wine.webp">
+<link rel="stylesheet" href="assets/fx.css">
 <style>
 .intro{position:fixed;inset:0;z-index:100;background:#EFE4D6;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:introOut .8s ease 2.3s forwards}
 .intro img{width:min(58vw,340px);height:auto;opacity:0;animation:introIn 1.5s cubic-bezier(.33,1,.68,1) .2s forwards}
@@ -83,8 +83,8 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 </style>
 </head>
 <body>
-<script>(function(){try{if(sessionStorage.getItem('miauIntro'))return;sessionStorage.setItem('miauIntro','1')}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.documentElement.classList.add('has-intro');var d=document.createElement('div');d.className='intro';d.setAttribute('aria-hidden','true');d.innerHTML='<img src="assets/emblem-wine.webp" alt="">';document.body.appendChild(d);setTimeout(function(){d.parentNode&&d.parentNode.removeChild(d);document.documentElement.classList.remove('has-intro')},3300)})();</script>
-<div style="background: #EFE4D6; overflow: hidden">
+<script>(function(){if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))document.documentElement.classList.add('js-fx');try{if(sessionStorage.getItem('miauIntro'))return;sessionStorage.setItem('miauIntro','1')}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.documentElement.classList.add('has-intro');var d=document.createElement('div');d.className='intro';d.setAttribute('aria-hidden','true');d.innerHTML='<img src="assets/emblem-wine.webp" alt="">';document.body.appendChild(d);setTimeout(function(){d.parentNode&&d.parentNode.removeChild(d);document.documentElement.classList.remove('has-intro')},3300)})();</script>
+<div style="background: #EFE4D6; overflow-x: clip">
 
   <!-- Шапка -->
   <header class="wrap site-head">
@@ -102,14 +102,15 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
       </nav>
     </details>
   </header>
+<main>
 
   <!-- 1. Первый экран -->
-  <section style="position: relative; height: 880px; background: #2A030C; color: #EFE4D6; overflow: hidden">
-    <video class="ph load-img" src="assets/hero.mp4" poster="assets/hero_poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true" style="object-position: 60% 40%"></video>
+  <section class="hero" data-scroll="pass" style="position: relative; height: 880px; background: #2A030C; color: #EFE4D6; overflow: hidden">
+    <video class="ph load-img" data-depth src="assets/hero.mp4" poster="assets/hero_poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true" style="--depth:-220; object-position: 60% 40%"></video>
     <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(42,3,12,.85) 0%, rgba(42,3,12,.4) 55%, rgba(42,3,12,.1) 100%), linear-gradient(180deg, rgba(42,3,12,.45) 0%, rgba(42,3,12,0) 30%, rgba(42,3,12,.55) 100%)"></div>
-    <div class="wrap" style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 64px">
+    <div class="wrap hero-in" data-depth style="--depth:180; position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 64px">
       <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 40px">
-        <h1 class="d1 load-1" style="max-width: 820px">Тебе можно быть разной</h1>
+        <h1 class="d1" style="max-width: 820px">Тебе можно быть разной</h1>
         <div class="load-2" style="flex: 0 1 400px; display: flex; flex-direction: column; gap: 28px">
           <p class="lead">Маникюр, массаж, йога и практики в одном доме на Фрунзенской набережной.</p>
           <div style="display: flex; flex-wrap: wrap; gap: 12px">
@@ -124,12 +125,12 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   <!-- 2. Суть -->
   <section class="wrap sec" style="display: flex; flex-wrap: wrap; gap: 32px 80px; align-items: flex-end">
     <h2 class="h2 rv" style="flex: 2 1 560px; max-width: 900px">Сначала решаешь, как хочешь себя чувствовать</h2>
-    <p class="lead" style="flex: 1 1 320px">У нас пять направлений: тело, энергия, красота, общение и тишина. Начать можно с любого.</p>
+    <p class="lead fade" style="flex: 1 1 320px">У нас пять направлений: тело, энергия, красота, общение и тишина. Начать можно с любого.</p>
   </section>
 
   <!-- 3. Пять направлений -->
   <section id="napravleniya" class="wrap" style="padding-bottom: clamp(64px, 7vw, 96px)">
-    <div class="dirs" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+    <div class="dirs stg" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
       
         <a class="panel" href="napravleniya.html" style="display: block; padding: 8px; background: transparent; text-decoration: none">
           <div style="height: 100%; border: 1px solid rgba(104,5,23,.3); padding: 0 20px 24px; display: flex; flex-direction: column; align-items: center; text-align: center">
@@ -138,7 +139,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
             </div>
             <span class="dir" style="margin-top: 22px">BODY</span>
             <span class="small" style="margin-top: 6px; color: #680517">Тело</span>
-            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 20px; color: #680517">Тело и чувственность</span>
+            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 22px; color: #680517">Тело и чувственность</span>
             <p class="small" style="margin-top: 10px; min-height: 60px">Йога и массаж, после которых тело снова слушается.</p>
             <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
               
@@ -159,7 +160,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
             </div>
             <span class="dir" style="margin-top: 22px">ENERGY</span>
             <span class="small" style="margin-top: 6px; color: #680517">Энергия</span>
-            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 20px; color: #680517">Сила и движение</span>
+            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 22px; color: #680517">Сила и движение</span>
             <p class="small" style="margin-top: 10px; min-height: 60px">Силовая йога и звук, чтобы проснуться и зарядиться на день.</p>
             <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
               
@@ -178,7 +179,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
             </div>
             <span class="dir" style="margin-top: 22px">BEAUTY</span>
             <span class="small" style="margin-top: 6px; color: #680517">Красота</span>
-            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 20px; color: #680517">Любовь к себе</span>
+            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 22px; color: #680517">Любовь к себе</span>
             <p class="small" style="margin-top: 10px; min-height: 60px">Руки, ноги, лицо. Без спешки и конвейера.</p>
             <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
               
@@ -199,7 +200,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
             </div>
             <span class="dir" style="margin-top: 22px">CONNECTION</span>
             <span class="small" style="margin-top: 6px; color: #680517">Связь</span>
-            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 20px; color: #680517">Слово и общение</span>
+            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 22px; color: #680517">Слово и общение</span>
             <p class="small" style="margin-top: 10px; min-height: 60px">Лекции и разговоры с людьми, которым интересно то же, что тебе.</p>
             <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
               
@@ -216,7 +217,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
             </div>
             <span class="dir" style="margin-top: 22px">SOUL</span>
             <span class="small" style="margin-top: 6px; color: #680517">Душа</span>
-            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 20px; color: #680517">Внутренний мир</span>
+            <span style="margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 22px; color: #680517">Внутренний мир</span>
             <p class="small" style="margin-top: 10px; min-height: 60px">Кундалини и тишина. Время услышать себя.</p>
             <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
               
@@ -233,7 +234,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   <section style="background: #2A030C; color: #EFE4D6">
     <div class="wrap sec" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px 80px; padding-bottom: 40px">
       <h2 class="h2 rv" style="flex: 2 1 520px">Массаж и практики</h2>
-      <p class="lead" style="flex: 1 1 320px">На второй этаж можно прийти отдельно, без маникюра и макияжа. Здесь тише, чем внизу.</p>
+      <p class="lead fade" style="flex: 1 1 320px">На второй этаж можно прийти отдельно, без маникюра и макияжа. Здесь тише, чем внизу.</p>
     </div>
     <div class="wrap" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; padding-bottom: clamp(64px, 7vw, 96px)">
       <a href="napravleniya.html#body" style="text-decoration: none; display: flex; flex-direction: column; gap: 14px">
@@ -248,22 +249,26 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   </section>
 
   <!-- 5. Манифест -->
-  <section class="wrap sec" style="display: flex; flex-wrap: wrap; gap: 48px 80px; align-items: center">
+  <section class="wrap sec" data-scroll="pass" style="display: flex; flex-wrap: wrap; gap: 48px 80px; align-items: center">
     <div class="zoom" style="flex: 1 1 360px; height: 600px; max-width: 520px"><img class="ph" src="assets/irina.jpg" alt="Ирина, основательница MIAU" style="object-position: 58% 45%"></div>
     <div style="flex: 1 1 460px; display: flex; flex-direction: column; gap: 28px">
-      <p class="h2 rv">«Ты приходишь сюда не стать другой. Ты приходишь снова почувствовать себя»</p>
-      <p class="body">Ирина, основательница MIAU</p>
+      <p class="h2 focus-words">«Ты приходишь сюда не стать другой. Ты приходишь снова почувствовать себя»</p>
+      <p class="body fade">Ирина, основательница MIAU</p>
       <a class="btn btn-ghost-d" href="manifest.html" style="align-self: flex-start">Читать манифест</a>
     </div>
   </section>
 
-  <!-- 6. Пространство -->
-  <section style="position: relative; height: 640px; color: #EFE4D6; overflow: hidden">
-    <img class="ph" src="assets/spa-dark.jpg" alt="">
-    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(42,3,12,.15) 30%, rgba(42,3,12,.75) 100%)"></div>
-    <div class="wrap" style="position: relative; height: 100%; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px 80px; padding-bottom: 56px">
-      <h2 class="h2 rv" style="flex: 2 1 480px">Можно задержаться</h2>
-      <p class="lead" style="flex: 1 1 320px">Сделать маникюр, подняться на массаж, выпить кофе. Никто не торопит.</p>
+  <!-- 6. Пространство: фото раскрывается на весь экран при прокрутке -->
+  <section class="zr-sec" data-scroll="pin" style="color: #EFE4D6">
+    <div class="stick">
+      <div class="zr-frame">
+        <img class="ph" src="assets/spa-dark.jpg" alt="Тихая комната с мягким светом">
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(42,3,12,.15) 30%, rgba(42,3,12,.75) 100%)"></div>
+      </div>
+      <div class="wrap zr-text" style="position: relative; height: 100%; display: flex; flex-wrap: wrap; align-items: flex-end; align-content: flex-end; justify-content: space-between; gap: 24px 80px; padding-bottom: 56px">
+        <h2 class="h2" style="flex: 2 1 480px">Можно задержаться</h2>
+        <p class="lead" style="flex: 1 1 320px">Сделать маникюр, подняться на массаж, выпить кофе. Никто не торопит.</p>
+      </div>
     </div>
   </section>
 
@@ -271,7 +276,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   <section class="wrap sec" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 48px 80px; align-items: center">
     <div style="display: flex; flex-direction: column; gap: 24px">
       <h2 class="h2 rv">Комьюнити</h2>
-      <p class="lead">Лекции, встречи и выездные ретриты, в том числе банные. Расписание и запись будут в приложении MIAU.</p>
+      <p class="lead fade">Лекции, встречи и выездные ретриты, в том числе банные. Расписание и запись будут в приложении MIAU.</p>
     </div>
     <div class="zoom" style="height: 420px"><img class="ph" src="assets/sauna-steam.jpg" alt="Пар над камнями в бане"></div>
   </section>
@@ -279,8 +284,8 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   <!-- 8. Сертификаты -->
   <section style="border-top: 1px solid rgba(104,5,23,.2)">
     <div class="wrap sec" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 48px 80px; align-items: center">
-      <a href="sertifikaty.html" class="zoom cert-stage" aria-label="Подарочные сертификаты MIAU" style="display: flex; align-items: center; justify-content: center; height: 520px; background: #2A030C; padding: 32px; text-decoration: none">
-        <div class="cert-card" style="width: 100%; max-width: 440px; aspect-ratio: 210 / 100; background: #EFE4D6; padding: 10px; box-shadow: 0 40px 70px -30px rgba(0,0,0,.6); transform: rotate(-4deg)">
+      <a href="sertifikaty.html" class="zoom cert-stage" data-scroll="pass" aria-label="Подарочные сертификаты MIAU" style="display: flex; align-items: center; justify-content: center; height: 520px; background: #2A030C; padding: 32px; text-decoration: none">
+        <div class="cert-card" style="width: 100%; max-width: 440px; aspect-ratio: 210 / 100; background: #EFE4D6; padding: 10px; box-shadow: 0 40px 70px -30px rgba(0,0,0,.6)">
           <div style="height: 100%; border: 1px solid rgba(104,5,23,.45); display: grid; grid-template-columns: 38% 1fr; align-items: center; gap: 18px; padding: 14px 22px 14px 14px; color: #680517">
             <img src="assets/emblem-wine.webp" alt="" style="width: 100%; height: auto">
             <div style="display: flex; flex-direction: column; gap: 10px">
@@ -294,7 +299,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
       </a>
       <div style="display: flex; flex-direction: column; gap: 28px">
         <h2 class="h2 rv">Время для себя в подарок</h2>
-        <dl style="margin: 0; border-top: 1px solid rgba(104,5,23,.25)">
+        <dl class="stg" style="margin: 0; border-top: 1px solid rgba(104,5,23,.25)">
           <div style="display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(104,5,23,.25)"><dt class="small" style="color: #680517">На сумму</dt><dd class="body" style="margin: 0">Получательница сама выберет, на что потратить</dd></div>
           <div style="display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(104,5,23,.25)"><dt class="small" style="color: #680517">На направление</dt><dd class="body" style="margin: 0">Маникюр, массаж, йога или другая услуга</dd></div>
           <div style="display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(104,5,23,.25)"><dt class="small" style="color: #680517">Упаковка</dt><dd class="body" style="margin: 0">Бордовый конверт с печатью</dd></div>
@@ -310,12 +315,13 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   <!-- 9. Запись -->
   <section style="background: #2A030C; color: #EFE4D6">
     <div class="wrap sec" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 32px">
-      <span aria-hidden="true" style="width: 1px; height: 72px; background: linear-gradient(180deg, rgba(201,164,106,0), #C9A46A)"></span>
+      <span class="draw" aria-hidden="true" style="width: 1px; height: 72px; background: linear-gradient(180deg, rgba(201,164,106,0), #C9A46A)"></span>
       <h2 class="h2 rv" style="max-width: 860px">Самая выгодная инвестиция — твоё состояние</h2>
       <a class="btn btn-cream" href="kontakty.html">Записаться</a>
     </div>
   </section>
 
+</main>
   <footer style="background: #2A030C; color: #EFE4D6">
     <div class="wrap" style="padding-block: 64px 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 40px">
       <div style="display: flex; flex-direction: column; gap: 16px">
@@ -337,6 +343,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
     </div>
   </footer>
 </div>
+<script src="assets/lenis.min.js" defer></script>
 <script src="assets/site.js" defer></script>
 </body>
 </html>
