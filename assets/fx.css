@@ -70,9 +70,9 @@ html.lenis,html.lenis body{height:auto}
 
 /* Типографика на телефоне: крупнее мелкий и основной текст, свободнее заголовки */
 @media (max-width:640px){
-  .small{font-size:15px}
-  .body{font-size:17px}
-  .h2{line-height:1.1}
-  .h1{line-height:1.04}
-  .d1{line-height:1}
+  .small{font-size:14px}
+  .body{font-size:16px}
+  .h2{line-height:1.15}
+  .h1{line-height:1.1}
+  .d1{line-height:1.06}
 }
