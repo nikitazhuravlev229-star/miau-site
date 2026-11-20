@@ -21,7 +21,7 @@
 .dp.on .dp-body{opacity:1;transform:none;transition-delay:.35s;pointer-events:auto}
 .dp-sign{grid-row:1/span 3;width:100%;height:auto;max-height:240px;filter:brightness(0) invert(1) sepia(.35) saturate(1.4) brightness(.97)}
 .dp-title{font:300 clamp(26px,2.6vw,40px)/1 'Unbounded',sans-serif;letter-spacing:.06em;margin:0}
-.dp-motto{font:500 15px/1.4 'Manrope',sans-serif;color:#C9A46A;margin:0}
+.dp-motto{font:500 15px/1.4 'Manrope',sans-serif;color:rgba(239,228,214,.8);margin:0}
 .dp-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px;grid-column:2}
 .dp-list li{border:1px solid rgba(239,228,214,.45);border-radius:999px;padding:7px 14px;font:500 13px/1 'Manrope',sans-serif}
 .dp-cta{grid-column:2;display:flex;gap:18px;align-items:center;margin-top:8px}
@@ -49,9 +49,9 @@
 .rc-n{position:absolute;top:16px;left:16px;font:500 13px/1 'Manrope',sans-serif;letter-spacing:.1em;color:#EFE4D6}
 .rc-t{font:300 21px/1.2 'Unbounded',sans-serif;letter-spacing:-.01em}
 .rc-d{font-size:14px;line-height:1.5;opacity:.75;margin:0}
-.rc-tag{font:600 11px/1 'Manrope',sans-serif;letter-spacing:.14em;color:#C9A46A;text-transform:uppercase}
+.rc-tag{font:600 11px/1 'Manrope',sans-serif;letter-spacing:.14em;color:rgba(239,228,214,.6);text-transform:uppercase}
 .rail-bar{height:1px;background:rgba(239,228,214,.2);position:relative;margin-top:28px}
-.rail-bar i{position:absolute;left:0;top:-1px;height:3px;background:#C9A46A;width:20%;transition:transform .2s linear}
+.rail-bar i{position:absolute;left:0;top:-1px;height:3px;background:#EFE4D6;width:20%;transition:transform .2s linear}
 
 /* ---------- цитата Ирины ---------- */
 .quote{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);min-height:760px}
@@ -59,7 +59,7 @@
 .quote-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .quote-tx{display:flex;flex-direction:column;justify-content:center;gap:40px;padding:clamp(48px,6vw,110px) clamp(20px,5vw,96px)}
 .quote-k{font:600 12px/1 'Manrope',sans-serif;letter-spacing:.16em;color:#680517;text-transform:uppercase;display:flex;align-items:center;gap:14px}
-.quote-k::before{content:"";width:48px;height:1px;background:#C9A46A}
+.quote-k::before{content:"";width:48px;height:1px;background:#680517}
 .quote-q{font:300 clamp(26px,3vw,46px)/1.18 'Unbounded',sans-serif;letter-spacing:-.025em;margin:0;color:#2A030C}
 .quote-sig{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between}
 .quote-who{display:flex;flex-direction:column;gap:4px}
@@ -74,13 +74,13 @@
 @media (max-width:860px){.quote{grid-template-columns:1fr;min-height:0}.quote-ph{min-height:0;aspect-ratio:4/5}.ring-link{width:120px;height:120px}}
 
 /* ---------- сертификат (карточка) ---------- */
-.cert{position:relative;aspect-ratio:1.72;width:100%;background:radial-gradient(120% 140% at 85% 10%,#7A0A1E 0%,#680517 45%,#4A0613 100%);color:#EFE4D6;overflow:hidden;border-radius:4px;box-shadow:0 50px 90px -40px rgba(0,0,0,.75),0 0 0 1px rgba(201,164,106,.25) inset;container-type:inline-size}
-.cert::before{content:"";position:absolute;inset:4.2cqw;border:1px solid rgba(201,164,106,.45);pointer-events:none}
+.cert{position:relative;aspect-ratio:1.72;width:100%;background:radial-gradient(120% 140% at 85% 10%,#7A0A1E 0%,#680517 45%,#4A0613 100%);color:#EFE4D6;overflow:hidden;border-radius:4px;box-shadow:0 50px 90px -40px rgba(0,0,0,.75),0 0 0 1px rgba(239,228,214,.18) inset;container-type:inline-size}
+.cert::before{content:"";position:absolute;inset:4.2cqw;border:1px solid rgba(239,228,214,.32);pointer-events:none}
 .cert-em{position:absolute;width:38cqw;left:7cqw;top:50%;transform:translateY(-50%);opacity:.95}
-.cert-thread{position:absolute;left:52cqw;top:0;height:46%;width:1px;background:linear-gradient(180deg,rgba(201,164,106,0),#C9A46A)}
-.cert-thread::after{content:"";position:absolute;bottom:-3px;left:-3px;width:7px;height:7px;border-radius:50%;background:#C9A46A}
+.cert-thread{position:absolute;left:52cqw;top:0;height:46%;width:1px;background:linear-gradient(180deg,rgba(239,228,214,0),#EFE4D6)}
+.cert-thread::after{content:"";position:absolute;bottom:-3px;left:-3px;width:7px;height:7px;border-radius:50%;background:#EFE4D6}
 .cert-tx{position:absolute;left:52cqw;right:8cqw;top:54%;display:flex;flex-direction:column;gap:1.6cqw;transform:translateX(-0.5px)}
-.cert-k{font:600 1.75cqw/1 'Manrope',sans-serif;letter-spacing:.28em;color:#C9A46A}
+.cert-k{font:600 1.75cqw/1 'Manrope',sans-serif;letter-spacing:.28em;color:rgba(239,228,214,.72)}
 .cert-sum{font:300 7.4cqw/1 'Unbounded',sans-serif;letter-spacing:-.03em;white-space:nowrap}
 .cert-for{font:500 2.1cqw/1.3 'Manrope',sans-serif;opacity:.85}
 .cert-no{position:absolute;right:8cqw;top:8cqw;font:500 1.6cqw/1 'Manrope',sans-serif;letter-spacing:.18em;opacity:.6}
@@ -88,7 +88,8 @@
 .tilt{transform-style:preserve-3d;transition:transform .6s cubic-bezier(.19,1,.22,1)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{appearance:none;border:1px solid currentColor;background:transparent;color:inherit;border-radius:999px;min-height:44px;padding:0 18px;font:500 14px/1 'Manrope',sans-serif;cursor:pointer;transition:background .25s ease,color .25s ease,border-color .25s ease}
-.chip:hover{background:rgba(201,164,106,.15)}
+.chip:hover{background:rgba(239,228,214,.12)}
+.bk .chip:hover,.light .chip:hover{background:rgba(104,5,23,.06)}
 .chip[aria-pressed="true"]{background:#EFE4D6;color:#680517;border-color:#EFE4D6}
 .light .chip[aria-pressed="true"]{background:#680517;color:#EFE4D6;border-color:#680517}
 
@@ -140,7 +141,7 @@
 /* ---------- карта ---------- */
 .mapx{position:relative;height:clamp(340px,40vw,520px);background:#E4D6C4;overflow:hidden;z-index:0}
 .mapx .leaflet-container{background:#E4D6C4;font-family:'Manrope',sans-serif}
-.mapx .leaflet-tile-pane{filter:grayscale(1) sepia(.42) saturate(1.25) hue-rotate(-12deg) brightness(1.04) contrast(.9)}
+.mapx .leaflet-tile-pane{filter:grayscale(1) sepia(.22) hue-rotate(-22deg) saturate(.85) brightness(1.03) contrast(.88)}
 .mapx .leaflet-control-attribution{background:rgba(239,228,214,.8);font-size:10px;color:#2A030C}
 .mapx .leaflet-control-attribution a{color:#680517}
 .mapx .leaflet-bar a{background:#EFE4D6;color:#680517;border-color:rgba(104,5,23,.2)}
@@ -160,7 +161,7 @@
 .ft-h{font:600 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.62;margin:0 0 14px}
 .ft-links{display:flex;flex-direction:column;gap:9px;font-size:15px}
 .ft a{text-decoration:none}.ft a:hover{text-decoration:underline}
-.ft-word{position:relative;z-index:1;margin:0 clamp(20px,4vw,56px);aspect-ratio:1854/440;-webkit-mask:url(logo-miau-beige.svg) center/contain no-repeat;mask:url(logo-miau-beige.svg) center/contain no-repeat;background:linear-gradient(105deg,rgba(239,228,214,.10) 0%,rgba(239,228,214,.10) 38%,rgba(201,164,106,.75) 50%,rgba(239,228,214,.10) 62%,rgba(239,228,214,.10) 100%);background-size:300% 100%;animation:ftShine 7s ease-in-out infinite}
+.ft-word{position:relative;z-index:1;margin:0 clamp(20px,4vw,56px);aspect-ratio:1854/440;-webkit-mask:url(logo-miau-beige.svg) center/contain no-repeat;mask:url(logo-miau-beige.svg) center/contain no-repeat;background:linear-gradient(105deg,rgba(239,228,214,.10) 0%,rgba(239,228,214,.10) 38%,rgba(239,228,214,.5) 50%,rgba(239,228,214,.10) 62%,rgba(239,228,214,.10) 100%);background-size:300% 100%;animation:ftShine 7s ease-in-out infinite}
 .js-fx .ft-word{transform:translate3d(0,calc((1 - var(--p,1)) * 35%),0) scale(calc(.92 + var(--p,1) * .08));transform-origin:center bottom}
 @keyframes ftShine{0%{background-position:100% 0}60%,100%{background-position:0 0}}
 .ft-bot{position:relative;z-index:2;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-top:20px;padding-bottom:28px;font-size:13px;opacity:.7}
