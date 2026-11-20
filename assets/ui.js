@@ -265,8 +265,7 @@
       var c = e.target.closest('.chip'); if (!c) return;
       [].forEach.call(c.parentNode.children, function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
       var v = c.dataset.v;
-      sumEl.textContent = v === 'own' ? 'Своя сумма' : money(+v);
-      sumEl.style.fontSize = v === 'own' ? '5.2cqw' : '';
+      if (sumEl) { sumEl.textContent = v === 'own' ? 'Своя сумма' : money(+v); sumEl.style.fontSize = v === 'own' ? '5.2cqw' : ''; }
       if (btn) btn.dataset.sum = v;
     });
   });
