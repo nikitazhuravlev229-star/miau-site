@@ -38,7 +38,7 @@
 }
 
 /* ---------- лента «Массаж и практики» ---------- */
-.rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 clamp(20px,4vw,56px) 8px;cursor:grab;-webkit-overflow-scrolling:touch}
+.rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 clamp(20px,4.5vw,96px) 8px;cursor:grab;-webkit-overflow-scrolling:touch}
 .rail::-webkit-scrollbar{display:none}
 .rail.drag{cursor:grabbing;scroll-snap-type:none}
 .rail.drag *{pointer-events:none}
@@ -163,7 +163,7 @@
 .ft-h{font:600 11px/1 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.62;margin:0 0 14px}
 .ft-links{display:flex;flex-direction:column;gap:9px;font-size:15px}
 .ft a{text-decoration:none}.ft a:hover{text-decoration:underline}
-.ft-word{position:relative;z-index:1;margin:0 clamp(20px,4vw,56px);aspect-ratio:1854/440;-webkit-mask:url(logo-miau-beige.svg) center/contain no-repeat;mask:url(logo-miau-beige.svg) center/contain no-repeat;background:linear-gradient(105deg,rgba(239,228,214,.10) 0%,rgba(239,228,214,.10) 38%,rgba(239,228,214,.5) 50%,rgba(239,228,214,.10) 62%,rgba(239,228,214,.10) 100%);background-size:300% 100%;animation:ftShine 7s ease-in-out infinite}
+.ft-word{position:relative;z-index:1;margin:0 clamp(20px,4.5vw,96px);aspect-ratio:1854/440;-webkit-mask:url(logo-miau-beige.svg) center/contain no-repeat;mask:url(logo-miau-beige.svg) center/contain no-repeat;background:linear-gradient(105deg,rgba(239,228,214,.10) 0%,rgba(239,228,214,.10) 38%,rgba(239,228,214,.5) 50%,rgba(239,228,214,.10) 62%,rgba(239,228,214,.10) 100%);background-size:300% 100%;animation:ftShine 7s ease-in-out infinite}
 .js-fx .ft-word{transform:translate3d(0,calc((1 - var(--p,1)) * 35%),0) scale(calc(.92 + var(--p,1) * .08));transform-origin:center bottom}
 @keyframes ftShine{0%{background-position:100% 0}60%,100%{background-position:0 0}}
 .ft-bot{position:relative;z-index:2;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-top:20px;padding-bottom:28px;font-size:13px;opacity:.7}
