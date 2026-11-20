@@ -69,8 +69,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 @media (max-width:640px){.prow{grid-template-columns:1fr auto;row-gap:6px}.prow>:first-child{grid-column:1/-1}.prow-head{display:none}.prow>a{justify-self:start !important}}
 @media (max-width:640px){.sec{padding-block:56px}}
 @media (max-width:640px){.dirs{display:flex !important;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:-20px;padding-inline:20px}.dirs::-webkit-scrollbar{display:none}.dirs>*{flex:0 0 80%;scroll-snap-align:center}}
-.cert-card{transition:transform 1s cubic-bezier(.2,.7,.2,1)}.cert-stage:hover .cert-card{transform:rotate(0) scale(1.02) !important}
-@media (max-width:640px){.cert-stage{height:380px !important}}
+@media (max-width:640px){.cert-stage{height:420px !important;padding-bottom:48px !important}}
 .map-box iframe{filter:saturate(.7) sepia(.12)}
 .map-cover{position:absolute;inset:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:16px}
 .map-cover span{font:500 13px/1 'Montserrat',sans-serif;background:rgba(42,3,12,.82);color:#EFE4D6;padding:10px 16px;border-radius:999px;opacity:0;transition:opacity .3s ease}
@@ -289,16 +288,22 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   <!-- 8. Сертификаты -->
   <section style="border-top: 1px solid rgba(104,5,23,.2)">
     <div class="wrap sec" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 48px 80px; align-items: center">
-      <a href="sertifikaty.html" class="zoom cert-stage" data-scroll="pass" aria-label="Подарочные сертификаты MIAU" style="display: flex; align-items: center; justify-content: center; height: 520px; background: #2A030C; padding: 32px; text-decoration: none">
-        <div class="cert-card" style="width: 100%; max-width: 440px; aspect-ratio: 210 / 100; background: #EFE4D6; padding: 10px; box-shadow: 0 40px 70px -30px rgba(0,0,0,.6)">
-          <div style="height: 100%; border: 1px solid rgba(104,5,23,.45); display: grid; grid-template-columns: 38% 1fr; align-items: center; gap: 18px; padding: 14px 22px 14px 14px; color: #680517">
-            <img src="assets/emblem-wine.webp" alt="" style="width: 100%; height: auto">
-            <div style="display: flex; flex-direction: column; gap: 10px">
-              <span style="font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: .2em; font-size: clamp(10px, 1.6vw, 14px)">ПОДАРОЧНЫЙ СЕРТИФИКАТ</span>
-              <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: clamp(12px, 1.8vw, 17px)">время для себя</span>
-              <span style="height: 1px; background: rgba(104,5,23,.4); margin-top: 8px"></span>
-              <span style="height: 1px; background: rgba(104,5,23,.4); margin-top: 10px"></span>
+      <a href="sertifikaty.html" class="cert-stage fade" data-scroll="pass" aria-label="Подарочные сертификаты MIAU" style="position: relative; display: flex; align-items: flex-end; justify-content: center; height: 540px; background: #2A030C; padding: 0 32px 64px; overflow: hidden; text-decoration: none">
+        <div class="env" style="position: relative; width: min(100%, 440px); aspect-ratio: 200 / 120">
+          <div style="position: absolute; inset: 0; background: #4A0613; box-shadow: 0 50px 80px -30px rgba(0,0,0,.7)"></div>
+          <div class="cert-card" style="position: absolute; left: 7%; right: 7%; top: 5%; aspect-ratio: 210 / 100; background: #EFE4D6; padding: 8px; box-shadow: 0 20px 40px -20px rgba(0,0,0,.6)">
+            <div style="height: 100%; border: 1px solid rgba(104,5,23,.45); display: grid; grid-template-columns: 36% 1fr; align-items: center; gap: 14px; padding: 10px 18px 10px 10px; color: #680517">
+              <img src="assets/emblem-wine.webp" alt="" style="width: 100%; height: auto">
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: .2em; font-size: clamp(9px, 1.4vw, 13px)">ПОДАРОЧНЫЙ СЕРТИФИКАТ</span>
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: clamp(11px, 1.6vw, 16px)">время для себя</span>
+                <span style="height: 1px; background: rgba(104,5,23,.4); margin-top: 6px"></span>
+              </div>
             </div>
+          </div>
+          <svg viewBox="0 0 200 120" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%"><path d="M0 38 L100 86 L200 38 L200 120 L0 120 Z" fill="#680517"/><path d="M0 120 L84 78 M200 120 L116 78" stroke="rgba(0,0,0,.22)" stroke-width=".5" fill="none"/><path d="M0 38 L100 86 L200 38" stroke="rgba(0,0,0,.3)" stroke-width=".6" fill="none"/></svg>
+          <div class="seal" style="position: absolute; left: 50%; top: 71%; width: 22%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle at 38% 32%, #8A1024 0%, #4A0613 70%, #2A030C 100%); box-shadow: 0 6px 14px rgba(0,0,0,.45), inset 0 0 0 3px rgba(0,0,0,.15); display: flex; align-items: center; justify-content: center">
+            <img src="assets/emblem-cream.webp" alt="" style="width: 74%; height: auto; opacity: .92">
           </div>
         </div>
       </a>
@@ -328,7 +333,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
             <a class="btn btn-ghost-d" href="https://yandex.ru/maps/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D0%A4%D1%80%D1%83%D0%BD%D0%B7%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%20%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%2046" target="_blank" rel="noopener">Открыть в Яндекс Картах</a>
           </div>
       </div>
-      <div class="zoom">
+      <div class="fade">
         <div class="map-box" style="position: relative; height: 460px; background: #2A030C; overflow: hidden">
           <iframe src="https://yandex.ru/map-widget/v1/?ll=37.581325%2C55.718375&amp;z=16&amp;pt=37.581325%2C55.718375%2Cpm2rdl" title="MIAU на Яндекс Картах: Москва, Фрунзенская набережная, 46" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0"></iframe>
           <button type="button" class="map-cover" aria-label="Включить управление картой"><span>Нажми, чтобы двигать карту</span></button>

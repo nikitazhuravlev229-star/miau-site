@@ -58,8 +58,10 @@ html.lenis,html.lenis body{height:auto}
 .js-fx .zr-text{--t:clamp(0,calc((var(--p,0) - .6) * 4),1);opacity:var(--t);transform:translate3d(0,calc((1 - var(--t)) * 40px),0)}
 @media (max-width:640px){.js-fx .zr-frame{clip-path:inset(calc((1 - var(--k)) * 24%) calc((1 - var(--k)) * 12%) round calc((1 - var(--k)) * 200px))}}
 
-/* 10. Сертификат выпрямляется по мере прокрутки */
-.js-fx .cert-card{transform:rotate(calc(-16deg + var(--p,.5) * 22deg)) translate3d(0,calc((.5 - var(--p,.5)) * 90px),0)}
+/* 10. Сертификат выезжает из конверта по мере прокрутки */
+.cert-card{transform:translate3d(0,-58%,0) rotate(-3deg)}
+.js-fx .cert-card{--k:clamp(0,calc((var(--p,.5) - .18) * 2.6),1);transform:translate3d(0,calc(18% - var(--k) * 76%),0) rotate(calc(var(--k) * -3deg));transition:transform .15s linear}
+.cert-stage:hover .cert-card{filter:brightness(1.03)}
 
 /* «Уменьшить движение»: всё статично */
 @media (prefers-reduced-motion: reduce){
