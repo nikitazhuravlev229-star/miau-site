@@ -19,9 +19,7 @@
   function el(html) { var t = D.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function certHTML(cls) {
-    return '<div class="cert ' + (cls || '') + '"><img class="cert-em" src="assets/emblem-cream.webp" alt=""><span class="cert-thread"></span>' +
-      '<span class="cert-no">№ 0001</span><div class="cert-tx"><span class="cert-k">ПОДАРОЧНЫЙ СЕРТИФИКАТ</span>' +
-      '<span class="cert-sum" data-c-sum>10 000 ₽</span><span class="cert-for" data-c-for>время для себя</span></div></div>';
+    return '<div class="cert ' + (cls || '') + '"><div class="cert-l"><img class="cert-em" src="assets/emblem-cream.webp" alt=""></div><span class="cert-div"></span><div class="cert-r"><span class="cert-k">ПОДАРОЧНЫЙ СЕРТИФИКАТ</span><span class="cert-sum" data-c-sum>10\u00a0000\u00a0₽</span><span class="cert-line"><em>для</em><i data-c-for></i></span><span class="cert-foot"><span>№ 0001</span><span>время для себя</span></span></div></div>';
   }
   MIAU.certHTML = certHTML;
 
@@ -157,8 +155,8 @@
   function preview() {
     var sum = state.v.sum === 'own' ? (state.v.own ? state.v.own.replace(/\s/g, '') : '') : state.v.sum;
     var txt = state.v.dir ? DIRS[state.v.dir].name.split(' · ')[1].toUpperCase() : (sum ? money(+sum) : '— ₽');
-    [].forEach.call(bk.querySelectorAll('[data-c-sum]'), function (x) { x.textContent = txt; x.style.fontSize = state.v.dir ? '5.4cqw' : ''; });
-    [].forEach.call(bk.querySelectorAll('[data-c-for]'), function (x) { x.textContent = state.v.to ? 'для ' + state.v.to : 'время для себя'; });
+    [].forEach.call(bk.querySelectorAll('[data-c-sum]'), function (x) { x.textContent = txt; x.style.fontSize = state.v.dir ? '5cqw' : ''; });
+    [].forEach.call(bk.querySelectorAll('[data-c-for]'), function (x) { x.textContent = state.v.to || ''; });
   }
   function go(i) {
     var steps = bk.querySelectorAll('.bk-step');
@@ -262,24 +260,15 @@
 
   /* ================= сертификат на главной: суммы + наклон ================= */
   [].forEach.call(D.querySelectorAll('[data-cert-live]'), function (box) {
-    var sumEl = box.querySelector('[data-c-sum]'), btn = box.querySelector('[data-cert]'), card = box.querySelector('.tilt');
+    var sumEl = box.querySelector('[data-c-sum]'), btn = box.querySelector('[data-cert]');
     box.addEventListener('click', function (e) {
       var c = e.target.closest('.chip'); if (!c) return;
       [].forEach.call(c.parentNode.children, function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
       var v = c.dataset.v;
       sumEl.textContent = v === 'own' ? 'Своя сумма' : money(+v);
-      sumEl.style.fontSize = v === 'own' ? '5.6cqw' : '';
+      sumEl.style.fontSize = v === 'own' ? '5.2cqw' : '';
       if (btn) btn.dataset.sum = v;
-      if (card && !RM) { card.animate([{ transform: card.style.transform + ' scale(.97)' }, { transform: card.style.transform }], { duration: 450, easing: 'cubic-bezier(.19,1,.22,1)' }); }
     });
-    if (card && !RM && matchMedia('(hover:hover)').matches) {
-      var zone = box.querySelector('[data-tilt-zone]') || card;
-      zone.addEventListener('pointermove', function (e) {
-        var b = zone.getBoundingClientRect(), x = (e.clientX - b.left) / b.width - .5, y = (e.clientY - b.top) / b.height - .5;
-        card.style.transform = 'perspective(1200px) rotateY(' + (x * 14) + 'deg) rotateX(' + (-y * 10) + 'deg)';
-      });
-      zone.addEventListener('pointerleave', function () { card.style.transform = ''; });
-    }
   });
 
   /* ================= карта (Leaflet + OpenStreetMap, без рекламы) ================= */
