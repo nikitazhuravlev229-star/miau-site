@@ -21,6 +21,11 @@
     });
   }
 
+  /* Карта: заслонка не даёт карте перехватывать прокрутку, пока по ней не нажали */
+  D.querySelectorAll('.map-cover').forEach(function (b) {
+    b.addEventListener('click', function () { b.parentNode.classList.add('live'); });
+  });
+
   if (!fx) return;
 
   /* 3. Плавная прокрутка (Lenis): только колесо мыши, на телефоне — родной скролл */
