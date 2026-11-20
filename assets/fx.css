@@ -70,6 +70,11 @@ html.lenis,html.lenis body{height:auto}
 
 /* Типографика на телефоне: крупнее мелкий и основной текст, свободнее заголовки */
 @media (max-width:640px){
+  .d1{font-size:34px !important}
+  .h1{font-size:28px !important}
+  .h2{font-size:23px !important}
+  .lead{font-size:16px !important}
+  .sec{padding-block:48px}
   .small{font-size:14px}
   .body{font-size:16px}
   .h2{line-height:1.15}

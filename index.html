@@ -70,14 +70,11 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 @media (max-width:640px){.sec{padding-block:56px}}
 @media (max-width:640px){.dirs{display:flex !important;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:-20px;padding-inline:20px}.dirs::-webkit-scrollbar{display:none}.dirs>*{flex:0 0 80%;scroll-snap-align:center}}
 @media (max-width:640px){.cert-stage{height:420px !important;padding-bottom:48px !important}}
-.map-box iframe{filter:saturate(.7) sepia(.12)}
-.map-cover{position:absolute;inset:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:16px}
-.map-cover span{font:500 13px/1 'Manrope',sans-serif;background:rgba(42,3,12,.82);color:#EFE4D6;padding:10px 16px;border-radius:999px;opacity:0;transition:opacity .3s ease}
-.map-cover:hover span,.map-cover:focus-visible span{opacity:1}
-.map-box.live .map-cover{display:none}
 </style>
 <link rel="preload" as="image" href="assets/emblem-wine.webp">
 <link rel="stylesheet" href="assets/fx.css">
+<link rel="stylesheet" href="assets/leaflet.css">
+<link rel="stylesheet" href="assets/ui.css">
 <style>
 .intro{position:fixed;inset:0;z-index:100;background:#EFE4D6;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:introOut .8s ease 2.3s forwards}
 .intro img{width:min(58vw,340px);height:auto;opacity:0;animation:introIn 1.5s cubic-bezier(.33,1,.68,1) .2s forwards}
@@ -95,13 +92,13 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
     <a href="index.html" aria-label="MIAU — главная" style="line-height: 0"><img src="assets/logo-miau-beige.svg" alt="MIAU" style="height: 26px; width: auto"></a>
     <nav class="nav nav-desk" aria-label="Основное меню">
       <a href="napravleniya.html">Направления</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a>
-      <a class="btn btn-cream" href="kontakty.html" style="min-height: 44px; padding: 0 22px">Записаться</a>
+      <a class="btn btn-cream" href="kontakty.html" data-book style="min-height: 44px; padding: 0 22px">Записаться</a>
     </nav>
     <details class="nav-mob">
       <summary><span class="nm-open">Меню</span><span class="nm-close">Закрыть</span></summary>
       <nav class="nav-sheet" aria-label="Меню">
         <a href="index.html">Главная</a><a href="napravleniya.html">Направления</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a>
-        <a class="btn btn-cream" href="kontakty.html" style="margin-top: 24px; align-self: flex-start">Записаться</a>
+        <a class="btn btn-cream" href="kontakty.html" data-book style="margin-top: 24px; align-self: flex-start">Записаться</a>
         <div style="margin-top: auto; display: flex; align-items: center; gap: 16px; padding-top: 32px"><img src="assets/emblem-cream.webp" alt="" width="64" height="64" style="width: 64px; height: auto"><p class="small" style="opacity: .7">Москва, Фрунзенская набережная, 46</p></div>
       </nav>
     </details>
@@ -118,7 +115,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
         <div class="load-2" style="flex: 0 1 400px; display: flex; flex-direction: column; gap: 28px">
           <p class="lead">Маникюр, массаж, йога и практики в одном доме на Фрунзенской набережной.</p>
           <div style="display: flex; flex-wrap: wrap; gap: 12px">
-            <a class="btn btn-cream" href="kontakty.html">Записаться</a>
+            <a class="btn btn-cream mob-only" href="kontakty.html" data-book>Записаться</a>
             <a class="btn btn-ghost" href="#napravleniya">Выбрать направление</a>
           </div>
         </div>
@@ -132,133 +129,118 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
     <p class="lead fade" style="flex: 1 1 320px">У нас пять направлений: тело, энергия, красота, общение и тишина. Начать можно с любого.</p>
   </section>
 
-  <!-- 3. Пять направлений -->
+  <!-- 3. Пять направлений: панели раскрываются -->
   <section id="napravleniya" class="wrap" style="padding-bottom: clamp(64px, 7vw, 96px)">
-    <div class="dirs stg" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
-      
-        <a class="panel" href="napravleniya.html" style="display: block; padding: 8px; background: transparent; text-decoration: none">
-          <div style="height: 100%; border: 1px solid rgba(104,5,23,.3); padding: 0 20px 24px; display: flex; flex-direction: column; align-items: center; text-align: center">
-            <div style="height: 210px; width: 100%; display: flex; justify-content: center; overflow: hidden">
-              <img class="draw" src="assets/sign-body.svg" alt="" style="height: 210px; width: auto">
-            </div>
-            <span class="dir" style="margin-top: 22px">BODY</span>
-            <span class="small" style="margin-top: 6px; color: #680517">Тело</span>
-            <span style="margin-top: 14px; font-family: 'Manrope', system-ui, sans-serif; font-weight: 500; font-size: 15px; color: #680517">Тело и чувственность</span>
-            <p class="small" style="margin-top: 10px; min-height: 60px">Йога и массаж, после которых тело снова слушается.</p>
-            <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Йога</div>
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Массаж</div>
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Массажные практики</div>
-              
-            </div>
-          </div>
-        </a>
-      
-        <a class="panel" href="napravleniya.html" style="display: block; padding: 8px; background: transparent; text-decoration: none">
-          <div style="height: 100%; border: 1px solid rgba(104,5,23,.3); padding: 0 20px 24px; display: flex; flex-direction: column; align-items: center; text-align: center">
-            <div style="height: 210px; width: 100%; display: flex; justify-content: center; overflow: hidden">
-              <img class="draw" src="assets/sign-energy.svg" alt="" style="height: 210px; width: auto">
-            </div>
-            <span class="dir" style="margin-top: 22px">ENERGY</span>
-            <span class="small" style="margin-top: 6px; color: #680517">Энергия</span>
-            <span style="margin-top: 14px; font-family: 'Manrope', system-ui, sans-serif; font-weight: 500; font-size: 15px; color: #680517">Сила и движение</span>
-            <p class="small" style="margin-top: 10px; min-height: 60px">Силовая йога и звук, чтобы проснуться и зарядиться на день.</p>
-            <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Силовая йога</div>
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Саундхилинг</div>
-              
-            </div>
-          </div>
-        </a>
-      
-        <a class="panel" href="napravleniya.html" style="display: block; padding: 8px; background: transparent; text-decoration: none">
-          <div style="height: 100%; border: 1px solid rgba(104,5,23,.3); padding: 0 20px 24px; display: flex; flex-direction: column; align-items: center; text-align: center">
-            <div style="height: 210px; width: 100%; display: flex; justify-content: center; overflow: hidden">
-              <img class="draw" src="assets/sign-beauty.svg" alt="" style="height: 210px; width: auto">
-            </div>
-            <span class="dir" style="margin-top: 22px">BEAUTY</span>
-            <span class="small" style="margin-top: 6px; color: #680517">Красота</span>
-            <span style="margin-top: 14px; font-family: 'Manrope', system-ui, sans-serif; font-weight: 500; font-size: 15px; color: #680517">Любовь к себе</span>
-            <p class="small" style="margin-top: 10px; min-height: 60px">Руки, ноги, лицо. Без спешки и конвейера.</p>
-            <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Маникюр</div>
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Педикюр</div>
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Макияж</div>
-              
-            </div>
-          </div>
-        </a>
-      
-        <a class="panel" href="napravleniya.html" style="display: block; padding: 8px; background: transparent; text-decoration: none">
-          <div style="height: 100%; border: 1px solid rgba(104,5,23,.3); padding: 0 20px 24px; display: flex; flex-direction: column; align-items: center; text-align: center">
-            <div style="height: 210px; width: 100%; display: flex; justify-content: center; overflow: hidden">
-              <img class="draw" src="assets/sign-connection.svg" alt="" style="height: 210px; width: auto">
-            </div>
-            <span class="dir" style="margin-top: 22px">CONNECTION</span>
-            <span class="small" style="margin-top: 6px; color: #680517">Связь</span>
-            <span style="margin-top: 14px; font-family: 'Manrope', system-ui, sans-serif; font-weight: 500; font-size: 15px; color: #680517">Слово и общение</span>
-            <p class="small" style="margin-top: 10px; min-height: 60px">Лекции и разговоры с людьми, которым интересно то же, что тебе.</p>
-            <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Лекции</div>
-              
-            </div>
-          </div>
-        </a>
-      
-        <a class="panel" href="napravleniya.html" style="display: block; padding: 8px; background: transparent; text-decoration: none">
-          <div style="height: 100%; border: 1px solid rgba(104,5,23,.3); padding: 0 20px 24px; display: flex; flex-direction: column; align-items: center; text-align: center">
-            <div style="height: 210px; width: 100%; display: flex; justify-content: center; overflow: hidden">
-              <img class="draw" src="assets/sign-soul.svg" alt="" style="height: 210px; width: auto">
-            </div>
-            <span class="dir" style="margin-top: 22px">SOUL</span>
-            <span class="small" style="margin-top: 6px; color: #680517">Душа</span>
-            <span style="margin-top: 14px; font-family: 'Manrope', system-ui, sans-serif; font-weight: 500; font-size: 15px; color: #680517">Внутренний мир</span>
-            <p class="small" style="margin-top: 10px; min-height: 60px">Кундалини и тишина. Время услышать себя.</p>
-            <div style="width: 100%; margin-top: 18px; border-top: 1px solid rgba(104,5,23,.22)">
-              
-                <div style="padding: 9px 0; border-bottom: 1px solid rgba(104,5,23,.22); text-align: left; font-size: 14px">Кундалини-практики</div>
-              
-            </div>
-          </div>
-        </a>
-      
+    <div class="dpanels fade">
+      <article class="dp on" tabindex="0" aria-expanded="true" aria-label="BODY — Тело">
+        <img class="dp-bg" src="assets/massage-back.jpg" alt="" style="object-position: 50% 50%">
+        <div class="dp-head"><span class="dp-num">01</span></div>
+        <span class="dp-name" aria-hidden="true">BODY</span>
+        <div class="dp-body">
+          <img class="dp-sign" src="assets/sign-body.svg" alt="">
+          <div style="display: flex; flex-direction: column; gap: 10px"><h3 class="dp-title">BODY</h3><p class="dp-motto">Тело · Тело и чувственность</p><p class="body" style="opacity: .85; max-width: 30em">Йога и массаж, после которых тело снова слушается.</p></div>
+          <ul class="dp-list"><li>Йога</li><li>Массаж</li><li>Массажные практики</li></ul>
+          <div class="dp-cta"><a class="btn btn-cream" href="kontakty.html" data-book data-dir="body">Записаться</a><a href="napravleniya.html#body">Цены →</a></div>
+        </div>
+      </article>
+      <article class="dp" tabindex="0" aria-expanded="false" aria-label="ENERGY — Энергия">
+        <img class="dp-bg" src="assets/med-sunset.jpg" alt="" style="object-position: 50% 40%">
+        <div class="dp-head"><span class="dp-num">02</span></div>
+        <span class="dp-name" aria-hidden="true">ENERGY</span>
+        <div class="dp-body">
+          <img class="dp-sign" src="assets/sign-energy.svg" alt="">
+          <div style="display: flex; flex-direction: column; gap: 10px"><h3 class="dp-title">ENERGY</h3><p class="dp-motto">Энергия · Сила и движение</p><p class="body" style="opacity: .85; max-width: 30em">Силовая йога и звук, чтобы проснуться и зарядиться на день.</p></div>
+          <ul class="dp-list"><li>Силовая йога</li><li>Саундхилинг</li></ul>
+          <div class="dp-cta"><a class="btn btn-cream" href="kontakty.html" data-book data-dir="energy">Записаться</a><a href="napravleniya.html#energy">Цены →</a></div>
+        </div>
+      </article>
+      <article class="dp" tabindex="0" aria-expanded="false" aria-label="BEAUTY — Красота">
+        <img class="dp-bg" src="assets/nails-red.jpg" alt="" style="object-position: 50% 50%">
+        <div class="dp-head"><span class="dp-num">03</span></div>
+        <span class="dp-name" aria-hidden="true">BEAUTY</span>
+        <div class="dp-body">
+          <img class="dp-sign" src="assets/sign-beauty.svg" alt="">
+          <div style="display: flex; flex-direction: column; gap: 10px"><h3 class="dp-title">BEAUTY</h3><p class="dp-motto">Красота · Любовь к себе</p><p class="body" style="opacity: .85; max-width: 30em">Руки, ноги, лицо. Без спешки и конвейера.</p></div>
+          <ul class="dp-list"><li>Маникюр</li><li>Педикюр</li><li>Макияж</li></ul>
+          <div class="dp-cta"><a class="btn btn-cream" href="kontakty.html" data-book data-dir="beauty">Записаться</a><a href="napravleniya.html#beauty">Цены →</a></div>
+        </div>
+      </article>
+      <article class="dp" tabindex="0" aria-expanded="false" aria-label="CONNECTION — Связь">
+        <img class="dp-bg" src="assets/lips-red.jpg" alt="" style="object-position: 50% 50%">
+        <div class="dp-head"><span class="dp-num">04</span></div>
+        <span class="dp-name" aria-hidden="true">CONNECTION</span>
+        <div class="dp-body">
+          <img class="dp-sign" src="assets/sign-connection.svg" alt="">
+          <div style="display: flex; flex-direction: column; gap: 10px"><h3 class="dp-title">CONNECTION</h3><p class="dp-motto">Связь · Слово и общение</p><p class="body" style="opacity: .85; max-width: 30em">Лекции и разговоры с людьми, которым интересно то же, что тебе.</p></div>
+          <ul class="dp-list"><li>Лекции</li></ul>
+          <div class="dp-cta"><a class="btn btn-cream" href="kontakty.html" data-book data-dir="connection">Записаться</a><a href="napravleniya.html#connection">Цены →</a></div>
+        </div>
+      </article>
+      <article class="dp" tabindex="0" aria-expanded="false" aria-label="SOUL — Душа">
+        <img class="dp-bg" src="assets/candle-hands.jpg" alt="" style="object-position: 50% 50%">
+        <div class="dp-head"><span class="dp-num">05</span></div>
+        <span class="dp-name" aria-hidden="true">SOUL</span>
+        <div class="dp-body">
+          <img class="dp-sign" src="assets/sign-soul.svg" alt="">
+          <div style="display: flex; flex-direction: column; gap: 10px"><h3 class="dp-title">SOUL</h3><p class="dp-motto">Душа · Интуиция и внутренний мир</p><p class="body" style="opacity: .85; max-width: 30em">Кундалини и тишина. Время услышать себя.</p></div>
+          <ul class="dp-list"><li>Кундалини-практики</li></ul>
+          <div class="dp-cta"><a class="btn btn-cream" href="kontakty.html" data-book data-dir="soul">Записаться</a><a href="napravleniya.html#soul">Цены →</a></div>
+        </div>
+      </article>
     </div>
   </section>
 
-  <!-- 4. Массаж и практики -->
-  <section style="background: #2A030C; color: #EFE4D6">
-    <div class="wrap sec" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px 80px; padding-bottom: 40px">
-      <h2 class="h2 rv" style="flex: 2 1 520px">Массаж и практики</h2>
-      <p class="lead fade" style="flex: 1 1 320px">На второй этаж можно прийти отдельно, без маникюра и макияжа. Здесь тише, чем внизу.</p>
+  <!-- 4. Массаж и практики: лента листается вбок -->
+  <section style="background: #2A030C; color: #EFE4D6" data-rail>
+    <div class="wrap sec" style="padding-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px 80px">
+      <div style="display: flex; flex-direction: column; gap: 20px; max-width: 640px">
+        <h2 class="h2 rv">Массаж и практики</h2>
+        <p class="lead fade">На второй этаж можно прийти отдельно, без маникюра и макияжа. Здесь тише, чем внизу.</p>
+      </div>
+      <div style="display: flex; gap: 10px"><button type="button" class="arrow-btn" data-prev aria-label="Назад"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button type="button" class="arrow-btn" data-next aria-label="Дальше"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     </div>
-    <div class="wrap" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; padding-bottom: clamp(64px, 7vw, 96px)">
-      <a href="napravleniya.html#body" style="text-decoration: none; display: flex; flex-direction: column; gap: 14px">
-        <div class="zoom" style="height: 560px"><img class="ph" src="assets/massage-back.jpg" alt="Руки массажиста на спине"></div>
-        <span class="h3">Массаж</span>
+    <div class="rail">
+      <a class="rc" href="kontakty.html" data-book data-dir="body" data-svc="Массаж">
+        <div class="rc-img"><img src="assets/massage-back.jpg" alt="Массаж" loading="lazy"><span class="rc-n">01</span></div>
+        <span class="rc-tag">Body · тело</span><span class="rc-t">Массаж</span><p class="rc-d">Час, после которого плечи опускаются, а дыхание выравнивается.</p>
       </a>
-      <a href="napravleniya.html#body" style="text-decoration: none; display: flex; flex-direction: column; gap: 14px">
-        <div class="zoom" style="height: 560px"><img class="ph" src="assets/yoga-mat.jpg" alt="Практика на коврике"></div>
-        <span class="h3">Йога и практики</span>
+      <a class="rc" href="kontakty.html" data-book data-dir="body" data-svc="Массажные практики">
+        <div class="rc-img"><img src="assets/massage-oil.jpg" alt="Массажные практики" loading="lazy"><span class="rc-n">02</span></div>
+        <span class="rc-tag">Body · тело</span><span class="rc-t">Массажные практики</span><p class="rc-d">Тёплое масло, свечи и медленный ритм.</p>
+      </a>
+      <a class="rc" href="kontakty.html" data-book data-dir="body" data-svc="Йога">
+        <div class="rc-img"><img src="assets/yoga-mat.jpg" alt="Йога" loading="lazy"><span class="rc-n">03</span></div>
+        <span class="rc-tag">Body · тело</span><span class="rc-t">Йога</span><p class="rc-d">Спокойная практика для гибкости и ясной головы.</p>
+      </a>
+      <a class="rc" href="kontakty.html" data-book data-dir="energy" data-svc="Силовая йога">
+        <div class="rc-img"><img src="assets/med-sunset.jpg" alt="Силовая йога" loading="lazy"><span class="rc-n">04</span></div>
+        <span class="rc-tag">Energy · энергия</span><span class="rc-t">Силовая йога</span><p class="rc-d">Чтобы проснуться, разогнать кровь и зарядиться на день.</p>
+      </a>
+      <a class="rc" href="kontakty.html" data-book data-dir="energy" data-svc="Саундхилинг">
+        <div class="rc-img"><img src="assets/m-bowl.jpg" alt="Саундхилинг" loading="lazy"><span class="rc-n">05</span></div>
+        <span class="rc-tag">Energy · энергия</span><span class="rc-t">Саундхилинг</span><p class="rc-d">Звук поющих чаш, который слышишь всем телом.</p>
+      </a>
+      <a class="rc" href="kontakty.html" data-book data-dir="soul" data-svc="Кундалини-практики">
+        <div class="rc-img"><img src="assets/med-hands.jpg" alt="Кундалини-практики" loading="lazy"><span class="rc-n">06</span></div>
+        <span class="rc-tag">Soul · душа</span><span class="rc-t">Кундалини-практики</span><p class="rc-d">Дыхание, движение и тишина. Время услышать себя.</p>
       </a>
     </div>
+    <div class="wrap" style="padding-bottom: clamp(64px, 7vw, 96px)"><div class="rail-bar"><i></i></div></div>
   </section>
 
-  <!-- 5. Манифест -->
-  <section class="wrap sec" data-scroll="pass" style="display: flex; flex-wrap: wrap; gap: 48px 80px; align-items: center">
-    <div class="zoom" style="flex: 1 1 360px; height: 600px; max-width: 520px"><img class="ph" src="assets/irina.jpg" alt="Ирина, основательница MIAU" style="object-position: 58% 45%"></div>
-    <div style="flex: 1 1 460px; display: flex; flex-direction: column; gap: 28px">
-      <p class="h2 focus-words">«Ты приходишь сюда не стать другой. Ты приходишь снова почувствовать себя»</p>
-      <p class="body fade">Ирина, основательница MIAU</p>
-      <a class="btn btn-ghost-d" href="manifest.html" style="align-self: flex-start">Читать манифест</a>
+  <!-- 5. Цитата Ирины -->
+  <section class="quote" data-scroll="pass">
+    <div class="quote-ph zoom"><img class="ph" src="assets/irina.jpg" alt="Ирина, основательница MIAU" style="object-position: 58% 35%"></div>
+    <div class="quote-tx">
+      <span class="quote-k">Манифест</span>
+      <p class="quote-q focus-words">«Ты приходишь сюда не стать другой. Ты приходишь снова почувствовать себя»</p>
+      <div class="quote-sig">
+        <div class="quote-who"><b>Ирина</b><span>основательница MIAU</span></div>
+        <a class="ring-link" href="manifest.html" aria-label="Читать манифест">
+          <svg viewBox="0 0 148 148" aria-hidden="true"><defs><path id="ringPath" d="M74,74 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/></defs><text font-family="Manrope, sans-serif" font-size="12" font-weight="600" letter-spacing="3" fill="currentColor"><textPath href="#ringPath" textLength="356">ЧИТАТЬ МАНИФЕСТ · ЧИТАТЬ МАНИФЕСТ ·</textPath></text></svg>
+          <span class="ring-c"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -285,95 +267,44 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
     <div class="zoom" style="height: 420px"><img class="ph" src="assets/sauna-steam.jpg" alt="Пар над камнями в бане"></div>
   </section>
 
-  <!-- 8. Сертификаты -->
-  <section style="border-top: 1px solid rgba(104,5,23,.2)">
-    <div class="wrap sec" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 48px 80px; align-items: center">
-      <a href="sertifikaty.html" class="cert-stage fade" data-scroll="pass" aria-label="Подарочные сертификаты MIAU" style="position: relative; display: flex; align-items: flex-end; justify-content: center; height: 540px; background: #2A030C; padding: 0 32px 64px; overflow: hidden; text-decoration: none">
-        <div class="env" style="position: relative; width: min(100%, 440px); aspect-ratio: 200 / 120">
-          <div style="position: absolute; inset: 0; background: #4A0613; box-shadow: 0 50px 80px -30px rgba(0,0,0,.7)"></div>
-          <div class="cert-card" style="position: absolute; left: 7%; right: 7%; top: 5%; aspect-ratio: 210 / 100; background: #EFE4D6; padding: 8px; box-shadow: 0 20px 40px -20px rgba(0,0,0,.6)">
-            <div style="height: 100%; border: 1px solid rgba(104,5,23,.45); display: grid; grid-template-columns: 36% 1fr; align-items: center; gap: 14px; padding: 10px 18px 10px 10px; color: #680517">
-              <img src="assets/emblem-wine.webp" alt="" style="width: 100%; height: auto">
-              <div style="display: flex; flex-direction: column; gap: 8px">
-                <span style="font-family: 'Unbounded', system-ui, sans-serif; letter-spacing: .2em; font-size: clamp(9px, 1.4vw, 13px)">ПОДАРОЧНЫЙ СЕРТИФИКАТ</span>
-                <span style="font-family: 'Manrope', system-ui, sans-serif; font-weight: 500; font-size: clamp(11px, 1.6vw, 16px)">время для себя</span>
-                <span style="height: 1px; background: rgba(104,5,23,.4); margin-top: 6px"></span>
-              </div>
-            </div>
-          </div>
-          <svg viewBox="0 0 200 120" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%"><path d="M0 38 L100 86 L200 38 L200 120 L0 120 Z" fill="#680517"/><path d="M0 120 L84 78 M200 120 L116 78" stroke="rgba(0,0,0,.22)" stroke-width=".5" fill="none"/><path d="M0 38 L100 86 L200 38" stroke="rgba(0,0,0,.3)" stroke-width=".6" fill="none"/></svg>
-          <div class="seal" style="position: absolute; left: 50%; top: 71%; width: 22%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle at 38% 32%, #8A1024 0%, #4A0613 70%, #2A030C 100%); box-shadow: 0 6px 14px rgba(0,0,0,.45), inset 0 0 0 3px rgba(0,0,0,.15); display: flex; align-items: center; justify-content: center">
-            <img src="assets/emblem-cream.webp" alt="" style="width: 74%; height: auto; opacity: .92">
-          </div>
-        </div>
-      </a>
+  <!-- 8. Сертификат: живой номинал -->
+  <section style="background: #2A030C; color: #EFE4D6" data-cert-live>
+    <div class="wrap sec" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 56px 96px; align-items: center">
       <div style="display: flex; flex-direction: column; gap: 28px">
         <h2 class="h2 rv">Время для себя в подарок</h2>
-        <dl class="stg" style="margin: 0; border-top: 1px solid rgba(104,5,23,.25)">
-          <div style="display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(104,5,23,.25)"><dt class="small" style="color: #680517">На сумму</dt><dd class="body" style="margin: 0">Получательница сама выберет, на что потратить</dd></div>
-          <div style="display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(104,5,23,.25)"><dt class="small" style="color: #680517">На направление</dt><dd class="body" style="margin: 0">Маникюр, массаж, йога или другая услуга</dd></div>
-          <div style="display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(104,5,23,.25)"><dt class="small" style="color: #680517">Упаковка</dt><dd class="body" style="margin: 0">Бордовый конверт с печатью</dd></div>
-        </dl>
-        <div style="display: flex; flex-wrap: wrap; gap: 12px">
-          <a class="btn btn-wine" href="sertifikaty.html">Выбрать сертификат</a>
-          <a class="btn btn-ghost-d" href="sertifikaty.html#kak">Как получить</a>
-        </div>
+        <p class="lead fade">Сертификат на сумму или на направление. Получательница сама выберет, когда прийти и что сделать.</p>
+        <div class="chips" role="group" aria-label="Номинал"><button type="button" class="chip" aria-pressed="false" data-v="5000">5&nbsp;000&nbsp;₽</button><button type="button" class="chip" aria-pressed="true" data-v="10000">10&nbsp;000&nbsp;₽</button><button type="button" class="chip" aria-pressed="false" data-v="15000">15&nbsp;000&nbsp;₽</button><button type="button" class="chip" aria-pressed="false" data-v="20000">20&nbsp;000&nbsp;₽</button><button type="button" class="chip" aria-pressed="false" data-v="own">Своя сумма</button></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-cream" href="sertifikaty.html" data-cert data-sum="10000">Оформить сертификат</a><a class="btn btn-ghost" href="sertifikaty.html">Как это работает</a></div>
       </div>
+      <div data-tilt-zone style="padding: 24px 0"><div class="tilt" style="max-width: 580px; margin-inline: auto"><div class="cert"><img class="cert-em" src="assets/emblem-cream.webp" alt=""><span class="cert-thread"></span><span class="cert-no">№ 0001</span><div class="cert-tx"><span class="cert-k">ПОДАРОЧНЫЙ СЕРТИФИКАТ</span><span class="cert-sum" data-c-sum>10&nbsp;000&nbsp;₽</span><span class="cert-for" data-c-for>время для себя</span></div></div></div></div>
     </div>
   </section>
 
   <!-- 8a. Где мы -->
-  <section style="border-top: 1px solid rgba(104,5,23,.2)">
-    <div class="wrap sec" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px 80px; align-items: center">
-      <div style="display: flex; flex-direction: column; gap: 24px">
-        <h2 class="h2 rv">Москва, Фрунзенская набережная, 46</h2>
-        <p class="lead fade">Хамовники, у реки. Метро «Спортивная» и «Фрунзенская».</p>
-        <div style="display: flex; flex-wrap: wrap; gap: 12px">
-            <a class="btn btn-wine" href="https://yandex.ru/maps/?rtext=~%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D0%A4%D1%80%D1%83%D0%BD%D0%B7%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%20%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%2046&amp;rtt=auto" target="_blank" rel="noopener">Построить маршрут</a>
-            <a class="btn btn-ghost-d" href="https://yandex.ru/maps/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D0%A4%D1%80%D1%83%D0%BD%D0%B7%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%20%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%2046" target="_blank" rel="noopener">Открыть в Яндекс Картах</a>
-          </div>
-      </div>
-      <div class="fade">
-        <div class="map-box" style="position: relative; height: 460px; background: #2A030C; overflow: hidden">
-          <iframe src="https://yandex.ru/map-widget/v1/?ll=37.581325%2C55.718375&amp;z=16&amp;pt=37.581325%2C55.718375%2Cpm2rdl" title="MIAU на Яндекс Картах: Москва, Фрунзенская набережная, 46" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0"></iframe>
-          <button type="button" class="map-cover" aria-label="Включить управление картой"><span>Нажми, чтобы двигать карту</span></button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. Запись -->
-  <section style="background: #2A030C; color: #EFE4D6">
-    <div class="wrap sec" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 32px">
-      <span class="draw" aria-hidden="true" style="width: 1px; height: 72px; background: linear-gradient(180deg, rgba(201,164,106,0), #C9A46A)"></span>
-      <h2 class="h2 rv" style="max-width: 860px">Самая выгодная инвестиция — твоё состояние</h2>
-      <a class="btn btn-cream" href="kontakty.html">Записаться</a>
+  <section class="wrap sec">
+    <div class="fade">
+      <div class="mapx" role="region" aria-label="Карта: MIAU, Москва, Фрунзенская набережная, 46"></div>
+      <div class="map-cap"><a href="https://yandex.ru/maps/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D0%A4%D1%80%D1%83%D0%BD%D0%B7%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%20%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%2046" target="_blank" rel="noopener">Москва, Фрунзенская набережная, 46</a><span>Хамовники, у реки · м. Спортивная, Фрунзенская</span></div>
     </div>
   </section>
 
 </main>
-  <footer style="background: #2A030C; color: #EFE4D6">
-    <div class="wrap" style="padding-block: 64px 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 40px">
-      <div style="display: flex; flex-direction: column; gap: 16px">
-        <img class="fade" src="assets/emblem-cream.webp" alt="Логотип MIAU" width="132" height="132" style="width: 132px; height: auto; align-self: flex-start">
-        <p class="small" style="opacity: .75">Красота, тело и душа в одном доме на Фрунзенской набережной</p>
-        <a class="btn btn-cream" href="kontakty.html" style="align-self: flex-start; min-height: 44px; padding: 0 22px">Записаться</a>
+  <footer class="ft" data-scroll="pass">
+    <div class="wrap ft-top">
+      <div>
+        <p class="ft-claim">Самая выгодная инвестиция — твоё состояние</p>
+        <a class="btn btn-cream" href="kontakty.html" data-book>Записаться</a>
       </div>
-      <nav class="small" aria-label="Разделы сайта" style="display: flex; flex-direction: column; gap: 8px">
-        <span style="opacity: .55">Разделы</span>
-        <a href="napravleniya.html">Направления и цены</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a>
-      </nav>
-      <div class="small" style="display: flex; flex-direction: column; gap: 8px">
-        <span style="opacity: .55">Контакты</span>
-        <span>Москва, Фрунзенская набережная, 46</span><span>[Часы работы]</span><a href="tel:+70000000000">[+7 000 000-00-00]</a><a href="kontakty.html">[Telegram]</a><a href="kontakty.html">[WhatsApp]</a>
-      </div>
+      <nav aria-label="Разделы сайта"><p class="ft-h">Разделы</p><div class="ft-links"><a href="napravleniya.html">Направления и цены</a><a href="manifest.html">Манифест</a><a href="komanda.html">Команда</a><a href="sertifikaty.html">Сертификаты</a><a href="kontakty.html">Контакты</a></div></nav>
+      <div><p class="ft-h">Контакты</p><div class="ft-links"><a href="https://yandex.ru/maps/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D0%A4%D1%80%D1%83%D0%BD%D0%B7%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%20%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F%2C%2046" target="_blank" rel="noopener">Фрунзенская наб., 46</a><span>[Часы работы]</span><a href="tel:+70000000000">[+7 000 000-00-00]</a><span><a href="kontakty.html">[Telegram]</a> · <a href="kontakty.html">[WhatsApp]</a></span></div></div>
     </div>
-    <div class="wrap small" style="padding-block: 20px 32px; border-top: 1px solid rgba(239,228,214,.15); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; opacity: .7">
-      <span>© 2026 MIAU · <a href="dokumenty.html">Документы</a></span><span>[ООО или ИП «…», ИНН …, ОГРН …]</span>
-    </div>
+    <div class="ft-word" aria-hidden="true"></div>
+    <div class="wrap ft-bot"><span>© 2026 MIAU · <a href="dokumenty.html">Документы</a></span><span>[ООО или ИП «…», ИНН …, ОГРН …]</span></div>
   </footer>
 </div>
 <script src="assets/lenis.min.js" defer></script>
 <script src="assets/site.js" defer></script>
+<script src="assets/leaflet.js" defer></script>
+<script src="assets/ui.js" defer></script>
 </body>
 </html>

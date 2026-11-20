@@ -21,16 +21,12 @@
     });
   }
 
-  /* Карта: заслонка не даёт карте перехватывать прокрутку, пока по ней не нажали */
-  D.querySelectorAll('.map-cover').forEach(function (b) {
-    b.addEventListener('click', function () { b.parentNode.classList.add('live'); });
-  });
-
   if (!fx) return;
 
   /* 3. Плавная прокрутка (Lenis): только колесо мыши, на телефоне — родной скролл */
   if (window.Lenis) {
     var lenis = new Lenis({ lerp: 0.09, anchors: true });
+    window.MIAU = window.MIAU || {}; MIAU.lenis = lenis;
     (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
     if (menu) menu.addEventListener('toggle', function () { menu.open ? lenis.stop() : lenis.start(); });
   }
