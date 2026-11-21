@@ -4,6 +4,10 @@
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fx = H.classList.contains('js-fx');
 
+  /* 0. Страница всегда открывается сверху (кроме ссылок с якорем #…) */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (!location.hash) window.scrollTo(0, 0);
+
   /* 1. Видео первого экрана: без звука, по кругу; при «уменьшить движение» — стоп-кадр */
   D.querySelectorAll('video').forEach(function (v) {
     v.muted = true;
