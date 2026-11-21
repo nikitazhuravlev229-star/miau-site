@@ -1,0 +1,13 @@
+# MIAU
+
+> Пространство красоты, тела и души в Москве: Фрунзенская набережная, 46. Маникюр, педикюр, макияж, массаж, йога, саундхилинг, практики и женское комьюнити в одном доме. Основательница — Ирина.
+
+## Страницы
+
+- [Главная](https://nikitazhuravlev229-star.github.io/miau-site/): пять направлений, массаж и практики, сертификат, карта
+- [Направления и цены](https://nikitazhuravlev229-star.github.io/miau-site/napravleniya.html): услуги по направлениям и запись
+- [Манифест](https://nikitazhuravlev229-star.github.io/miau-site/manifest.html): философия MIAU и три опоры
+- [Команда](https://nikitazhuravlev229-star.github.io/miau-site/komanda.html): основательница и мастера
+- [Сертификаты](https://nikitazhuravlev229-star.github.io/miau-site/sertifikaty.html): подарочные сертификаты на сумму
+- [Контакты](https://nikitazhuravlev229-star.github.io/miau-site/kontakty.html): адрес, карта, вопросы перед визитом
+- [Документы](https://nikitazhuravlev229-star.github.io/miau-site/dokumenty.html): политика конфиденциальности, согласие, оферта
