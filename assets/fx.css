@@ -70,6 +70,7 @@ html.lenis,html.lenis body{height:auto}
 
 /* Типографика на телефоне: крупнее мелкий и основной текст, свободнее заголовки */
 @media (max-width:640px){
+  .h3:not([style*="font-size"]){font-size:19px}
   .d1{font-size:34px !important}
   .h1{font-size:28px !important}
   .h2{font-size:23px !important}
