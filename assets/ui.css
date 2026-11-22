@@ -173,3 +173,30 @@
   .ft-links{font-size:14px;gap:8px}
 }
 @media (prefers-reduced-motion:reduce){.ft-word{animation:none}.ring-link svg{animation:none}.pin::before{animation:none}}
+
+/* ===== Перетекание: видео и фото растворяются в фоне, секции переходят беж ↔ бордо ===== */
+.hero{position:relative;color:#EFE4D6;background:#EFE4D6;overflow:hidden}
+.hero video,.hero-shade{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 58%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 58%,transparent 100%)}
+.hero-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(42,3,12,.55) 0,rgba(42,3,12,.1) 20%,rgba(42,3,12,.15) 38%,rgba(42,3,12,.7) 66%,#2A030C 100%)}
+.hero-in{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:clamp(150px,30svh,300px)}
+.hero-cap{display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}
+.hero-t{font-family:'Unbounded',system-ui,sans-serif;font-weight:300;font-size:clamp(22px,2.2vw,30px);line-height:1.2;letter-spacing:-.02em;margin:0}
+
+.fl{--fl:clamp(110px,13vw,200px);background:#2A030C}
+.fl-in{background:linear-gradient(180deg,#EFE4D6 0,#2A030C var(--fl))}
+.fl-out{background:linear-gradient(180deg,#2A030C calc(100% - var(--fl)),#EFE4D6 100%)}
+.fl-in.fl-out{background:linear-gradient(180deg,#EFE4D6 0,#2A030C var(--fl),#2A030C calc(100% - var(--fl)),#EFE4D6 100%)}
+.fl-in{padding-top:calc(var(--fl) * .55)}
+.fl-out{padding-bottom:calc(var(--fl) * .55)}
+
+/* фото без жёсткой рамки: края растворяются */
+.soft{--sx:10%;--sy:12%;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 var(--sx),#000 calc(100% - var(--sx)),transparent),linear-gradient(180deg,transparent,#000 var(--sy),#000 calc(100% - var(--sy)),transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent,#000 var(--sx),#000 calc(100% - var(--sx)),transparent),linear-gradient(180deg,transparent,#000 var(--sy),#000 calc(100% - var(--sy)),transparent);
+  mask-composite:intersect}
+.dpanels.soft{--sx:3%;--sy:7%}
+.fl-pan{background:linear-gradient(180deg,#EFE4D6 0,#EFE4D6 25%,#2A030C 100%);padding-bottom:clamp(40px,5vw,72px)}
+.ft{--fl:clamp(120px,14vw,220px);background:linear-gradient(180deg,#EFE4D6 0,#2A030C var(--fl));padding-top:calc(var(--fl) * .5)}
+.rc-img{-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent);mask-image:linear-gradient(180deg,#000 70%,transparent)}
+.zr-sec .stick{-webkit-mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent)}
