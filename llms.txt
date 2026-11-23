@@ -6,6 +6,7 @@
 
 - [Главная](https://nikitazhuravlev229-star.github.io/miau-site/): пять направлений, массаж и практики, сертификат, карта
 - [Направления и цены](https://nikitazhuravlev229-star.github.io/miau-site/napravleniya.html): услуги по направлениям и запись
+- [Направления по отдельности](https://nikitazhuravlev229-star.github.io/miau-site/body.html): BODY, ENERGY (energy.html), BEAUTY (beauty.html), CONNECTION (connection.html), SOUL (soul.html) — что это и чем помогает
 - [Манифест](https://nikitazhuravlev229-star.github.io/miau-site/manifest.html): философия MIAU и три опоры
 - [Команда](https://nikitazhuravlev229-star.github.io/miau-site/komanda.html): основательница и мастера
 - [Сертификаты](https://nikitazhuravlev229-star.github.io/miau-site/sertifikaty.html): подарочные сертификаты на сумму

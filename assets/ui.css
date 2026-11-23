@@ -215,3 +215,28 @@
 .dpanels.soft{--sx:5%;--sy:10%}
 .rc-img{-webkit-mask-image:linear-gradient(180deg,#000 55%,rgba(0,0,0,1.000) 55.0%,rgba(0,0,0,0.995) 58.8%,rgba(0,0,0,0.965) 62.5%,rgba(0,0,0,0.896) 66.2%,rgba(0,0,0,0.790) 70.0%,rgba(0,0,0,0.653) 73.8%,rgba(0,0,0,0.500) 77.5%,rgba(0,0,0,0.347) 81.2%,rgba(0,0,0,0.210) 85.0%,rgba(0,0,0,0.104) 88.8%,rgba(0,0,0,0.035) 92.5%,rgba(0,0,0,0.005) 96.2%,rgba(0,0,0,0.000) 100.0%);mask-image:linear-gradient(180deg,#000 55%,rgba(0,0,0,1.000) 55.0%,rgba(0,0,0,0.995) 58.8%,rgba(0,0,0,0.965) 62.5%,rgba(0,0,0,0.896) 66.2%,rgba(0,0,0,0.790) 70.0%,rgba(0,0,0,0.653) 73.8%,rgba(0,0,0,0.500) 77.5%,rgba(0,0,0,0.347) 81.2%,rgba(0,0,0,0.210) 85.0%,rgba(0,0,0,0.104) 88.8%,rgba(0,0,0,0.035) 92.5%,rgba(0,0,0,0.005) 96.2%,rgba(0,0,0,0.000) 100.0%)}
 .zr-sec .stick{-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,0.000) calc(var(--zy) * 0.000),rgba(0,0,0,0.005) calc(var(--zy) * 0.083),rgba(0,0,0,0.035) calc(var(--zy) * 0.167),rgba(0,0,0,0.104) calc(var(--zy) * 0.250),rgba(0,0,0,0.210) calc(var(--zy) * 0.333),rgba(0,0,0,0.347) calc(var(--zy) * 0.417),rgba(0,0,0,0.500) calc(var(--zy) * 0.500),rgba(0,0,0,0.653) calc(var(--zy) * 0.583),rgba(0,0,0,0.790) calc(var(--zy) * 0.667),rgba(0,0,0,0.896) calc(var(--zy) * 0.750),rgba(0,0,0,0.965) calc(var(--zy) * 0.833),rgba(0,0,0,0.995) calc(var(--zy) * 0.917),rgba(0,0,0,1.000) calc(var(--zy) * 1.000),rgba(0,0,0,1.000) calc(100% - var(--zy) + var(--zy) * 0.000),rgba(0,0,0,0.995) calc(100% - var(--zy) + var(--zy) * 0.083),rgba(0,0,0,0.965) calc(100% - var(--zy) + var(--zy) * 0.167),rgba(0,0,0,0.896) calc(100% - var(--zy) + var(--zy) * 0.250),rgba(0,0,0,0.790) calc(100% - var(--zy) + var(--zy) * 0.333),rgba(0,0,0,0.653) calc(100% - var(--zy) + var(--zy) * 0.417),rgba(0,0,0,0.500) calc(100% - var(--zy) + var(--zy) * 0.500),rgba(0,0,0,0.347) calc(100% - var(--zy) + var(--zy) * 0.583),rgba(0,0,0,0.210) calc(100% - var(--zy) + var(--zy) * 0.667),rgba(0,0,0,0.104) calc(100% - var(--zy) + var(--zy) * 0.750),rgba(0,0,0,0.035) calc(100% - var(--zy) + var(--zy) * 0.833),rgba(0,0,0,0.005) calc(100% - var(--zy) + var(--zy) * 0.917),rgba(0,0,0,0.000) calc(100% - var(--zy) + var(--zy) * 1.000));mask-image:linear-gradient(180deg,rgba(0,0,0,0.000) calc(var(--zy) * 0.000),rgba(0,0,0,0.005) calc(var(--zy) * 0.083),rgba(0,0,0,0.035) calc(var(--zy) * 0.167),rgba(0,0,0,0.104) calc(var(--zy) * 0.250),rgba(0,0,0,0.210) calc(var(--zy) * 0.333),rgba(0,0,0,0.347) calc(var(--zy) * 0.417),rgba(0,0,0,0.500) calc(var(--zy) * 0.500),rgba(0,0,0,0.653) calc(var(--zy) * 0.583),rgba(0,0,0,0.790) calc(var(--zy) * 0.667),rgba(0,0,0,0.896) calc(var(--zy) * 0.750),rgba(0,0,0,0.965) calc(var(--zy) * 0.833),rgba(0,0,0,0.995) calc(var(--zy) * 0.917),rgba(0,0,0,1.000) calc(var(--zy) * 1.000),rgba(0,0,0,1.000) calc(100% - var(--zy) + var(--zy) * 0.000),rgba(0,0,0,0.995) calc(100% - var(--zy) + var(--zy) * 0.083),rgba(0,0,0,0.965) calc(100% - var(--zy) + var(--zy) * 0.167),rgba(0,0,0,0.896) calc(100% - var(--zy) + var(--zy) * 0.250),rgba(0,0,0,0.790) calc(100% - var(--zy) + var(--zy) * 0.333),rgba(0,0,0,0.653) calc(100% - var(--zy) + var(--zy) * 0.417),rgba(0,0,0,0.500) calc(100% - var(--zy) + var(--zy) * 0.500),rgba(0,0,0,0.347) calc(100% - var(--zy) + var(--zy) * 0.583),rgba(0,0,0,0.210) calc(100% - var(--zy) + var(--zy) * 0.667),rgba(0,0,0,0.104) calc(100% - var(--zy) + var(--zy) * 0.750),rgba(0,0,0,0.035) calc(100% - var(--zy) + var(--zy) * 0.833),rgba(0,0,0,0.005) calc(100% - var(--zy) + var(--zy) * 0.917),rgba(0,0,0,0.000) calc(100% - var(--zy) + var(--zy) * 1.000));--zy:30%}
+
+/* ===== Один блок — один экран ===== */
+.scr{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-content:center;box-sizing:border-box}
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);align-items:center;padding-block:clamp(48px,8svh,96px)}
+.svc-rev .svc-ph{order:2}
+.svc-ph{height:min(78svh,720px)}
+.svc-tx{display:flex;flex-direction:column;gap:20px;max-width:560px}
+.svc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.svc-list li{font:400 16px/1.5 'Manrope',sans-serif;padding-left:22px;position:relative}
+.svc-list li::before{content:"";position:absolute;left:0;top:.75em;width:12px;height:1px;background:#680517}
+@media (max-width:760px){.svc{grid-template-columns:1fr}.svc-rev .svc-ph{order:0}.svc-ph{height:52svh}.scr.svc{min-height:auto}}
+
+/* ===== v3: переходы мягче и короче, без растворения фото под текстом ===== */
+.hero{background:#2A030C}
+.hero video,.hero-shade{-webkit-mask-image:none;mask-image:none}
+.hero-shade{background:linear-gradient(180deg,rgba(42,3,12,.5) 0,rgba(42,3,12,.1) 25%,rgba(42,3,12,.15) 50%,rgba(42,3,12,.75) 100%)}
+.hero-in{padding-bottom:clamp(64px,12svh,140px)}
+.fl{--fl:clamp(40px,4vw,72px)}
+.fl-in{padding-top:clamp(64px,7vw,112px)}
+.fl-out{padding-bottom:clamp(64px,7vw,112px)}
+.ft{--fl:clamp(40px,4vw,72px);padding-top:clamp(48px,5vw,80px)}
+.fl-pan{background:linear-gradient(180deg,#EFE4D6 calc(100% - 72px),#2A030C 100%)}
+.zr-sec .stick,.rc-img{-webkit-mask-image:none;mask-image:none}
+.soft{--sx:4%;--sy:5%}
+.dpanels.soft{--sx:0%;--sy:0%;-webkit-mask-image:none;mask-image:none}
