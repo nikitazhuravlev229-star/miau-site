@@ -13,6 +13,7 @@
      LLM_URL   — полный адрес, например https://api.kie.ai/<модель>/v1/chat/completions (точный путь — в docs.kie.ai)
      LLM_KEY   — ключ API
      LLM_MODEL — имя модели, если провайдер просит его в теле запроса (Kie не просит: модель в адресе)
+   Groq (бесплатный тариф, без карты): LLM_URL=https://api.groq.com/openai/v1/chat/completions, LLM_KEY=gsk_…, LLM_MODEL=openai/gpt-oss-120b
    FreeLLMAPI (свой сервер-агрегатор бесплатных лимитов): LLM_URL=https://<сервер>/v1/chat/completions,
      LLM_KEY=freellmapi-… (общий ключ из его панели), LLM_MODEL=одна конкретная модель (не auto — иначе ответы скачут по стилю)
    Если LLM_URL задан, GigaChat не используется. */
