@@ -13,6 +13,8 @@
      LLM_URL   — полный адрес, например https://api.kie.ai/<модель>/v1/chat/completions (точный путь — в docs.kie.ai)
      LLM_KEY   — ключ API
      LLM_MODEL — имя модели, если провайдер просит его в теле запроса (Kie не просит: модель в адресе)
+   FreeLLMAPI (свой сервер-агрегатор бесплатных лимитов): LLM_URL=https://<сервер>/v1/chat/completions,
+     LLM_KEY=freellmapi-… (общий ключ из его панели), LLM_MODEL=одна конкретная модель (не auto — иначе ответы скачут по стилю)
    Если LLM_URL задан, GigaChat не используется. */
 const fs = require('fs');
 const crypto = require('crypto');
@@ -60,7 +62,8 @@ async function chat(messages) {
   const all = [{ role: 'system', content: SYSTEM }, ...msgs];
   let r;
   if (process.env.LLM_URL) {
-    const body = { messages: all.map(m => ({ role: m.role, content: [{ type: 'text', text: m.content }] })), stream: false, max_tokens: 400 };
+    const parts = /kie\.ai/.test(process.env.LLM_URL); /* Kie ждёт content массивом, остальные (FreeLLMAPI, OpenRouter…) — строкой */
+    const body = { messages: all.map(m => ({ role: m.role, content: parts ? [{ type: 'text', text: m.content }] : m.content })), stream: false, max_tokens: 400 };
     if (process.env.LLM_MODEL) body.model = process.env.LLM_MODEL;
     r = await fetch(process.env.LLM_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + process.env.LLM_KEY }, body: JSON.stringify(body) });
   } else {
