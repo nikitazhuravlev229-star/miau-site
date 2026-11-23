@@ -316,3 +316,12 @@ article.scr:first-child{border-top:0}
   .zoom[style*="aspect-ratio: 4 / 5"]:not([data-cert-live] .zoom){aspect-ratio:4/3 !important}
   .scr > div > .zoom[style*="min(78svh"],.zoom[style*="height: min(78svh"]{height:56svh !important}
 }
+
+/* ===== 23.11: отступы, сертификат, форма ===== */
+.rail{scroll-padding-inline:clamp(20px,4.5vw,96px)}
+.quote{padding-top:clamp(56px,6vw,112px)}
+/* фото сертификата растворяется в фоне блока */
+.cert-ph{-webkit-mask-image:radial-gradient(ellipse 72% 70% at 50% 52%,#000 52%,rgba(0,0,0,.85) 62%,rgba(0,0,0,.5) 76%,rgba(0,0,0,.18) 88%,transparent 100%);mask-image:radial-gradient(ellipse 72% 70% at 50% 52%,#000 52%,rgba(0,0,0,.85) 62%,rgba(0,0,0,.5) 76%,rgba(0,0,0,.18) 88%,transparent 100%)}
+/* карточка сертификата в форме — бордовая, как печатный сертификат */
+.cert{background:#680517}
+.bk-date small:first-child{text-transform:uppercase}

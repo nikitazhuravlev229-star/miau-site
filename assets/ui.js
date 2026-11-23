@@ -36,7 +36,7 @@
     var d = new Date();
     for (var i = 0; i < 14; i++) {
       var x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + i);
-      var label = i === 0 ? 'сегодня' : i === 1 ? 'завтра' : wd[x.getDay()];
+      var label = wd[x.getDay()];
       out.push('<button type="button" class="chip bk-date" aria-pressed="false" data-v="' + x.getDate() + ' ' + mn[x.getMonth()] + ' (' + label + ')"><small>' + label + '</small><b>' + x.getDate() + '</b><small>' + mn[x.getMonth()] + '</small></button>');
     }
     return '<div class="chips bk-dates" data-name="date">' + out.join('') + '</div>';
@@ -54,11 +54,12 @@
     book: {
       title: 'Запись в MIAU',
       steps: [
-        '<div class="bk-step" data-step="what"><p class="bk-q">Что хочется?</p><div><p class="bk-l">Направление</p>' +
-        chips('dir', Object.keys(DIRS).map(function (k) { return [k, DIRS[k].name]; })) + '</div><div data-svc hidden><p class="bk-l">Услуга</p><div data-svc-list></div></div>' +
+        '<div class="bk-step" data-step="what"><p class="bk-q">Что хочется?</p><div><p class="bk-l">Направления — можно несколько</p>' +
+        chips('dir', Object.keys(DIRS).map(function (k) { return [k, DIRS[k].name]; }), true) + '</div><div data-svc hidden><p class="bk-l">Услуга</p><div data-svc-list></div></div>' +
         '<p class="body" style="opacity:.7">Не знаешь, что выбрать? Пропусти — администратор подскажет.</p></div>',
         '<div class="bk-step" data-step="when"><p class="bk-q">Когда удобно?</p><div><p class="bk-l">День</p>' + dates() + '</div>' +
-        '<div><p class="bk-l">Время</p>' + chips('time', ['Утро, 10–13', 'День, 13–17', 'Вечер, 17–21']) + '</div>' +
+        '<div><p class="bk-l">Время</p>' + chips('time', ['Утро, 10–13', 'День, 13–17', 'Вечер, 17–21', ['own', 'Другое']]) + '</div>' +
+        '<label class="fld" data-own-time hidden><span class="bk-l">Своё время</span><input name="owntime" placeholder="Например, 19:30 или после 20" maxlength="40"></label>' +
         '<div><p class="bk-l">Специалист</p>' + chips('master', ['Любой свободный', 'Уже знаю, к кому — напишу в комментарии']) + '</div></div>',
         contactStep
       ],
@@ -99,11 +100,13 @@
     form.addEventListener('click', function (e) {
       var c = e.target.closest('.chip'); if (!c) return;
       var g = c.parentNode, name = g.dataset.name;
-      [].forEach.call(g.children, function (x) { if (x !== c) x.setAttribute('aria-pressed', 'false'); });
+      var multi = g.hasAttribute('data-multi');
+      if (!multi) [].forEach.call(g.children, function (x) { if (x !== c) x.setAttribute('aria-pressed', 'false'); });
       var on = c.getAttribute('aria-pressed') !== 'true';
       c.setAttribute('aria-pressed', on ? 'true' : 'false');
-      state.v[name] = on ? c.dataset.v : '';
+      state.v[name] = multi ? [].filter.call(g.children, function (x) { return x.getAttribute('aria-pressed') === 'true'; }).map(function (x) { return x.dataset.v; }).join(',') : (on ? c.dataset.v : '');
       if (name === 'dir' && kind === 'book') svc(state.v.dir);
+      if (name === 'time') { var ot = bk.querySelector('[data-own-time]'); ot.hidden = state.v.time !== 'own'; if (!ot.hidden) ot.querySelector('input').focus(); }
       if (kind === 'cert') {
         if (name === 'sum') { state.v.dir = ''; clearGroup('dir'); }
         if (name === 'dir' && on) { state.v.sum = ''; clearGroup('sum'); }
@@ -142,9 +145,13 @@
   function clearGroup(n) { [].forEach.call(bk.querySelectorAll('.chips[data-name="' + n + '"] .chip'), function (x) { x.setAttribute('aria-pressed', 'false'); }); }
   function svc(dir) {
     var box = bk.querySelector('[data-svc]'), list = bk.querySelector('[data-svc-list]');
-    state.v.svc = '';
-    if (!dir) { box.hidden = true; return; }
-    list.innerHTML = chips('svc', DIRS[dir].items);
+    var keep = (state.v.svc || '').split(',').filter(Boolean), ds = (dir || '').split(',').filter(Boolean), items = [];
+    ds.forEach(function (d) { DIRS[d].items.forEach(function (x) { var v = typeof x === 'object' ? x[0] : x; if (items.indexOf(v) < 0) items.push(v); }); });
+    if (!items.length) { state.v.svc = ''; box.hidden = true; return; }
+    list.innerHTML = chips('svc', items, true);
+    keep = keep.filter(function (v) { return items.indexOf(v) >= 0; });
+    keep.forEach(function (v) { var b = list.querySelector('.chip[data-v="' + v + '"]'); b && b.setAttribute('aria-pressed', 'true'); });
+    state.v.svc = keep.join(',');
     box.hidden = false;
   }
   function phoneMask(v) {
@@ -191,7 +198,7 @@
   function submit() {
     var v = state.v, rows = [];
     if (state.kind === 'book') {
-      rows = [['Направление', v.dir ? DIRS[v.dir].name : 'Подскажет администратор'], ['Услуга', v.svc || '—'], ['День', v.date || 'Любой'], ['Время', v.time || 'Любое'], ['Специалист', v.master || 'Любой']];
+      rows = [['Направления', v.dir ? v.dir.split(',').map(function (d) { return DIRS[d].name; }).join(', ') : 'Подскажет администратор'], ['Услуги', v.svc ? v.svc.split(',').join(', ') : '—'], ['День', v.date || 'Любой'], ['Время', v.time === 'own' ? (v.owntime || 'Своё — уточним') : (v.time || 'Любое')], ['Специалист', v.master || 'Любой']];
     } else {
       var sum = v.sum === 'own' ? (v.own || '') + ' ₽' : v.sum ? money(+v.sum) : '';
       rows = [['Сертификат', v.dir ? 'На направление ' + DIRS[v.dir].name : sum], ['Кому', v.to || '—'], ['От кого', v.from || '—'], ['Получение', v.get || 'Уточним']];
