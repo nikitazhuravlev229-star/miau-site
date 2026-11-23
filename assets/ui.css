@@ -273,3 +273,46 @@ article.scr:first-child{border-top:0}
 .btn-wine:hover{background:transparent;color:#2A030C;border-color:#2A030C}
 .scrolled .nav-mob summary{background:#2A030C;box-shadow:0 0 0 1px rgba(239,228,214,.35),0 6px 20px rgba(42,3,12,.25)}
 .go:hover i{background:#2A030C}
+
+/* ===== Телефон: единая шкала текста, компактные кнопки и отступы ===== */
+@media (max-width:640px){
+  /* заголовки страниц */
+  .h1,.d1{font-size:26px !important;line-height:1.15 !important}
+  /* заголовки блоков — один размер */
+  .h2,.quote-q,.ft-claim,.dp-title,.svc-tx .h2,main p.fade[style*="Unbounded"],main p.h2{font-size:22px !important;line-height:1.2 !important}
+  /* подзаголовки — один размер */
+  .h3,.dir,.dp-name,.rc-t,main p.h3,.prow .h3{font-size:17px !important;line-height:1.3 !important}
+  .hero-t{font-size:20px !important}
+  /* текст */
+  .lead,.body,.svc-list li,.ft-links{font-size:15px !important;line-height:1.55 !important}
+  .small,.rc-d,.dp-motto{font-size:13px !important}
+  /* кнопки */
+  .btn{min-height:42px !important;padding:0 20px !important;font-size:14px !important}
+  .chip{min-height:38px;padding:0 14px;font-size:13px}
+  .go i{width:46px;height:46px}
+  /* отступы */
+  .sec{padding-block:40px !important}
+  article.scr{padding-block:32px !important}
+  .svc{padding-block:32px !important;gap:20px !important}
+  .svc-ph{height:44svh !important}
+  .svc-tx{gap:14px}
+  .fl-pan{padding-bottom:40px}
+  [data-cert-live] .cert-ph{height:42svh !important;width:calc(42svh * .8) !important}
+  .quote-tx{gap:16px}
+  /* карта без пустот */
+  .map-sec .mapx{height:300px}
+  .map-sec .map-cap{padding:10px 20px;font-size:13px}
+  /* подвал компактнее */
+  .ft-top{padding-top:36px !important;padding-bottom:20px !important;gap:24px 16px !important}
+  .ft-claim{margin-bottom:16px}
+  .ft-word{margin-top:4px}
+  .ft-bot{padding-top:12px;padding-bottom:20px;font-size:12px}
+}
+/* на десктопе тоже срезаем пустоты вокруг карты и подвала */
+.map-sec{margin:0;padding:0}
+.ft-top{padding-top:clamp(40px,5vw,72px)}
+@media (max-width:640px){
+  .pcard{height:200px !important}
+  .zoom[style*="aspect-ratio: 4 / 5"]:not([data-cert-live] .zoom){aspect-ratio:4/3 !important}
+  .scr > div > .zoom[style*="min(78svh"],.zoom[style*="height: min(78svh"]{height:56svh !important}
+}
