@@ -342,3 +342,14 @@ article.scr:first-child{border-top:0}
   .nav-mob summary{top:10px;right:10px;width:44px;height:44px}
   .site-head{padding-top:14px;min-height:58px}
 }
+/* единая шкала: H1 62 / H2 44 / H3 22 на десктопе, 26 / 22 / 17 на телефоне */
+.hero-t{font-size:clamp(32px,4.4vw,62px);line-height:1.06;letter-spacing:-.03em}
+.dp-title,.quote-q{font-size:clamp(26px,3.3vw,44px)}
+.rc-t{font-size:22px}
+main p.fade[style*="Unbounded"]{font-size:clamp(26px,3.3vw,44px) !important;line-height:1.12 !important}
+@media (max-width:640px){
+  .hero-t{font-size:26px !important;line-height:1.15 !important}
+  .steps li,main ol li,main ul li{font-size:15px !important}
+  .acc summary{font-size:17px !important}
+  main p.fade[style*="Unbounded"]{font-size:22px !important;line-height:1.2 !important}
+}
