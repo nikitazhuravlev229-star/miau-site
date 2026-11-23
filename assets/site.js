@@ -16,6 +16,10 @@
     if (p && p.catch) p.catch(function () {});
   });
 
+  /* 1a. Кнопка меню: после первого экрана получает бордовый кружок, чтобы читаться на беже */
+  var setScrolled = function () { H.classList.toggle('scrolled', window.scrollY > 120); };
+  setScrolled(); window.addEventListener('scroll', setScrolled, { passive: true });
+
   /* 2. Мобильное меню: закрыть по Escape и после выбора пункта */
   var menu = D.querySelector('.nav-mob');
   if (menu) {

@@ -240,3 +240,10 @@
 .zr-sec .stick,.rc-img{-webkit-mask-image:none;mask-image:none}
 .soft{--sx:4%;--sy:5%}
 .dpanels.soft{--sx:0%;--sy:0%;-webkit-mask-image:none;mask-image:none}
+
+/* ===== Меню всегда под рукой: кнопка закреплена справа сверху ===== */
+.nav-mob summary{position:fixed;top:18px;right:calc(clamp(20px,4.5vw,96px) - 11px);margin:0;z-index:30;border-radius:50%;color:#EFE4D6;transition:background .3s ease,box-shadow .3s ease}
+.nav-mob .nav-sheet{z-index:29}
+.scrolled .nav-mob summary{background:#680517;box-shadow:0 6px 20px rgba(42,3,12,.25)}
+.nav-mob[open] summary{background:transparent;box-shadow:none}
+.site-head{min-height:66px}
