@@ -83,11 +83,11 @@ def page(d):
   <section class="wrap scr svc{rev}">
     <div class="svc-ph zoom soft"><img class="ph" src="assets/{ph}.webp" alt="{name}"></div>
     <div class="svc-tx">
-      <span class="small" style="color: #680517">{d['key']} · {i + 1:02d}</span>
+      <span class="small" style="color: #2A030C">{d['key']} · {i + 1:02d}</span>
       <h2 class="h2 rv">{name}</h2>
       <p class="lead fade">{what}</p>
       <div class="fade">
-        <p class="small" style="color: #680517; margin-bottom: 10px">Чем помогает</p>
+        <p class="small" style="color: #2A030C; margin-bottom: 10px">Чем помогает</p>
         <ul class="svc-list">{lis}</ul>
       </div>
       <p class="small fade">[мин] · [цена]</p>
@@ -96,7 +96,7 @@ def page(d):
   </section>''')
     others = ''.join(f'<a class="btn btn-ghost" href="{o["slug"]}.html">{o["key"]}</a>' for o in D if o is not d)
     m.append(f'''
-  <section style="background: #680517; color: #EFE4D6">
+  <section style="background: #2A030C; color: #EFE4D6">
     <div class="wrap sec" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px 80px">
       <h2 class="h2 rv">Другие направления</h2>
       <nav style="display: flex; flex-wrap: wrap; gap: 8px" aria-label="Другие направления">{others}</nav>
