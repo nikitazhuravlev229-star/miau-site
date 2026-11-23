@@ -6,6 +6,8 @@
   /* Куда отправлять заявки. Пока пусто: заявка собирается, но никуда не уходит.
      Подключить: MIAU.endpoint = 'https://…' (Telegram-бот, CRM, Formspree) — придёт POST с JSON. */
   MIAU.endpoint = MIAU.endpoint || '';
+  /* Адрес облачной функции ассистента (tools/assistant). Обычно тот же, что endpoint. Пусто — чат работает без нейросети. */
+  MIAU.chatEndpoint = MIAU.chatEndpoint || '';
 
   var DIRS = {
     body: { name: 'BODY Тело', items: ['Йога', 'Массаж', 'Массажные практики'] },
@@ -22,6 +24,7 @@
     return '<div class="cert ' + (cls || '') + '"><div class="cert-l"><img class="cert-em" src="assets/emblem-cream.webp" alt=""></div><span class="cert-div"></span><div class="cert-r"><span class="cert-k">ПОДАРОЧНЫЙ СЕРТИФИКАТ</span><span class="cert-sum" data-c-sum>10\u00a0000\u00a0₽</span><span class="cert-line"><em>для</em><i data-c-for></i></span><span class="cert-foot"><span>№ 0001</span><span>время для себя</span></span></div></div>';
   }
   MIAU.certHTML = certHTML;
+  MIAU.DIRS = DIRS; MIAU.SUMS = SUMS; MIAU.money = money;
 
   /* ================= панель (drawer) ================= */
   var ov, bk, state, lenisWasRunning;
