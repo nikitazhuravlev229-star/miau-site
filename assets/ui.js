@@ -8,11 +8,11 @@
   MIAU.endpoint = MIAU.endpoint || '';
 
   var DIRS = {
-    body: { name: 'BODY · Тело', items: ['Йога', 'Массаж', 'Массажные практики'] },
-    energy: { name: 'ENERGY · Энергия', items: ['Силовая йога', 'Саундхилинг'] },
-    beauty: { name: 'BEAUTY · Красота', items: ['Маникюр', 'Педикюр', 'Макияж'] },
-    connection: { name: 'CONNECTION · Связь', items: ['Лекции'] },
-    soul: { name: 'SOUL · Душа', items: ['Кундалини-практики'] }
+    body: { name: 'BODY Тело', items: ['Йога', 'Массаж', 'Массажные практики'] },
+    energy: { name: 'ENERGY Энергия', items: ['Силовая йога', 'Саундхилинг'] },
+    beauty: { name: 'BEAUTY Красота', items: ['Маникюр', 'Педикюр', 'Макияж'] },
+    connection: { name: 'CONNECTION Связь', items: ['Лекции'] },
+    soul: { name: 'SOUL Душа', items: ['Кундалини-практики'] }
   };
   var SUMS = [5000, 10000, 15000, 20000];
   function money(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽'; }
@@ -71,7 +71,7 @@
         '<div class="bk-step" data-step="sum"><div class="bk-preview">' + certHTML() + '</div><div><p class="bk-l">Номинал</p>' +
         chips('sum', SUMS.map(function (s) { return [String(s), money(s)]; }).concat([['own', 'Своя сумма']])) + '</div>' +
         '<label class="fld" data-own hidden><span class="bk-l">Своя сумма, ₽</span><input name="own" inputmode="numeric" placeholder="Например, 12 000"><span class="msg"></span></label>' +
-        '<div><p class="bk-l">Или на направление</p>' + chips('dir', Object.keys(DIRS).map(function (k) { return [k, DIRS[k].name.split(' · ')[1]]; })) + '</div></div>',
+        '<div><p class="bk-l">Или на направление</p>' + chips('dir', Object.keys(DIRS).map(function (k) { return [k, DIRS[k].name.split(' ')[1]]; })) + '</div></div>',
         '<div class="bk-step" data-step="who"><div class="bk-preview">' + certHTML() + '</div><p class="bk-q">Кому и от кого</p>' +
         '<label class="fld"><span class="bk-l">Имя на сертификате</span><input name="to" placeholder="Например, Анне" maxlength="28"></label>' +
         '<label class="fld"><span class="bk-l">От кого</span><input name="from" maxlength="40"></label>' +
@@ -161,7 +161,7 @@
   }
   function preview() {
     var sum = state.v.sum === 'own' ? (state.v.own ? state.v.own.replace(/\s/g, '') : '') : state.v.sum;
-    var txt = state.v.dir ? DIRS[state.v.dir].name.split(' · ')[1].toUpperCase() : (sum ? money(+sum) : '— ₽');
+    var txt = state.v.dir ? DIRS[state.v.dir].name.split(' ')[1].toUpperCase() : (sum ? money(+sum) : '— ₽');
     [].forEach.call(bk.querySelectorAll('[data-c-sum]'), function (x) { x.textContent = txt; x.style.fontSize = state.v.dir ? '5cqw' : ''; });
     [].forEach.call(bk.querySelectorAll('[data-c-for]'), function (x) { x.textContent = state.v.to || ''; });
   }

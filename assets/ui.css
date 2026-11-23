@@ -325,3 +325,15 @@ article.scr:first-child{border-top:0}
 /* карточка сертификата в форме — бордовая, как печатный сертификат */
 .cert{background:#680517}
 .bk-date small:first-child{text-transform:uppercase}
+
+/* ===== Ленты на светлом фоне (работы, айдентика) ===== */
+.light-rail .rc{color:#2A030C}
+.light-rail .arrow-btn:hover{background:#2A030C;color:#EFE4D6}
+/* айдентика: фото целиком, без обрезки */
+.id-rail{align-items:flex-start}
+.id-rail .id-it{flex:0 0 auto;height:clamp(320px,34vw,500px)}
+.id-rail .id-it img{height:100%;width:auto;max-width:none;display:block}
+@media (max-width:640px){
+  .id-rail .id-it{height:auto;width:82vw}
+  .id-rail .id-it img{width:100%;height:auto}
+}

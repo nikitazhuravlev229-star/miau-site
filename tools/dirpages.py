@@ -49,7 +49,7 @@ D = [
         ['Успокаивает поток мыслей', 'Возвращает энергию', 'Помогает прислушаться к себе']),
       ]),
 ]
-TITLES = {d['slug']: f"{d['key']} — {d['motto']} · MIAU" for d in D}
+TITLES = {d['slug']: f"{d['key']} — {d['motto']} | MIAU" for d in D}
 
 def page(d):
     url = BASE + d['slug'] + '.html'
@@ -83,14 +83,14 @@ def page(d):
   <section class="wrap scr svc{rev}">
     <div class="svc-ph zoom soft"><img class="ph" src="assets/{ph}.webp" alt="{name}"></div>
     <div class="svc-tx">
-      <span class="small" style="color: #2A030C">{d['key']} · {i + 1:02d}</span>
+      <span class="small" style="color: #2A030C">{d['key']}&ensp;{i + 1:02d}</span>
       <h2 class="h2 rv">{name}</h2>
       <p class="lead fade">{what}</p>
       <div class="fade">
         <p class="small" style="color: #2A030C; margin-bottom: 10px">Чем помогает</p>
         <ul class="svc-list">{lis}</ul>
       </div>
-      <p class="small fade">[мин] · [цена]</p>
+      <p class="small fade">[мин]&emsp;[цена]</p>
       <a class="btn btn-wine fade" href="kontakty.html" data-book data-dir="{d['slug']}" data-svc="{name}" style="align-self: flex-start">Записаться</a>
     </div>
   </section>''')
