@@ -140,3 +140,8 @@ Leaflet + тайлы OpenStreetMap, тонированы фильтром в п�
 - Для GigaChat положить рядом с index.js сертификат НУЦ Минцифры (`russian_trusted_root_ca.pem`, с gosuslugi.ru/crt) и задать `NODE_EXTRA_CA_CERTS=./russian_trusted_root_ca.pem`.
 - Бот отвечает только по `tools/assistant/kb.md`. Всё в [скобках] он не озвучивает и отправляет к администратору. Новые факты от Ирины вписывать туда.
 - Подключение: вписать адрес функции в `MIAU.endpoint` и `MIAU.chatEndpoint` в начале `assets/ui.js`, обновить `?v=`.
+
+## Вариант «Перетекание» (?fade)
+- Ссылка `…/index.html?fade` включает вариант, где фото растворяются в фон, а винные блоки перетекают в крем. Выбор запоминается в браузере (localStorage `miauFade`), `?flat` возвращает основной вид.
+- Файлы: `assets/fade.css` (все правила под `.v-fade`), `assets/fade.js` (расставляет классы `vf-in`, `vf-out`, `vf-hero`, `vf-m`, `vf-soft`). Класс `v-fade` ставит короткий скрипт в `<head>` каждой страницы.
+- Без `?fade` сайт выглядит как раньше: сплошные блоки без градиентов.
