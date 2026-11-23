@@ -247,3 +247,23 @@
 .scrolled .nav-mob summary{background:#680517;box-shadow:0 6px 20px rgba(42,3,12,.25)}
 .nav-mob[open] summary{background:transparent;box-shadow:none}
 .site-head{min-height:66px}
+
+/* ===== v4: без градиентов-переходов, без пустых экранов ===== */
+.fl,.fl-in,.fl-out,.fl-in.fl-out{background:#2A030C;padding-top:0;padding-bottom:0}
+.fl-pan{background:#EFE4D6;padding-bottom:clamp(56px,6vw,96px)}
+.ft{background:#2A030C;padding-top:0}
+.soft{-webkit-mask-image:none;mask-image:none}
+/* «экран на блок» — только для первых экранов; остальные блоки по содержимому */
+.scr:not([style*="100svh"]):not([data-cert-live]){min-height:0}
+article.scr{padding-block:clamp(40px,5vw,72px);border-top:1px solid rgba(104,5,23,.2)}
+article.scr:first-child{border-top:0}
+.svc{min-height:0}
+/* карта во всю ширину, без отступов */
+.map-sec .mapx{height:clamp(360px,42vw,560px)}
+.map-sec .map-cap{padding:14px clamp(20px,4.5vw,96px)}
+/* переход к манифесту — простая стрелка */
+.go{display:inline-flex;align-items:center;gap:16px;color:#680517;font:600 15px/1 'Manrope',sans-serif;text-decoration:none}
+.go i{width:56px;height:56px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;transition:background .3s ease,color .3s ease}
+.go:hover i{background:#680517;color:#EFE4D6}
+.go:hover svg{transform:translateX(3px)}
+.go svg{transition:transform .3s ease}
