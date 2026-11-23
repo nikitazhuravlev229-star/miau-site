@@ -204,7 +204,7 @@
   function ask(t) {
     if (!MIAU.chatEndpoint) return act(local(t));
     busy = true; var w = add('ch-bot ch-wait', '<i></i><i></i><i></i>');
-    fetch(MIAU.chatEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history.slice(-12) }) })
+    fetch(MIAU.chatEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history.slice(-12).map(function (m) { return { role: m.role, content: m.content.replace(/\+?\d[\d\s()-]{8,}\d/g, '[телефон]') }; }) }) })
       .then(function (r) { if (!r.ok) throw 0; return r.json(); })
       .then(function (r) { w.remove(); act(r || {}); })
       .catch(function () { w.remove(); act(local(t)); })
