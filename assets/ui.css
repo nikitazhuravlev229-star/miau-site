@@ -337,3 +337,8 @@ article.scr:first-child{border-top:0}
   .id-rail .id-it{height:auto;width:82vw}
   .id-rail .id-it img{width:100%;height:auto}
 }
+/* телефон: кнопка меню в углу */
+@media (max-width:640px){
+  .nav-mob summary{top:10px;right:10px;width:44px;height:44px}
+  .site-head{padding-top:14px;min-height:58px}
+}
