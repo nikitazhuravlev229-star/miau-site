@@ -8,7 +8,12 @@
      TG_TOKEN       — токен бота от @BotFather
      TG_CHAT        — id чата администратора или группы
      ALLOW_ORIGIN   — https://nikitazhuravlev229-star.github.io (или домен сайта)
-     NODE_EXTRA_CA_CERTS=./russian_trusted_root_ca.pem — сертификат НУЦ Минцифры, нужен для GigaChat */
+     NODE_EXTRA_CA_CERTS=./russian_trusted_root_ca.pem — сертификат НУЦ Минцифры, нужен для GigaChat
+   Вместо GigaChat можно любую модель с OpenAI-совместимым API (например, Kie.ai) — тогда задать:
+     LLM_URL   — полный адрес, например https://api.kie.ai/<модель>/v1/chat/completions (точный путь — в docs.kie.ai)
+     LLM_KEY   — ключ API
+     LLM_MODEL — имя модели, если провайдер просит его в теле запроса (Kie не просит: модель в адресе)
+   Если LLM_URL задан, GigaChat не используется. */
 const fs = require('fs');
 const crypto = require('crypto');
 const KB = fs.readFileSync(__dirname + '/kb.md', 'utf8');
@@ -52,13 +57,24 @@ async function chat(messages) {
   const msgs = (Array.isArray(messages) ? messages : []).slice(-12)
     .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
     .map(m => ({ role: m.role, content: m.content.slice(0, 600) }));
-  const r = await fetch('https://gigachat.devices.sberbank.ru/api/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + await gigaToken() },
-    body: JSON.stringify({ model: 'GigaChat', temperature: 0.3, max_tokens: 400, messages: [{ role: 'system', content: SYSTEM }, ...msgs] })
-  });
-  if (!r.ok) throw new Error('gigachat ' + r.status);
-  const text = (await r.json()).choices[0].message.content || '';
+  const all = [{ role: 'system', content: SYSTEM }, ...msgs];
+  let r;
+  if (process.env.LLM_URL) {
+    const body = { messages: all.map(m => ({ role: m.role, content: [{ type: 'text', text: m.content }] })), stream: false, max_tokens: 400 };
+    if (process.env.LLM_MODEL) body.model = process.env.LLM_MODEL;
+    r = await fetch(process.env.LLM_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + process.env.LLM_KEY }, body: JSON.stringify(body) });
+  } else {
+    r = await fetch('https://gigachat.devices.sberbank.ru/api/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + await gigaToken() },
+      body: JSON.stringify({ model: 'GigaChat', temperature: 0.3, max_tokens: 400, messages: all })
+    });
+  }
+  if (!r.ok) throw new Error('llm ' + r.status);
+  const j = await r.json();
+  if (!j.choices || !j.choices[0]) throw new Error('llm ' + JSON.stringify(j).slice(0, 200)); /* Kie отдаёт ошибки и с кодом 200 */
+  let text = j.choices[0].message.content || '';
+  if (Array.isArray(text)) text = text.map(p => p.text || '').join('');
   let out;
   try { out = JSON.parse(text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1)); } catch (e) { out = { reply: text }; }
   return {

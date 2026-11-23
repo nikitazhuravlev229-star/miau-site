@@ -136,6 +136,7 @@ Leaflet + тайлы OpenStreetMap, тонированы фильтром в п�
 - Запись и сертификат чат собирает сам, по шагам (направления, услуги, день, время, имя, телефон, связь, согласие) и шлёт заявку в `MIAU.endpoint` — тем же JSON, что форма, плюс `source: "chat"` и `dialog` (последние реплики).
 - Свободные вопросы уходят в `MIAU.chatEndpoint`. Пусто — бот отвечает без нейросети: адрес, направления, переход к записи.
 - Сервер: `tools/assistant/index.js` — облачная функция (Yandex Cloud Functions, Node 18+). Один адрес: `{messages}` → GigaChat, заявка → сообщение в Telegram. Ключи только в переменных окружения функции (GIGACHAT_KEY, GIGACHAT_SCOPE, TG_TOKEN, TG_CHAT, ALLOW_ORIGIN). В код сайта ключи не класть.
+- Вместо GigaChat можно Kie.ai или другой OpenAI-совместимый API: задать LLM_URL и LLM_KEY (см. шапку index.js).
 - Для GigaChat положить рядом с index.js сертификат НУЦ Минцифры (`russian_trusted_root_ca.pem`, с gosuslugi.ru/crt) и задать `NODE_EXTRA_CA_CERTS=./russian_trusted_root_ca.pem`.
 - Бот отвечает только по `tools/assistant/kb.md`. Всё в [скобках] он не озвучивает и отправляет к администратору. Новые факты от Ирины вписывать туда.
 - Подключение: вписать адрес функции в `MIAU.endpoint` и `MIAU.chatEndpoint` в начале `assets/ui.js`, обновить `?v=`.
