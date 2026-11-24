@@ -153,6 +153,8 @@
     if (P.closest('.dpanels, .rc, .light-rail') || P === s) return;
     var L = D.createElement('div'); L.className = 'vf-bg'; L.setAttribute('aria-hidden', 'true');
     L.style.backgroundImage = 'url("' + (im.currentSrc || im.src) + '")';
+    /* кадрирование как у исходного фото; по вертикали — ближе к верху, чтобы не резать голову */
+    var op = getComputedStyle(im).objectPosition.split(' '); L.style.backgroundPosition = (op[0] || '50%') + ' ' + Math.min(parseFloat(op[1]) || 50, 25) + '%';
     s.insertBefore(L, s.firstChild); P.style.visibility = 'hidden'; s.classList.add('vf-bleed');
     bleeds.push([s, P, L, im]);
   });
@@ -184,8 +186,10 @@
         if (first) { if (first.dataset.mt == null) first.dataset.mt = parseFloat(getComputedStyle(first).marginTop) || 0; first.style.marginTop = (+first.dataset.mt + band) + 'px'; }
         h = Y; botT = 0;
       }
+      /* фото не заходит в полосы перехода: начинается под верхней полосой и заканчивается над нижней, края растворяются коротко */
+      top += topT; h -= topT + botT;
       var st = L.style; st.top = top + 'px'; st.height = h + 'px';
-      var vm = pxMask('180deg', h, topT, topT + Math.max(120, h * .22), h - botT - Math.max(120, h * .22), h - botT), hm;
+      var vm = pxMask('180deg', h, 0, Math.min(90, h * .15), h - Math.min(110, h * .18), h), hm;
       if (pr.width > sr.width * .7) {                                   /* телефон: фото сверху, текст под ним */
         st.left = '0'; st.right = '0'; st.width = 'auto';
         /* фон начинается там, где стоит само фото: если текст над фото — текст остаётся на чистом вине */
