@@ -45,15 +45,19 @@
   }
 
   var blocks = [].filter.call(D.querySelectorAll('section, footer.ft'), function (s) { return !s.parentElement.closest('section, footer') && s.getBoundingClientRect().height > 40; });
-  var col = blocks.map(bg), band = vb();
+  var col = blocks.map(bg), band = vb(), colB;
+  colB = col.slice();
   /* кремовые блоки с фото становятся тёмными, как первый экран: без бежевых полей по бокам */
   function bigImgs(s) { return [].filter.call(s.querySelectorAll('img'), function (m) { return !m.closest('.site-head, .ch, .bk, .intro') && (m.getBoundingClientRect().width || m.offsetWidth) > 200; }); }
   blocks.forEach(function (s, i) {
     if (i === 0 || col[i] !== 'c' || s.matches('.zr-sec, .map-sec, footer') || s.querySelector('.zr-sec, .mapx')) return;
-    if (!bigImgs(s).length) return;
+    var bi = bigImgs(s); if (!bi.length) return;
     col[i] = 'w'; s.classList.add('vf-dark');
+    /* длинный блок, где фото только в начале (например, «Команда»): верх тёмный, затем переход в беж, ниже — на беже */
+    var ph = bi[0].getBoundingClientRect();
+    if (bi.length === 1 && s.offsetHeight > ph.height * 1.8) { colB[i] = 'c'; s.classList.add('vf-split'); }
   });
-  blocks.forEach(function (s, i) { s.dataset.vfc = col[i]; });
+  blocks.forEach(function (s, i) { if (!s.classList.contains('vf-split')) colB[i] = col[i]; s.dataset.vfc = col[i]; });
   function colorOf(el) { var s = el.closest('[data-vfc]'); return RGB[s ? s.dataset.vfc : 'c']; }
 
   blocks.forEach(function (s, i) {
@@ -68,7 +72,7 @@
       var last = media[media.length - 1];
       if (last) {
         /* одна плёнка: фото уходит в вино, затем вино → крем (полоса --vb); видео под ней не перерисовывает маску */
-        var hh = s.offsetHeight, toCream = col[i + 1] === 'c', room = toCream ? hh - band : hh, stay = hh * .48, st = [], k, t, e;
+        var hh = s.offsetHeight, toCream = colB[i] === 'w' && col[i + 1] === 'c', room = toCream ? hh - band : hh, stay = hh * .48, st = [], k, t, e;
         for (k = 0; k <= 8; k++) { t = k / 8; st.push('rgba(' + RGB.w + ',' + ease(t).toFixed(3) + ') ' + ((stay + (room - stay) * t) / hh * 100).toFixed(2) + '%'); }
         if (toCream) for (k = 1; k <= 12; k++) {
           t = k / 12; e = ease(t);
@@ -78,7 +82,7 @@
         film(s, last.nextSibling, 'linear-gradient(180deg,' + st.join(',') + ')');
         media.forEach(function (m) { m.classList.add('vf-cut'); });
       }
-      if (col[i + 1] === 'c') {
+      if (toCream) {
         s.classList.add('vf-out');
         [].forEach.call(s.children, function (t) {
           if (!t.textContent.trim() || media.indexOf(t) > -1) return;
@@ -89,8 +93,8 @@
     }
     if (col[i] !== 'w') return;
     var cs = getComputedStyle(s);
-    if (i > 0 && col[i - 1] === 'c') { s.classList.add('vf-in'); s.style.paddingTop = ((parseFloat(cs.paddingTop) || 0) + band * .8) + 'px'; }
-    if (i < blocks.length - 1 && col[i + 1] === 'c') { s.classList.add('vf-out'); s.style.paddingBottom = ((parseFloat(cs.paddingBottom) || 0) + band * .8) + 'px'; }
+    if (i > 0 && colB[i - 1] === 'c') { s.classList.add('vf-in'); s.style.paddingTop = ((parseFloat(cs.paddingTop) || 0) + band * .8) + 'px'; }
+    if (i < blocks.length - 1 && colB[i] === 'w' && col[i + 1] === 'c') { s.classList.add('vf-out'); s.style.paddingBottom = ((parseFloat(cs.paddingBottom) || 0) + band * .8) + 'px'; }
   });
 
   /* фото внутри блоков: мягкие края маской */
@@ -138,6 +142,14 @@
     s.insertBefore(L, s.firstChild); P.style.visibility = 'hidden';
     bleeds.push([s, P, L, im]);
   });
+  function markLight(el, absY) {      /* всё, что ниже границы, — на беже: тёмный текст */
+    [].forEach.call(el.children, function (c) {
+      if (c.classList.contains('vf-bg')) return;
+      var r = c.getBoundingClientRect();
+      if (r.top >= absY - 4) { c.classList.add('vf-light'); c.dataset.vfc = 'c'; }
+      else if (r.bottom > absY) markLight(c, absY);
+    });
+  }
   function layout() {
     bleeds.forEach(function (b) {
       var s = b[0], P = b[1], L = b[2], im = b[3];
@@ -145,7 +157,19 @@
       var sr = s.getBoundingClientRect(), pr = P.getBoundingClientRect(), H = s.offsetHeight;
       var topT = s.classList.contains('vf-in') ? band : 0, botT = s.classList.contains('vf-out') ? band : 0;
       var top = 0, h = H;
-      if (H > pr.height * 1.8) { top = Math.max(0, pr.top - sr.top - 140); h = Math.min(H - top, pr.height + 280); topT = top ? 0 : topT; botT = top + h < H - 1 ? 0 : botT; }
+      if (s.classList.contains('vf-split')) {
+        /* граница: под фото. Выше — вино, затем полоса вино → беж, ниже — беж и тёмный текст */
+        /* граница — под всем рядом с фото (вместе с текстом), а не только под фото: на телефоне текст стоит под снимком */
+        var A = P; while (A.parentElement && A.parentElement !== s && A.parentElement.offsetHeight < H * .6) A = A.parentElement;
+        var Y = Math.round(Math.max(pr.bottom, A.getBoundingClientRect().bottom) - sr.top + 40), g = ['#2A030C 0', '#2A030C ' + Y + 'px'], k2, t2, e2;
+        for (k2 = 1; k2 <= 12; k2++) { t2 = k2 / 12; e2 = ease(t2); g.push('rgb(' + [42 + 197 * e2, 3 + 225 * e2, 12 + 202 * e2].map(Math.round).join(',') + ') ' + Math.round(Y + band * t2) + 'px'); }
+        if (!s.classList.contains('vf-in')) s.style.setProperty('background', 'linear-gradient(180deg,' + g.join(',') + ',#EFE4D6 100%)', 'important');
+        markLight(s, sr.top + Y);
+        /* бежевую часть опускаем ниже полосы перехода, чтобы тёмный текст не попадал на тёмное */
+        var first = s.querySelector('.vf-light');
+        if (first) { if (first.dataset.mt == null) first.dataset.mt = parseFloat(getComputedStyle(first).marginTop) || 0; first.style.marginTop = (+first.dataset.mt + band) + 'px'; }
+        h = Y; botT = 0;
+      }
       var st = L.style; st.top = top + 'px'; st.height = h + 'px';
       var vm = pxMask('180deg', h, topT, topT + Math.max(120, h * .22), h - botT - Math.max(120, h * .22), h - botT), hm;
       if (pr.width > sr.width * .7) {                                   /* телефон: фото сверху, текст под ним */
