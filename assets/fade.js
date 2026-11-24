@@ -22,7 +22,7 @@
       if (col[i + 1] === 'c') {
         s.classList.add('vf-out');
         var txt = [].filter.call(s.children, function (c) { return c.textContent.trim() && !c.classList.contains('vf-m'); });
-        txt.forEach(function (t) { var pb = parseFloat(getComputedStyle(t).paddingBottom) || 0; t.style.paddingBottom = (pb + band * .75) + 'px'; });
+        txt.forEach(function (t) { var pb = parseFloat(getComputedStyle(t).paddingBottom) || 0; t.style.paddingBottom = (pb + band * 1.05) + 'px'; });
       }
       return;
     }
