@@ -1,4 +1,4 @@
-/* MIAU — интерактив: панель записи и сертификата, направления, лента, сертификат, карта */
+/* МЯУ — интерактив: панель записи и сертификата, направления, лента, сертификат, карта */
 (function () {
   var D = document;
   var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -55,7 +55,7 @@
 
   var FLOWS = {
     book: {
-      title: 'Запись в MIAU',
+      title: 'Запись в МЯУ',
       steps: [
         '<div class="bk-step" data-step="what"><p class="bk-q">Что хочется?</p><div><p class="bk-l">Направления — можно несколько</p>' +
         chips('dir', Object.keys(DIRS).map(function (k) { return [k, DIRS[k].name]; }), true) + '</div><div data-svc hidden><p class="bk-l">Услуга</p><div data-svc-list></div></div>' +
@@ -216,7 +216,7 @@
     var payload = { type: state.kind, data: v, page: location.pathname, at: new Date().toISOString() };
     delete payload.data.consent; payload.consent = true;
     if (MIAU.endpoint) { try { fetch(MIAU.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (e) {} }
-    else if (window.console) console.info('MIAU: заявка собрана, но отправка не подключена (MIAU.endpoint пуст)', payload);
+    else if (window.console) console.info('МЯУ: заявка собрана, но отправка не подключена (MIAU.endpoint пуст)', payload);
   }
   function close(instant) {
     if (!bk) return;
@@ -290,7 +290,7 @@
       m.zoomControl.setPosition('bottomright');
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(m);
       m.attributionControl.setPrefix(false);
-      L.marker(LL, { icon: L.divIcon({ className: '', html: '<div class="pin"><i></i><b>MIAU</b></div>', iconSize: [22, 22], iconAnchor: [11, 11] }), keyboard: false }).addTo(m);
+      L.marker(LL, { icon: L.divIcon({ className: '', html: '<div class="pin"><i></i><b>МЯУ</b></div>', iconSize: [22, 22], iconAnchor: [11, 11] }), keyboard: false }).addTo(m);
       if (L.Browser.mobile) m.panBy([60, 0], { animate: false });
     };
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { init(e.target); io.unobserve(e.target); } }); }, { rootMargin: '300px' });

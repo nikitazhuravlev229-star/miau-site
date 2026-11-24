@@ -1,4 +1,4 @@
-/* MIAU — ассистент на сайте.
+/* МЯУ — ассистент на сайте.
    Отвечает на вопросы (через MIAU.chatEndpoint → облачная функция → GigaChat),
    а запись и сертификат собирает сам, по шагам, и отправляет заявку в MIAU.endpoint
    (та же облачная функция пересылает её в Telegram). Ключей и токенов здесь нет и быть не должно.
@@ -16,13 +16,13 @@
   /* ---------- оболочка ---------- */
   function mount() {
     btn = D.createElement('button');
-    btn.type = 'button'; btn.className = 'ch-btn'; btn.setAttribute('aria-label', 'Ассистент MIAU');
+    btn.type = 'button'; btn.className = 'ch-btn'; btn.setAttribute('aria-label', 'Ассистент МЯУ');
     btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v10H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>';
     btn.addEventListener('click', function () { toggle(true); });
     box = D.createElement('section');
-    box.className = 'ch'; box.setAttribute('aria-label', 'Ассистент MIAU'); box.hidden = true;
+    box.className = 'ch'; box.setAttribute('aria-label', 'Ассистент МЯУ'); box.hidden = true;
     box.innerHTML =
-      '<header class="ch-hd"><p class="ch-ttl">Ассистент MIAU</p><button type="button" class="ch-x" aria-label="Закрыть">×</button></header>' +
+      '<header class="ch-hd"><p class="ch-ttl">Ассистент МЯУ</p><button type="button" class="ch-x" aria-label="Закрыть">×</button></header>' +
       '<div class="ch-log" role="log" aria-live="polite"></div>' +
       '<form class="ch-in"><textarea rows="1" name="q" placeholder="Напиши вопрос" maxlength="600" aria-label="Сообщение"></textarea>' +
       '<button type="submit" class="ch-send" aria-label="Отправить"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></form>' +
@@ -44,7 +44,7 @@
     } else btn.focus();
   }
   function hello() {
-    bot('Привет! Я ассистент MIAU. Помогу выбрать направление, отвечу на вопросы и запишу тебя или оформлю сертификат.');
+    bot('Привет! Я ассистент МЯУ. Помогу выбрать направление, отвечу на вопросы и запишу тебя или оформлю сертификат.');
     chips([['book', 'Записаться'], ['cert', 'Подарить сертификат'], ['ask', 'Задать вопрос']], 'start');
   }
 
@@ -141,7 +141,7 @@
         : 'Не получилось отправить. Попробуй ещё раз чуть позже или позвони нам — контакты на странице «Контакты».');
       flow = null; chips([['book', 'Ещё запись'], ['ask', 'Задать вопрос']], 'start');
     };
-    if (!ep) { if (window.console) console.info('MIAU: заявка из чата собрана, отправка не подключена (MIAU.endpoint пуст)', payload); return done(true); }
+    if (!ep) { if (window.console) console.info('МЯУ: заявка из чата собрана, отправка не подключена (MIAU.endpoint пуст)', payload); return done(true); }
     fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       .then(function (r) { done(r.ok); }).catch(function () { done(false); });
   }
@@ -213,7 +213,7 @@
   function local(t) {
     var s = layout(t).toLowerCase();
     if (/^(привет|здравств|добр(ый|ое|ого)|хай|hello|hi)\b/.test(s)) return { reply: 'Привет! Хочешь записаться, подобрать направление или подарить сертификат?' };
-    if (/как (тебя|вас) зовут|кто ты|ты бот|ты человек/.test(s)) return { reply: 'Я ассистент MIAU, онлайн-помощник сайта. Записываю, помогаю выбрать направление и оформить сертификат. На сложные вопросы ответит администратор.' };
+    if (/как (тебя|вас) зовут|кто ты|ты бот|ты человек/.test(s)) return { reply: 'Я ассистент МЯУ, онлайн-помощник сайта. Записываю, помогаю выбрать направление и оформить сертификат. На сложные вопросы ответит администратор.' };
     if (/как (ты|дела|жизнь)|как поживаешь/.test(s)) return { reply: 'Всё хорошо, спасибо! Чем помочь: подобрать направление, записать или рассказать про сертификат?' };
     if (/спасиб/.test(s)) return { reply: 'Пожалуйста! Если что-то ещё — пиши.' };
     var m = match(s);

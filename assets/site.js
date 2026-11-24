@@ -1,4 +1,4 @@
-/* MIAU — общий скрипт сайта: видео, плавная прокрутка, анимации, меню */
+/* МЯУ — общий скрипт сайта: видео, плавная прокрутка, анимации, меню */
 (function () {
   var D = document, H = D.documentElement;
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
