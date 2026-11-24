@@ -8,6 +8,7 @@
   MIAU.endpoint = MIAU.endpoint || '';
   /* Адрес облачной функции ассистента (tools/assistant). Обычно тот же, что endpoint. Пусто — чат работает без нейросети. */
   MIAU.chatEndpoint = MIAU.chatEndpoint || 'https://functions.yandexcloud.net/d4enmgrvq6f5mestu4h1';
+  MIAU.endpoint = MIAU.endpoint || MIAU.chatEndpoint;   /* заявки форм и чата идут туда же: функция кладёт их в очередь, сервер пересылает в Telegram */
 
   var DIRS = {
     body: { name: 'BODY Тело', items: ['Йога', 'Массаж', 'Массажные практики'] },
@@ -21,7 +22,7 @@
   function el(html) { var t = D.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function certHTML(cls) {
-    return '<div class="cert ' + (cls || '') + '"><div class="cert-l"><img class="cert-em" src="assets/emblem-cream.webp" alt=""></div><span class="cert-div"></span><div class="cert-r"><span class="cert-k">ПОДАРОЧНЫЙ СЕРТИФИКАТ</span><span class="cert-sum" data-c-sum>10\u00a0000\u00a0₽</span><span class="cert-line"><em>для</em><i data-c-for></i></span><span class="cert-foot"><span>№ 0001</span><span>время для себя</span></span></div></div>';
+    return '<div class="cert ' + (cls || '') + '"><div class="cert-l"><img class="cert-em" src="assets/emblem-myau-cream.webp" alt=""></div><span class="cert-div"></span><div class="cert-r"><span class="cert-k">ПОДАРОЧНЫЙ СЕРТИФИКАТ</span><span class="cert-sum" data-c-sum>10\u00a0000\u00a0₽</span><span class="cert-line"><em>для</em><i data-c-for></i></span><span class="cert-foot"><span>№ 0001</span><span>время для себя</span></span></div></div>';
   }
   MIAU.certHTML = certHTML;
   MIAU.DIRS = DIRS; MIAU.SUMS = SUMS; MIAU.money = money;
@@ -94,7 +95,7 @@
       '<div class="bk-hd"><p class="bk-ttl">' + F.title + '</p><button type="button" class="bk-x" aria-label="Закрыть">×</button></div>' +
       '<div class="bk-steps">' + F.steps.map(function () { return '<i></i>'; }).join('') + '</div>' +
       '<form class="bk-bd" novalidate>' + F.steps.join('') +
-      '<div class="bk-done"><img src="assets/emblem-wine.webp" alt=""><p class="bk-q">Заявка у нас</p><p class="body">' + F.done + '</p><dl class="bk-sum" data-sum></dl></div></form>' +
+      '<div class="bk-done"><img src="assets/emblem-myau-wine.webp" alt=""><p class="bk-q">Заявка у нас</p><p class="body">' + F.done + '</p><dl class="bk-sum" data-sum></dl></div></form>' +
       '<div class="bk-ft"><button type="button" class="bk-back">← Назад</button><button type="button" class="btn btn-wine bk-next">Дальше</button></div></aside>');
     D.body.appendChild(ov); D.body.appendChild(bk);
     state = { kind: kind, i: 0, v: {} };
@@ -199,11 +200,11 @@
     submit();
   }
   function submit() {
-    var v = state.v, rows = [];
+    var v = state.v, rows = [], sum = '';
     if (state.kind === 'book') {
       rows = [['Направления', v.dir ? v.dir.split(',').map(function (d) { return DIRS[d].name; }).join(', ') : 'Подскажет администратор'], ['Услуги', v.svc ? v.svc.split(',').join(', ') : '—'], ['День', v.date || 'Любой'], ['Время', v.time === 'own' ? (v.owntime || 'Своё — уточним') : (v.time || 'Любое')], ['Специалист', v.master || 'Любой']];
     } else {
-      var sum = v.sum === 'own' ? (v.own || '') + ' ₽' : v.sum ? money(+v.sum) : '';
+      sum = v.sum === 'own' ? (v.own || '') + ' ₽' : v.sum ? money(+v.sum) : '';
       rows = [['Сертификат', v.dir ? 'На направление ' + DIRS[v.dir].name : sum], ['Кому', v.to || '—'], ['От кого', v.from || '—'], ['Получение', v.get || 'Уточним']];
     }
     rows = rows.concat([['Имя', v.name], ['Телефон', v.phone], ['Связь', v.channel || 'Позвонить']]);
@@ -213,9 +214,18 @@
     bk.querySelector('.bk-steps').style.visibility = 'hidden';
     bk.querySelector('.bk-back').style.visibility = 'hidden';
     var nb = bk.querySelector('.bk-next'); nb.textContent = 'Готово'; nb.onclick = function (e) { e.stopImmediatePropagation(); close(); };
-    var payload = { type: state.kind, data: v, page: location.pathname, at: new Date().toISOString() };
-    delete payload.data.consent; payload.consent = true;
-    if (MIAU.endpoint) { try { fetch(MIAU.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (e) {} }
+    var data = {}; Object.keys(v).forEach(function (k) { if (k !== 'consent') data[k] = v[k]; });
+    if (state.kind === 'cert') data.sum = sum || '';                       /* «Своя сумма» → число, а не «own» */
+    if (data.time === 'own') { data.time = data.owntime || 'Своё — уточним'; delete data.owntime; }
+    var payload = { type: state.kind, source: 'form', data: data, consent: true, page: location.pathname, at: new Date().toISOString() };
+    var fail = function () {                                                 /* заявка не ушла — честно говорим и даём другой путь */
+      var q = bk.querySelector('.bk-done .bk-q'), b = bk.querySelector('.bk-done .body');
+      if (q) q.textContent = 'Заявка не отправилась';
+      if (b) b.textContent = 'Связь подвела. Попробуй ещё раз чуть позже или напиши администратору — контакты на странице «Контакты».';
+    };
+    if (MIAU.endpoint) {
+      try { fetch(MIAU.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).then(function (r) { if (!r.ok) fail(); }).catch(fail); } catch (e) { fail(); }
+    }
     else if (window.console) console.info('МЯУ: заявка собрана, но отправка не подключена (MIAU.endpoint пуст)', payload);
   }
   function close(instant) {

@@ -133,6 +133,7 @@
   function submit() {
     var v = flow.v, data = {};
     Object.keys(v).forEach(function (k) { data[k] = Array.isArray(v[k]) ? v[k].join(',') : v[k]; });
+    if (flow.kind === 'cert' && /^\d+$/.test(data.sum || '')) data.sum = MIAU.money ? MIAU.money(+data.sum) : data.sum + ' ₽';
     var payload = { type: flow.kind, source: 'chat', data: data, consent: true, page: location.pathname, at: new Date().toISOString(),
       dialog: history.slice(-12).map(function (m) { return (m.role === 'user' ? 'Клиентка: ' : 'Бот: ') + m.content; }).join('\n') };
     var ep = MIAU.endpoint;
