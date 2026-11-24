@@ -7,7 +7,7 @@
      Подключить: MIAU.endpoint = 'https://…' (Telegram-бот, CRM, Formspree) — придёт POST с JSON. */
   MIAU.endpoint = MIAU.endpoint || '';
   /* Адрес облачной функции ассистента (tools/assistant). Обычно тот же, что endpoint. Пусто — чат работает без нейросети. */
-  MIAU.chatEndpoint = MIAU.chatEndpoint || '';
+  MIAU.chatEndpoint = MIAU.chatEndpoint || 'https://functions.yandexcloud.net/d4enmgrvq6f5mestu4h1';
 
   var DIRS = {
     body: { name: 'BODY Тело', items: ['Йога', 'Массаж', 'Массажные практики'] },

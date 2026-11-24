@@ -25,7 +25,7 @@ const NAMES = { body: 'BODY Тело', energy: 'ENERGY Энергия', beauty: 
 const dirName = v => String(v || '').split(',').filter(Boolean).map(d => NAMES[d] || d).join(', ');
 
 const SYSTEM = `Ты — ассистент женского пространства MIAU на сайте. Обращайся к собеседнице на «ты», тепло и коротко: 1–3 предложения.
-Отвечай ТОЛЬКО по базе знаний ниже. Если факта нет в базе или он в [квадратных скобках] — не придумывай, скажи, что это уточнит администратор, и предложи записаться.
+Отвечай ТОЛЬКО по базе знаний ниже. Если факта нет в базе или он в [квадратных скобках] — не придумывай. Скажи прямо, что этого пока нет на сайте и что подскажет администратор в Telegram или WhatsApp (контакты на странице «Контакты»), и предложи записаться прямо в чате. Пример: «Часы работы пока уточняем — их подскажет администратор, контакты на странице «Контакты». Хочешь, запишу тебя прямо здесь?» Пиши живо и по-человечески, без канцелярита; о себе — в нейтральном роде, без «рада/рад».
 Не ставь диагнозов и не давай медицинских советов. Не обещай скидок, цен, времени и мастеров.
 Не проси телефон и имя в тексте — запись собирается отдельными шагами.
 Ответ строго в JSON без пояснений: {"reply":"текст","action":"none|book|cert","dir":["body"],"svc":["Массаж"]}
@@ -114,7 +114,7 @@ function lead(p) {
    (Google Apps Script, tools/assistant/relay.gs): RELAY_URL + RELAY_SECRET. Без них — напрямую в Telegram. */
 async function sendTelegram(text, ping) {
   if (process.env.RELAY_URL) {
-    const r = await fetch(process.env.RELAY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ secret: process.env.RELAY_SECRET, text, ping: !!ping }), signal: AbortSignal.timeout(20000) });
+    const r = await fetch(process.env.RELAY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ secret: process.env.RELAY_SECRET, token: process.env.TG_TOKEN, chat: process.env.TG_CHAT, text, ping: !!ping }), signal: AbortSignal.timeout(20000) });
     const j = await r.json().catch(() => ({}));
     if (!j.ok) throw new Error('relay ' + r.status + ' ' + JSON.stringify(j).slice(0, 200));
     return j;
