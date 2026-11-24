@@ -56,7 +56,16 @@ async function gigaToken() {
   return token;
 }
 
-async function chat(messages) {
+/* ключ: LLM_KEY, а если его нет — токен сервисного аккаунта функции (YandexGPT в том же облаке) */
+function llmHeaders(context) {
+  const h = { 'Content-Type': 'application/json' };
+  const tok = process.env.LLM_KEY || (context && context.token && context.token.access_token);
+  if (tok) h.Authorization = 'Bearer ' + tok;
+  if (process.env.LLM_PROJECT) h['OpenAI-Project'] = process.env.LLM_PROJECT;
+  return h;
+}
+
+async function chat(messages, context) {
   const msgs = (Array.isArray(messages) ? messages : []).slice(-12)
     .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
     .map(m => ({ role: m.role, content: m.content.slice(0, 600) }));
@@ -66,7 +75,7 @@ async function chat(messages) {
     const parts = /kie\.ai/.test(process.env.LLM_URL); /* Kie ждёт content массивом, остальные (FreeLLMAPI, OpenRouter…) — строкой */
     const body = { messages: all.map(m => ({ role: m.role, content: parts ? [{ type: 'text', text: m.content }] : m.content })), stream: false, max_tokens: 400 };
     if (process.env.LLM_MODEL) body.model = process.env.LLM_MODEL;
-    r = await fetch(process.env.LLM_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + process.env.LLM_KEY }, body: JSON.stringify(body) });
+    r = await fetch(process.env.LLM_URL, { method: 'POST', headers: llmHeaders(context), body: JSON.stringify(body) });
   } else {
     r = await fetch('https://gigachat.devices.sberbank.ru/api/v1/chat/completions', {
       method: 'POST',
@@ -98,23 +107,40 @@ function lead(p) {
   else { add('Направления', dirName(d.dir)); add('Услуги', d.svc); add('День', d.date); add('Время', d.time === 'own' ? d.owntime : d.time); add('Специалист', d.master); }
   add('Имя', d.name); add('Телефон', d.phone); add('Связь', d.channel); add('Комментарий', d.comment);
   if (p.dialog) L.push('\nДиалог:\n' + String(p.dialog).slice(0, 2500));
-  return fetch(`https://api.telegram.org/bot${process.env.TG_TOKEN}/sendMessage`, {
+  return sendTelegram(L.join('\n'));
+}
+
+/* из российских дата-центров api.telegram.org недоступен, поэтому можно слать через посредника
+   (Google Apps Script, tools/assistant/relay.gs): RELAY_URL + RELAY_SECRET. Без них — напрямую в Telegram. */
+async function sendTelegram(text, ping) {
+  if (process.env.RELAY_URL) {
+    const r = await fetch(process.env.RELAY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ secret: process.env.RELAY_SECRET, text, ping: !!ping }), signal: AbortSignal.timeout(20000) });
+    const j = await r.json().catch(() => ({}));
+    if (!j.ok) throw new Error('relay ' + r.status + ' ' + JSON.stringify(j).slice(0, 200));
+    return j;
+  }
+  const r = await fetch(`https://api.telegram.org/bot${process.env.TG_TOKEN}/${ping ? 'getMe' : 'sendMessage'}`, ping ? { signal: AbortSignal.timeout(10000) } : {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: process.env.TG_CHAT, text: L.join('\n'), disable_web_page_preview: true })
-  }).then(async r => { if (!r.ok) throw new Error('telegram ' + r.status + ' ' + (await r.text()).slice(0, 200)); });
+    body: JSON.stringify({ chat_id: process.env.TG_CHAT, text, disable_web_page_preview: true }), signal: AbortSignal.timeout(15000)
+  });
+  if (!r.ok) throw new Error('telegram ' + r.status + ' ' + (await r.text()).slice(0, 200));
+  return r;
 }
 
 /* проверка связи: {"diag":true} — доступны ли модель и Telegram из функции */
-async function diag() {
-  const t = async (name, fn) => { const t0 = Date.now(); try { const r = await fn(); return name + ': ' + r.status + ' ' + (await r.text()).slice(0, 120) + ' (' + (Date.now() - t0) + ' мс)'; } catch (e) { return name + ': ' + (e.cause && e.cause.code || e.message) + ' (' + (Date.now() - t0) + ' мс)'; } };
+async function diag(context) {
   const out = [];
-  if (process.env.LLM_URL) out.push(await t('llm', () => fetch(process.env.LLM_URL.replace(/chat\/completions$/, 'models'), { headers: { Authorization: 'Bearer ' + process.env.LLM_KEY }, signal: AbortSignal.timeout(10000) })));
-  out.push(await t('telegram', () => fetch(`https://api.telegram.org/bot${process.env.TG_TOKEN}/getMe`, { signal: AbortSignal.timeout(10000) })));
-  out.push('env: ' + ['LLM_URL', 'LLM_KEY', 'LLM_MODEL', 'TG_TOKEN', 'TG_CHAT', 'ALLOW_ORIGIN'].map(k => k + (process.env[k] ? '✓' : '✗')).join(' '));
+  const t0 = Date.now();
+  try { const a = await chat([{ role: 'user', content: 'Привет! Где вы находитесь?' }], context); out.push('llm: OK — ' + a.reply.slice(0, 100) + ' (' + (Date.now() - t0) + ' мс)'); }
+  catch (e) { out.push('llm: ' + (e.cause && e.cause.code || e.message) + ' (' + (Date.now() - t0) + ' мс)'); }
+  const t1 = Date.now();
+  try { await sendTelegram('', true); out.push('telegram: OK (' + (Date.now() - t1) + ' мс)'); }
+  catch (e) { out.push('telegram: ' + (e.cause && e.cause.code || (e.name === 'TimeoutError' ? 'timeout' : e.message)) + ' (' + (Date.now() - t1) + ' мс)'); }
+  out.push('env: ' + ['LLM_URL', 'LLM_KEY', 'LLM_MODEL', 'LLM_PROJECT', 'RELAY_URL', 'RELAY_SECRET', 'TG_TOKEN', 'TG_CHAT', 'ALLOW_ORIGIN'].map(k => k + (process.env[k] ? '✓' : '–')).join(' ') + (context && context.token ? ' сервисный-аккаунт✓' : ' сервисный-аккаунт–'));
   return { diag: out.map(x => x.replace(/bot\d+:[\w-]+/g, 'bot***')) };
 }
 
-module.exports.handler = async function (event) {
+module.exports.handler = async function (event, context) {
   const origin = process.env.ALLOW_ORIGIN || '*';
   const H = { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', 'Content-Type': 'application/json; charset=utf-8' };
   const res = (code, obj) => ({ statusCode: code, headers: H, body: JSON.stringify(obj) });
@@ -125,8 +151,8 @@ module.exports.handler = async function (event) {
   let p;
   try { p = JSON.parse(event.isBase64Encoded ? Buffer.from(event.body, 'base64').toString() : event.body); } catch (e) { return res(400, { error: 'json' }); }
   try {
-    if (p.diag) return res(200, await diag());
-    if (p.messages) return res(200, await chat(p.messages));
+    if (p.diag) return res(200, await diag(context));
+    if (p.messages) return res(200, await chat(p.messages, context));
     if (!p.consent || !p.data || !p.data.phone) return res(400, { error: 'lead' });
     await lead(p);
     return res(200, { ok: true });
