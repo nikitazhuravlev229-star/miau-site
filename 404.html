@@ -46,7 +46,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
 @keyframes introOut{to{opacity:0;visibility:hidden}}
 .has-intro .load-1{animation-delay:2.6s}.has-intro .load-2{animation-delay:2.85s}.has-intro .load-img{animation-delay:2.3s}
 </style>
-<script>try{var q=location.search;if(/[?&]fade\b/.test(q))localStorage.setItem("miauFade","1");if(/[?&]flat\b/.test(q))localStorage.removeItem("miauFade");if(localStorage.getItem("miauFade"))document.documentElement.classList.add("v-fade")}catch(e){}</script>
+<script>try{var q=location.search;if(/[?&]fade\b/.test(q))localStorage.setItem("miauFade","1");if(/[?&]flat\b/.test(q))localStorage.removeItem("miauFade");if(localStorage.getItem("miauFade"))document.documentElement.classList.add("v-fade");if(/[?&]miau\b/.test(q))localStorage.setItem("miauBrand","en");if(/[?&]myau\b/.test(q))localStorage.removeItem("miauBrand");if(localStorage.getItem("miauBrand"))document.documentElement.classList.add("b-miau")}catch(e){}</script>
 <link rel="stylesheet" href="assets/fade.css?v=1795515714">
 </head>
 <body>
@@ -68,6 +68,7 @@ footer a:not(.btn){text-decoration:none}footer a:not(.btn):hover{text-decoration
   </main>
   <footer class="wrap small" style="padding-bottom: 28px; opacity: .6">© 2026 МЯУ&emsp;Москва, Фрунзенская набережная, 46</footer>
 </div>
+<script src="assets/brand.js?v=1795522166"></script>
 <script src="assets/lenis.min.js?v=1795515714" defer></script>
 <script src="assets/site.js?v=1795515714" defer></script>
 <script src="assets/ui.js?v=1795515714" defer></script>
