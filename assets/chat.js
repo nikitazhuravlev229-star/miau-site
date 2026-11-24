@@ -182,14 +182,49 @@
     if (flow && flow.wait) return typed(t);
     ask(t);
   }
+  /* текст, набранный в английской раскладке: «rfr dfc pjden» → «как вас зовут» */
+  var EN = "qwertyuiop[]asdfghjkl;'zxcvbnm,.`", RU = 'йцукенгшщзхъфывапролджэячсмитьбюё';
+  function layout(t) {
+    if (/[а-яё]/i.test(t) || !/[a-z]/i.test(t)) return t;
+    return t.replace(/[a-z\[\];',.`]/gi, function (c) { var i = EN.indexOf(c.toLowerCase()); return i < 0 ? c : RU[i]; });
+  }
+  /* короткие описания услуг — те же, что на страницах направлений */
+  var ABOUT = {
+    'Йога': 'Йога — позы, дыхание и концентрация. Начать можно с любым опытом.',
+    'Массаж': 'Массаж — мастер прорабатывает мышцы спины, шеи и плеч. Около часа.',
+    'Массажные практики': 'Массажные практики — медленный массаж-ритуал с тёплым маслом и свечами.',
+    'Силовая йога': 'Силовая йога — динамичная практика: позы идут одна за другой в ритме дыхания.',
+    'Саундхилинг': 'Саундхилинг — звуковая медитация: ты лежишь, ведущий играет на поющих чашах.',
+    'Маникюр': 'Маникюр — уход за ногтями и кожей рук: кутикула, форма, покрытие.',
+    'Педикюр': 'Педикюр — уход за стопами и ногтями на ногах.',
+    'Макияж': 'Макияж — под событие или просто потому, что хочется.',
+    'Лекции': 'Лекции — встречи с экспертами о здоровье, психологии, отношениях и самопознании.',
+    'Комьюнити и ретриты': 'Ретриты — совместные занятия и выезды, в том числе банные.',
+    'Кундалини-практики': 'Кундалини — дыхание, повторяющиеся движения, звук и медитация.'
+  };
+  var ADMIN = 'Это подскажет администратор: напиши в Telegram или WhatsApp, контакты на странице «Контакты».';
+  function match(s) {
+    var list = Object.keys(ABOUT).filter(function (n) { return s.indexOf(n.toLowerCase().slice(0, 5)) > -1; });
+    if (/силов/.test(s)) list = list.filter(function (n) { return n !== 'Йога'; });
+    if (/практик/.test(s) && list.indexOf('Массажные практики') > -1) list = list.filter(function (n) { return n !== 'Массаж'; });
+    var d = Object.keys(DIRS).filter(function (k) { return DIRS[k].items.some(function (i) { return list.indexOf(i) > -1; }); });
+    return { list: list, d: d, svc: list.filter(function (n) { return d.some(function (k) { return DIRS[k].items.indexOf(n) > -1; }); }) };
+  }
   function local(t) {
-    var s = t.toLowerCase();
-    if (/запис|записа|хочу на|свобод/.test(s)) return { action: 'book' };
+    var s = layout(t).toLowerCase();
+    if (/^(привет|здравств|добр(ый|ое|ого)|хай|hello|hi)\b/.test(s)) return { reply: 'Привет! Хочешь записаться, подобрать направление или подарить сертификат?' };
+    if (/как (тебя|вас) зовут|кто ты|ты бот|ты человек/.test(s)) return { reply: 'Я ассистент MIAU, онлайн-помощник сайта. Записываю, помогаю выбрать направление и оформить сертификат. На сложные вопросы ответит администратор.' };
+    if (/спасиб/.test(s)) return { reply: 'Пожалуйста! Если что-то ещё — пиши.' };
+    var m = match(s);
+    if (/запис|записа|хочу на|свобод|окошк/.test(s)) return { action: 'book', dir: m.d, svc: m.svc };
     if (/сертиф|подар/.test(s)) return { action: 'cert' };
-    if (/адрес|где вы|добрат|метро|находит/.test(s)) return { reply: 'Мы на Фрунзенской набережной, 46. Карта и контакты — на странице «Контакты».' };
-    var hit = Object.keys(DIRS).filter(function (k) { return DIRS[k].items.concat(DIRS[k].name.split(' ')).some(function (w) { return s.indexOf(w.toLowerCase().slice(0, 5)) > -1; }); });
+    if (/адрес|где вы|где наход|добрат|метро|наход/.test(s)) return { reply: 'Мы на Фрунзенской набережной, 46. Карта и как пройти — на странице «Контакты».' };
+    if (/сколько (стоит|длит|идёт|идет|по времени)|цен|стоимост|прайс|длительн|сколько времени|сколько час|сколько минут/.test(s)) return { reply: 'Цены и длительность сейчас уточняем. ' + ADMIN + ' А записаться можешь прямо здесь — администратор всё расскажет при подтверждении.' };
+    if (/врем|часы|график|работаете|открыт/.test(s)) return { reply: 'Часы работы уточнит администратор. ' + ADMIN };
+    if (m.list.length) return { reply: m.list.map(function (n) { return ABOUT[n]; }).join('\n'), action: 'book', dir: m.d, svc: m.svc };
+    var hit = Object.keys(DIRS).filter(function (k) { return DIRS[k].name.toLowerCase().split(' ').some(function (w) { return s.indexOf(w.slice(0, 5)) > -1; }); });
     if (hit.length) return { reply: hit.map(function (k) { return DIRS[k].name + ': ' + DIRS[k].items.join(', '); }).join('\n'), action: 'book', dir: hit };
-    return { reply: 'Тут лучше ответит администратор — контакты на странице «Контакты». А записать тебя я могу прямо здесь.' };
+    return { reply: 'Пока я умею записывать, рассказывать о направлениях и оформлять сертификат. С остальным поможет администратор — контакты на странице «Контакты».' };
   }
   function act(r) {
     if (r.reply) bot(r.reply);
