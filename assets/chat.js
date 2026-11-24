@@ -185,8 +185,23 @@
   }
   /* текст, набранный в английской раскладке: «rfr dfc pjden» → «как вас зовут» */
   var EN = "qwertyuiop[]asdfghjkl;'zxcvbnm,.`", RU = 'йцукенгшщзхъфывапролджэячсмитьбюё';
+  /* русский, набранный в английской раскладке («ghbdtn» → «привет»). Настоящий английский не трогаем:
+     в нём есть частые слова и гласные, а в «перевёрнутом» русском слова почти без гласных или со знаками ;[],.' внутри */
+  var EN_WORDS = /^(a|an|the|is|are|am|do|does|did|you|your|i|i'm|im|my|me|we|it|it's|how|what|where|when|why|who|which|can|could|would|should|will|to|for|of|in|on|at|and|or|not|no|yes|hi|hello|hey|please|thanks|thank|price|prices|cost|much|many|book|booking|massage|yoga|nails|manicure|pedicure|makeup|open|hours|address|gift|card|certificate|english|speak|need|want|have|has|there|this|that|with|about|ok|okay)$/i;
+  var BI = ' th he in er an re on at en nd ti es or te of ed is it al ar st to nt ng se ha as ou io le ve co me de hi ri ro ic ne ea ra ce li ch ll be ma si om ur ag ge oo ow ok ho wh ly ca us ut ut ir ss ee el et la lo ot no mu uc ki ke ye yo pr ri ic ce ga ty ' ;
+  function looksEnglish(t) {
+    var w = t.toLowerCase().match(/[a-z'\[\];,.`]+/g) || [];
+    if (!w.length) return false;
+    if (w.some(function (x) { return EN_WORDS.test(x.replace(/[.,]+$/, '')); })) return true;
+    var odd = w.filter(function (x) { return !/[aeiouy]/.test(x) || /[a-z][\[\];',.`][a-z]/.test(x); }).length;
+    if (odd / w.length >= .5) return false;
+    /* доля частых английских сочетаний букв: в английском их много, в «перевёрнутом» русском почти нет */
+    var L = t.toLowerCase().replace(/[^a-z]+/g, ' '), n = 0, hit = 0;
+    for (var i = 0; i < L.length - 1; i++) { var g = L.substr(i, 2); if (g.indexOf(' ') > -1) continue; n++; if (BI.indexOf(' ' + g + ' ') > -1) hit++; }
+    return !n || hit / n >= .28;
+  }
   function layout(t) {
-    if (/[а-яё]/i.test(t) || !/[a-z]/i.test(t)) return t;
+    if (/[а-яё]/i.test(t) || !/[a-z]/i.test(t) || looksEnglish(t)) return t;
     return t.replace(/[a-z\[\];',.`]/gi, function (c) { var i = EN.indexOf(c.toLowerCase()); return i < 0 ? c : RU[i]; });
   }
   /* короткие описания услуг — те же, что на страницах направлений */
