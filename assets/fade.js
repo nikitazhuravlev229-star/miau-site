@@ -151,6 +151,7 @@
     var imgs = bigImgs(s); if (imgs.length !== 1) return;
     var im = imgs[0], P = im.closest('.zoom, .quote-ph, .svc-ph') || im.parentElement;
     if (P.closest('.dpanels, .rc, .light-rail') || P === s) return;
+    if (P.parentElement.querySelector(':scope > h1, :scope > h2, :scope > .h2')) return;   /* фото в одной колонке с заголовком (Философия) — оставляем рамкой, иначе фон ляжет под заголовок */
     var L = D.createElement('div'); L.className = 'vf-bg'; L.setAttribute('aria-hidden', 'true');
     L.style.backgroundImage = 'url("' + (im.currentSrc || im.src) + '")';
     /* кадрирование как у исходного фото; по вертикали — ближе к верху, чтобы не резать голову */
@@ -189,7 +190,7 @@
       /* фото не заходит в полосы перехода: начинается под верхней полосой и заканчивается над нижней, края растворяются коротко */
       top += topT; h -= topT + botT;
       var st = L.style; st.top = top + 'px'; st.height = h + 'px';
-      var vm = pxMask('180deg', h, 0, Math.min(90, h * .15), h - Math.min(110, h * .18), h), hm;
+      var vm = pxMask('180deg', h, 0, Math.min(110, h * .17), h - Math.min(130, h * .2), h), hm;
       if (pr.width > sr.width * .7) {                                   /* телефон: фото сверху, текст под ним */
         st.left = '0'; st.right = '0'; st.width = 'auto';
         /* фон начинается там, где стоит само фото: если текст над фото — текст остаётся на чистом вине */
@@ -197,9 +198,9 @@
         h = Math.min(H - top, Math.round(pr.bottom - sr.top + 140 - top)); st.top = top + 'px'; st.height = h + 'px';
         vm = pxMask('180deg', h, topT, topT + 120, h - 220, h); hm = 'linear-gradient(#000,#000)';
       } else {
-        var left = pr.left + pr.width / 2 < sr.left + sr.width / 2, w = left ? pr.right - sr.left + 140 : sr.right - pr.left + 140;
+        var left = pr.left + pr.width / 2 < sr.left + sr.width / 2, w = left ? pr.right - sr.left + 60 : sr.right - pr.left + 60;
         st.width = w + 'px'; st.left = left ? '0' : 'auto'; st.right = left ? 'auto' : '0';
-        hm = pxMask(left ? '90deg' : '270deg', w, 0, 0, w * .62, w);
+        hm = pxMask(left ? '90deg' : '270deg', w, 0, 0, w * .76, w);   /* к тексту растворяется только последняя пятая часть — фото видно целиком */
       }
       st.webkitMaskImage = st.maskImage = hm + ',' + vm;
       st.webkitMaskComposite = 'source-in'; st.maskComposite = 'intersect';
@@ -230,5 +231,12 @@
       if (hasBg(el, sec)) return;
       el.style.setProperty('color', fg, 'important');
     });
+  });
+
+  /* линейные рисунки направлений (sign-*.svg): на тёмном — светлая версия, на беже — тёмная */
+  [].forEach.call(D.querySelectorAll('img[src*="sign-"]'), function (im) {
+    var src = im.getAttribute('src'), dark = colorOf(im) === RGB.w;
+    var n = dark ? src.replace(/sign-([a-z]+)\.svg/, 'sign-$1-cream.svg') : src.replace(/sign-([a-z]+)-cream\.svg/, 'sign-$1.svg');
+    if (n !== src) im.setAttribute('src', n);
   });
 })();
