@@ -142,10 +142,9 @@
   }
   function submit() {
     var v = flow.v, data = {};
-    Object.keys(v).forEach(function (k) { data[k] = Array.isArray(v[k]) ? v[k].join(',') : v[k]; });
+    Object.keys(v).forEach(function (k) { data[k] = Array.isArray(v[k]) ? v[k].join(k === 'dir' ? ',' : ', ') : v[k]; });
     if (flow.kind === 'cert' && /^\d+$/.test(data.sum || '')) data.sum = MIAU.money ? MIAU.money(+data.sum) : data.sum + ' ₽';
-    var payload = { type: flow.kind, source: 'chat', data: data, consent: true, page: location.pathname, at: new Date().toISOString(),
-      dialog: history.slice(-12).map(function (m) { return (m.role === 'user' ? 'Клиентка: ' : 'Бот: ') + m.content; }).join('\n') };
+    var payload = { type: flow.kind, source: 'chat', data: data, consent: true, page: location.pathname, at: new Date().toISOString() };
     var ep = MIAU.endpoint;
     var done = function (ok) {
       bot(ok ? 'Заявка у администратора. Она свяжется с тобой' + (v.channel && v.channel !== 'Позвонить' ? ' в ' + v.channel : ' по телефону') + ', чтобы подтвердить ' + (flow.kind === 'book' ? 'время.' : 'детали.')
@@ -186,10 +185,11 @@
     if (w === 'to') { v.to = t.slice(0, 28); return askName(); }
     if (w === 'tg') { var nk = tgNick(t); if (!nk) { flow.wait = 'tg'; inp.placeholder = '@username'; return bot('Ник пишется латиницей, от 5 символов, например @anna_m. Если ника нет — нажми «Ника нет».'); } v.tg = nk; return afterContacts(); }
     if (w === 'health') { v.health = t.slice(0, 300); return askConsent(); }
-    if (w === 'name') { v.name = t.slice(0, 40); return askPhone(); }
+    if (w === 'name') { if ((t.match(/[a-zа-яё]/gi) || []).length < 2) { flow.wait = 'name'; inp.placeholder = 'Имя'; return bot('Напиши, пожалуйста, имя — так администратор будет знать, как к тебе обращаться.'); } v.name = t.slice(0, 40); return askPhone(); }
     if (w === 'phone') {
-      var d = t.replace(/\D/g, ''); if (d.length === 10) d = '7' + d; if (d[0] === '8') d = '7' + d.slice(1);
-      if (d.length !== 11) { flow.wait = 'phone'; inp.placeholder = '+7 ___ ___-__-__'; inp.setAttribute('inputmode', 'tel'); return bot('Кажется, в номере не хватает цифр. Напиши его целиком.'); }
+      /* только российские номера: +7 или 8, затем код 3xx, 4xx, 8xx или 9xx */
+      var d = t.replace(/\D/g, ''); if (d.length === 10) d = '7' + d; if (d.length === 11 && d[0] === '8') d = '7' + d.slice(1);
+      if (d.length !== 11 || d[0] !== '7' || '3489'.indexOf(d[1]) < 0) { flow.wait = 'phone'; inp.placeholder = '+7 ___ ___-__-__'; inp.setAttribute('inputmode', 'tel'); return bot(d.length < 10 ? 'Кажется, в номере не хватает цифр. Напиши его целиком, например +7 912 345-67-89.' : 'Нужен российский номер: начинается с +7 или 8, например +7 912 345-67-89.'); }
       v.phone = '+' + d[0] + ' ' + d.slice(1, 4) + ' ' + d.slice(4, 7) + '-' + d.slice(7, 9) + '-' + d.slice(9); return askChannel();
     }
   }

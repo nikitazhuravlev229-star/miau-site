@@ -194,8 +194,9 @@
     }
     if (step.dataset.step === 'contacts') {
       var nm = step.querySelector('[name=name]'), ph = step.querySelector('[name=phone]'), cs = step.querySelector('[name=consent]');
-      if (!nm.value.trim()) { mark(nm, 'Как к тебе обращаться?'); ok = false; }
-      if (ph.value.replace(/\D/g, '').length !== 11) { mark(ph, 'Нужен номер целиком'); ok = false; }
+      if ((nm.value.match(/[a-zа-яё]/gi) || []).length < 2) { mark(nm, 'Как к тебе обращаться?'); ok = false; }
+      var pd = ph.value.replace(/\D/g, '');
+      if (pd.length !== 11) { mark(ph, 'Нужен номер целиком'); ok = false; } else if ('3489'.indexOf(pd[1]) < 0) { mark(ph, 'Нужен российский номер, например +7 912 345-67-89'); ok = false; }
       if (!cs.checked) { cs.closest('.ok-box').classList.add('err'); ok = false; }
       var tg = step.querySelector('[name=tg]');
       if (state.v.channel === 'Telegram' && !tgNick(tg.value)) { mark(tg, tg.value.trim() ? 'Ник — латиницей, от 5 символов, например @anna_m' : 'Напиши ник — по номеру в Telegram могут не найти'); ok = false; }
@@ -228,6 +229,7 @@
     bk.querySelector('.bk-back').style.visibility = 'hidden';
     var nb = bk.querySelector('.bk-next'); nb.textContent = 'Готово'; nb.onclick = function (e) { e.stopImmediatePropagation(); close(); };
     var data = {}; Object.keys(v).forEach(function (k) { if (k !== 'consent' && k !== 'hconsent') data[k] = v[k]; });
+    if (data.svc) data.svc = String(data.svc).split(',').join(', ');
     if (v.channel === 'Telegram') data.tg = tgNick(v.tg); else delete data.tg;
     if (!(data.health || '').trim() || !v.hconsent) delete data.health; else data.health = data.health.trim();
     if (state.kind === 'cert') data.sum = sum || '';                       /* «Своя сумма» → число, а не «own» */
