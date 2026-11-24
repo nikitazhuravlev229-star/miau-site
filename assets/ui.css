@@ -406,3 +406,5 @@ main p.fade.stmt[style*="Unbounded"]{font-size:clamp(20px,1.7vw,26px) !important
 @media (max-width:640px){ .id-rail .id-it img{width:100% !important;height:auto !important;aspect-ratio:1/1;object-fit:cover} }
 /* шапка манифеста на телефоне: голову не обрезать — увеличение от верхнего края, сдвиг вверх меньше */
 @media (max-width:860px){ .js-fx img.mh-ph{transform-origin:50% 0;object-position:62% 0% !important;--depth:-50 !important} }
+/* панели направлений — по той же сетке полей, что и весь сайт */
+.dpanels{margin-inline:clamp(20px,4.5vw,96px)}
