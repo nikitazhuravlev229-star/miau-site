@@ -167,11 +167,15 @@
       else if (r.bottom > absY) markLight(c, absY);
     });
   }
+  function absOff(el) { var x = 0, y = 0; while (el) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x: x, y: y }; }
   function layout() {
     bleeds.forEach(function (b) {
       var s = b[0], P = b[1], L = b[2], im = b[3];
       if (im.currentSrc && L.style.backgroundImage.indexOf(im.currentSrc) < 0) L.style.backgroundImage = 'url("' + im.currentSrc + '")';
-      var sr = s.getBoundingClientRect(), pr = P.getBoundingClientRect(), H = s.offsetHeight;
+      /* размеры без transform: фото может быть ещё уменьшено анимацией .zoom, тогда getBoundingClientRect врёт */
+      var sr = s.getBoundingClientRect(), so = absOff(s), po = absOff(P), H = s.offsetHeight;
+      var pr = { left: sr.left + po.x - so.x, top: sr.top + po.y - so.y, width: P.offsetWidth, height: P.offsetHeight };
+      pr.right = pr.left + pr.width; pr.bottom = pr.top + pr.height;
       var topT = s.classList.contains('vf-in') ? band : 0, botT = s.classList.contains('vf-out') ? band : 0;
       var top = 0, h = H;
       if (s.classList.contains('vf-split')) {
@@ -191,7 +195,10 @@
       top += topT; h -= topT + botT;
       var st = L.style; st.top = top + 'px'; st.height = h + 'px';
       var vm = pxMask('180deg', h, 0, Math.min(110, h * .17), h - Math.min(130, h * .2), h), hm;
-      if (pr.width > sr.width * .7) {                                   /* телефон: фото сверху, текст под ним */
+      /* фото и текст друг под другом (телефон), а не рядом: заголовок блока не стоит на одной высоте с фото */
+      var T = s.querySelector('h1, h2, .h2'), tr = T && T.getBoundingClientRect();
+      var stacked = pr.width > sr.width * .7 || (tr && !(tr.bottom > pr.top + 20 && tr.top < pr.bottom - 20));
+      if (stacked) {                                   /* телефон: фото сверху, текст под ним */
         st.left = '0'; st.right = '0'; st.width = 'auto';
         /* фон начинается там, где стоит само фото: если текст над фото — текст остаётся на чистом вине */
         top = Math.max(0, Math.round(pr.top - sr.top - 100)); if (top) topT = 0;
@@ -206,7 +213,14 @@
       st.webkitMaskComposite = 'source-in'; st.maskComposite = 'intersect';
     });
   }
-  if (bleeds.length) { layout(); addEventListener('load', layout); var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(layout, 150); }); }
+  if (bleeds.length) {
+    layout(); addEventListener('load', layout);
+    var rt, relayout = function () { clearTimeout(rt); rt = setTimeout(layout, 150); };
+    addEventListener('resize', relayout);
+    if (D.fonts && D.fonts.ready) D.fonts.ready.then(layout);
+    /* высота блока поменялась (шрифты, картинки, перенос строк) — пересчитать; смотрим на ширину и высоту, а не на каждый кадр */
+    if (window.ResizeObserver) { var ro = new ResizeObserver(relayout); bleeds.forEach(function (b) { ro.observe(b[0]); ro.observe(b[1]); }); }
+  }
 
   /* страховка читаемости: в перекрашенных блоках текст, чей цвет почти сливается с фоном блока, получает контрастный цвет.
      Элементы со своей подложкой (кнопки, плашки, фото) не трогаем. */

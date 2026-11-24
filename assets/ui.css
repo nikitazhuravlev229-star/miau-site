@@ -402,3 +402,7 @@ main p.fade.stmt[style*="Unbounded"]{font-size:clamp(20px,1.7vw,26px) !important
   footer::after{content:"";display:block;height:64px}
 }
 @media (max-width:380px){ .btn{padding:0 14px !important;font-size:13px !important} }
+/* слайдер «Как это выглядит» на телефоне: все кадры одного размера (квадрат) */
+@media (max-width:640px){ .id-rail .id-it img{width:100% !important;height:auto !important;aspect-ratio:1/1;object-fit:cover} }
+/* шапка манифеста на телефоне: голову не обрезать — увеличение от верхнего края, сдвиг вверх меньше */
+@media (max-width:860px){ .js-fx img.mh-ph{transform-origin:50% 0;object-position:62% 0% !important;--depth:-50 !important} }
