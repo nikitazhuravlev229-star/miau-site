@@ -238,6 +238,7 @@
   var _answer = answer;
   answer = function (key, val) { if (key === 'gobook') { var p = flow && flow.pre; flow = null; return startBook(p); } return _answer(key, val); };
   function ask(t) {
+    t = layout(t); /* «rfr dfc pjden» → «как вас зовут», и для нейросети тоже */
     if (!MIAU.chatEndpoint) return act(local(t));
     busy = true; var w = add('ch-bot ch-wait', '<i></i><i></i><i></i>');
     fetch(MIAU.chatEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history.slice(-12).map(function (m) { return { role: m.role, content: m.content.replace(/\+?\d[\d\s()-]{8,}\d/g, '[телефон]') }; }) }) })
