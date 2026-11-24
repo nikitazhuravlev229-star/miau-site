@@ -48,3 +48,6 @@
 .v-fade .vf-lite .chip:hover{background:rgba(42,3,12,.06)}
 .v-fade .vf-dark .chip[aria-pressed="true"]{background:#EFE4D6;color:#2A030C;border-color:#EFE4D6}
 .v-fade .dp-head{text-shadow:0 1px 10px rgba(42,3,12,.75),0 0 2px rgba(42,3,12,.6)}
+/* значки карты и аккордеона не перекрашиваются вместе с блоком */
+.v-fade .leaflet-bar a,.v-fade .vf-dark .leaflet-bar a:not(.btn):not(.chip){color:#2A030C !important;background:#EFE4D6 !important}
+.acc summary::after{color:currentColor !important}

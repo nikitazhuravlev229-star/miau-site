@@ -350,7 +350,7 @@ main p.fade[style*="Unbounded"]{font-size:clamp(26px,3.3vw,44px) !important;line
 @media (max-width:640px){
   .hero-t{font-size:26px !important;line-height:1.15 !important}
   .steps li,main ol li,main ul li{font-size:15px !important}
-  .acc summary{font-size:17px !important}
+  .acc summary{font-size:14px !important;line-height:1.4 !important;padding:16px 0 !important}
   main p.fade[style*="Unbounded"]{font-size:22px !important;line-height:1.2 !important}
 }
 /* ===== ассистент ===== */
@@ -396,3 +396,9 @@ main p.fade[style*="Unbounded"]{font-size:clamp(26px,3.3vw,44px) !important;line
 @media (prefers-reduced-motion:reduce){.ch{animation:none}.ch-wait i{animation:none}}
 main p.fade.stmt[style*="Unbounded"]{font-size:clamp(20px,1.7vw,26px) !important;line-height:1.3 !important}
 @media (max-width:860px){main p.fade.stmt[style*="Unbounded"]{font-size:17px !important;line-height:1.35 !important}}
+/* мобильная выверка 24.11 */
+@media (max-width:860px){
+  .btn{white-space:nowrap}
+  footer::after{content:"";display:block;height:64px}
+}
+@media (max-width:380px){ .btn{padding:0 14px !important;font-size:13px !important} }
