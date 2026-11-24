@@ -47,16 +47,16 @@
   var blocks = [].filter.call(D.querySelectorAll('section, footer.ft'), function (s) { return !s.parentElement.closest('section, footer') && s.getBoundingClientRect().height > 40; });
   /* Строгое чередование по всему сайту: бордовый, бежевый, бордовый, бежевый… начиная с первого экрана.
      Блок, чей родной цвет не совпал с очередью, перекрашивается: vf-dark (беж → вино) или vf-lite (вино → беж).
-     Подвал всегда бордовый: если перед ним по очереди тоже бордовый — между ними бежевый перелив (vf-glow). */
+     Подвал тоже идёт по очереди: может быть и бежевым. */
   if (!blocks.length) return;
   var nat = blocks.map(bg), band = vb(), col = [], colB, glow = -1, n = blocks.length;
   blocks.forEach(function (s, i) { col[i] = i === 0 ? nat[0] : (col[i - 1] === 'w' ? 'c' : 'w'); });
-  if (blocks[n - 1].matches('footer') && col[n - 1] !== 'w') { col[n - 1] = 'w'; glow = n - 1; }
+  /* подвал не обязан быть бордовым: получает цвет по очереди, как все */
   function bigImgs(s) { return [].filter.call(s.querySelectorAll('img'), function (m) { return !m.closest('.site-head, .ch, .bk, .intro') && (m.getBoundingClientRect().width || m.offsetWidth) > 200; }); }
   blocks.forEach(function (s, i) {
     if (i === 0) return;
     if (col[i] === 'w' && nat[i] === 'c') s.classList.add('vf-dark');
-    if (col[i] === 'c' && nat[i] === 'w') s.classList.add('vf-lite');
+    if (col[i] === 'c' && (nat[i] === 'w' || s.classList.contains('zr-sec'))) s.classList.add('vf-lite');   /* у «Можно задержаться» надпись светлая по задумке — на беже делаем тёмной */
     s.dataset.vfc = col[i];
   });
   blocks[0].dataset.vfc = col[0];
@@ -129,7 +129,7 @@
 
   /* широкое фото «Можно задержаться»: сверху крем, снизу вино */
   [].forEach.call(D.querySelectorAll('.zr-sec .zr-frame'), function (f) {
-    var zc = colorOf(f); film(f, null, fadeTo(zc, '180deg', 0, 22) + ',' + fadeTo(zc, '0deg', 0, 20));
+    var zc = colorOf(f), zl = zc === RGB.c; film(f, null, fadeTo(zc, '180deg', 0, 22) + ',' + fadeTo(zc, '0deg', 0, zl ? 34 : 20));   /* на беже растворение выше: под тёмной надписью светлый фон */
   });
 
   /* карта: растворяется сверху и снизу */
@@ -202,4 +202,29 @@
     });
   }
   if (bleeds.length) { layout(); addEventListener('load', layout); var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(layout, 150); }); }
+
+  /* страховка читаемости: в перекрашенных блоках текст, чей цвет почти сливается с фоном блока, получает контрастный цвет.
+     Элементы со своей подложкой (кнопки, плашки, фото) не трогаем. */
+  function rgbOf(v) { var m = String(v).match(/[\d.]+/g); return m ? m.slice(0, 3).map(Number) : [0, 0, 0]; }
+  function L(c) { return c.map(function (v) { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }).reduce(function (a, v, i) { return a + v * [.2126, .7152, .0722][i]; }, 0); }
+  function contrast(a, b) { var x = L(a), y = L(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); }
+  function hasBg(el, stop) {
+    for (var x = el; x && x !== stop; x = x.parentElement) {
+      var c = getComputedStyle(x);
+      if (c.backgroundImage !== 'none' || (c.backgroundColor !== 'rgba(0, 0, 0, 0)' && c.backgroundColor !== 'transparent')) return true;
+      if (x.matches('.btn, .chip, .dp, .vf-bg, button, input, textarea, select')) return true;
+    }
+    return false;
+  }
+  [].forEach.call(D.querySelectorAll('.vf-dark, .vf-lite'), function (sec) {
+    var dark = sec.classList.contains('vf-dark');
+    var bgc = dark ? [42, 3, 12] : [239, 228, 214], fg = dark ? '#EFE4D6' : '#2A030C';
+    [].forEach.call(sec.querySelectorAll('*'), function (el) {
+      if (!el.childNodes.length || ![].some.call(el.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim(); })) return;
+      var light = el.closest('.vf-light'); if (light && sec.contains(light)) return;
+      if (contrast(rgbOf(getComputedStyle(el).color), bgc) >= 3) return;
+      if (hasBg(el, sec)) return;
+      el.style.setProperty('color', fg, 'important');
+    });
+  });
 })();

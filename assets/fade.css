@@ -19,8 +19,8 @@
 .v-fade .vf-dark{background:#2A030C;color:#EFE4D6}
 .v-fade .vf-bleed{position:relative;overflow:hidden}
 .v-fade .vf-bleed > :not(.vf-bg){position:relative;z-index:1}
-.v-fade .vf-dark :is(h1,h2,h3,h4,p,span,b,li,a,small,label,.quote-k,.go):not(.btn){color:inherit}
-.v-fade .vf-dark .dp :is(h1,h2,h3,h4,p,span,b,li,small,label){color:#EFE4D6}
+.v-fade .vf-dark :is(h1,h2,h3,h4,h5,h6,p,span,b,strong,em,i,li,a,small,label,summary,dt,dd,td,th,figcaption,blockquote,cite,time,.quote-k,.go):not(.btn):not(.chip){color:inherit!important}
+.v-fade .vf-dark .dp :is(h1,h2,h3,h4,p,span,b,li,small,label){color:#EFE4D6!important}
 .v-fade .vf-dark .btn-wine{background:#EFE4D6;border-color:#EFE4D6;color:#2A030C}
 .v-fade .vf-dark .btn-wine:hover{background:transparent;color:#EFE4D6}
 .v-fade .vf-dark .btn-ghost-d:hover{background:rgba(239,228,214,.12)}
@@ -36,9 +36,14 @@
 .v-fade .vf-dark .vf-light [style*="border"],.v-fade .vf-dark .vf-light[style*="border"]{border-color:rgba(42,3,12,.25)!important}
 /* бордовые по природе блоки, которым по очереди выпал беж */
 .v-fade .vf-lite{background:#EFE4D6!important;color:#2A030C!important}
-.v-fade .vf-lite :is(h1,h2,h3,h4,p,span,b,li,a,small,label,.quote-k,.go):not(.btn){color:inherit!important}
+.v-fade .vf-lite :is(h1,h2,h3,h4,h5,h6,p,span,b,strong,em,i,li,a,small,label,summary,dt,dd,td,th,figcaption,blockquote,cite,time,.quote-k,.go):not(.btn):not(.chip){color:inherit!important}
 .v-fade .vf-lite .btn-cream{background:#2A030C;border-color:#2A030C;color:#EFE4D6}
 .v-fade .vf-lite .btn-cream:hover{background:transparent;color:#2A030C}
 .v-fade .vf-lite .btn-ghost:hover{background:rgba(42,3,12,.07)}
 .v-fade .vf-lite [style*="border"]{border-color:rgba(42,3,12,.25)!important}
 .v-fade .zr-sec::after{display:none!important}
+/* подвал, которому по очереди выпал беж */
+.v-fade .ft.vf-lite .ft-word{background-image:linear-gradient(105deg,rgba(42,3,12,.10) 0%,rgba(42,3,12,.10) 38%,rgba(42,3,12,.32) 50%,rgba(42,3,12,.10) 62%,rgba(42,3,12,.10) 100%)}
+.v-fade .vf-lite .chip[aria-pressed="true"]{background:#2A030C;color:#EFE4D6;border-color:#2A030C}
+.v-fade .vf-lite .chip:hover{background:rgba(42,3,12,.06)}
+.v-fade .vf-dark .chip[aria-pressed="true"]{background:#EFE4D6;color:#2A030C;border-color:#EFE4D6}
