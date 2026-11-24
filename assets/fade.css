@@ -11,3 +11,7 @@
 
 /* растворение без масок: неподвижные плёнки цвета фона поверх фото (их расставляет fade.js) — так браузер не перерисовывает фото на каждом кадре */
 .v-fade .vf-ov{position:absolute;inset:0;pointer-events:none;contain:strict}
+.v-fade .vf-cut:not(.zoom),.v-fade:not(.js-fx) .vf-cut,.v-fade.js-fx .zoom.in.vf-cut{clip-path:inset(1px)}
+.v-fade .vf-mask{will-change:transform}
+/* в перетекании блоки идут без границ: убираем линии-разделители между секциями */
+.v-fade main > section{border-top:0!important;border-bottom:0!important}

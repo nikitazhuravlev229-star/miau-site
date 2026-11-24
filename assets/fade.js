@@ -15,13 +15,33 @@
     for (var i = 0; i <= 8; i++) { var t = i / 8; s.push('rgba(' + rgb + ',' + (1 - ease(t)).toFixed(3) + ') ' + (a + (b - a) * t).toFixed(2) + '%'); }
     return 'linear-gradient(' + dir + ',' + s.join(',') + ')';
   }
+  /* маска мягких краёв для неподвижных фото и панелей: швов не даёт, а перерисовки нет — содержимое не движется */
+  function maskTo(dir, a, b) {
+    var st = [];
+    /* первые 2px у края полностью прозрачны: при дробных координатах браузер считает маску со сдвигом, и иначе крайний пиксель фото проступает линией */
+    for (var i = 0; i <= 8; i++) { var t = i / 8; st.push('rgba(0,0,0,' + ease(t).toFixed(3) + ') calc(2px + ' + (a + (b - a) * t).toFixed(2) + '%)'); }
+    return 'linear-gradient(' + dir + ',transparent 0,' + st.join(',') + ',#000 calc(2px + ' + b + '%))';
+  }
+  function softMask(el, x, y) {
+    var m = maskTo('90deg', 0, x) + ',' + maskTo('270deg', 0, x);
+    var v = maskTo('180deg', 0, y) + ',' + maskTo('0deg', 0, y);
+    /* горизонталь и вертикаль перемножаются: пересекаем две составные маски */
+    el.style.webkitMaskImage = el.style.maskImage = m + ',' + v;
+    el.style.webkitMaskComposite = 'source-in'; el.style.maskComposite = 'intersect';
+    el.classList.add('vf-mask');
+    /* обводка цвета фона внутри края: закрывает пиксель, который при дробном масштабе остаётся без маски */
+    el.style.outline = '2px solid rgb(' + colorOf(el) + ')'; el.style.outlineOffset = '-2px';
+  }
   function edges(rgb, x, y) {   /* x, y — ширина растворения в % по горизонтали и вертикали */
     return [fadeTo(rgb, '90deg', 0, x), fadeTo(rgb, '270deg', 0, x), fadeTo(rgb, '180deg', 0, y), fadeTo(rgb, '0deg', 0, y)].join(',');
   }
-  function film(host, before, bgImg) {
+  /* фото под плёнкой обрезаем на 1px внутрь: иначе на границе между пикселями из-под плёнки проступает тонкая тёмная линия */
+  function cut(el) { [].forEach.call(el.matches && el.matches('img, video, picture') ? [el] : el.querySelectorAll('img, video, picture'), function (m) { m.classList.add('vf-cut'); }); }
+  function film(host, before, bgImg, media) {
     var d = D.createElement('div'); d.className = 'vf-ov'; d.setAttribute('aria-hidden', 'true'); d.style.backgroundImage = bgImg;
     if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
-    host.insertBefore(d, before || null); return d;
+    host.insertBefore(d, before || null); cut(media || host);
+    return d;
   }
 
   var blocks = [].filter.call(D.querySelectorAll('section, footer.ft'), function (s) { return !s.parentElement.closest('section, footer') && s.getBoundingClientRect().height > 40; });
@@ -49,6 +69,7 @@
           st.push('rgb(' + c + ') ' + ((room + band * t) / hh * 100).toFixed(2) + '%');
         }
         film(s, last.nextSibling, 'linear-gradient(180deg,' + st.join(',') + ')');
+        media.forEach(function (m) { m.classList.add('vf-cut'); });
       }
       if (col[i + 1] === 'c') {
         s.classList.add('vf-out');
@@ -65,25 +86,21 @@
     if (i < blocks.length - 1 && col[i + 1] === 'c') { s.classList.add('vf-out'); s.style.paddingBottom = ((parseFloat(cs.paddingBottom) || 0) + band * .8) + 'px'; }
   });
 
-  /* фото внутри блоков: мягкие края плёнкой цвета фона */
+  /* фото внутри блоков: мягкие края маской */
   [].forEach.call(D.querySelectorAll('main img, body > div img'), function (im) {
     if (im.closest('.vf-hero, .zr-sec, .dp, .dpanels, .id-rail, .cert-ph, .site-head, .ft, .ch, .bk, .nav-mob, .intro, .cert')) return;
     var ir = im.getBoundingClientRect(); if ((ir.width || im.offsetWidth) < 220) return;
     var p = im.parentElement, pr = p.getBoundingClientRect();
     var fills = Math.abs(pr.width - ir.width) < 8 && Math.abs(pr.height - ir.height) < 8;
-    if (p.querySelector(':scope > .vf-ov')) return;
+    var t = fills ? p : im; if (t.classList.contains('vf-mask')) return;
     var wide = ir.width > innerWidth * .8;
-    var f = film(p, fills ? null : im.nextSibling, edges(colorOf(p), wide ? 3 : 6, wide ? 8 : 7));
-    if (!fills) {                       /* рамки по размеру фото нет — ставим плёнку точно на фото */
-      var place = function () { f.style.inset = 'auto'; f.style.left = im.offsetLeft + 'px'; f.style.top = im.offsetTop + 'px'; f.style.width = im.offsetWidth + 'px'; f.style.height = im.offsetHeight + 'px'; };
-      place(); addEventListener('resize', place); if (!im.complete) im.addEventListener('load', place);
-    }
+    softMask(t, wide ? 3 : 6, wide ? 8 : 7);
   });
 
-  /* блок направлений: края перетекают в крем */
+  /* блок направлений: края перетекают в крем (маска; панель перерисовывается только при клике) */
   [].forEach.call(D.querySelectorAll('.dpanels .dp'), function (dp) {
-    var r = dp.getBoundingClientRect(), x = Math.min(4, 2000 / Math.max(r.width, 1)), y = Math.min(6, 3200 / Math.max(r.height, 1));
-    film(dp, null, edges(colorOf(dp), x, y)).style.zIndex = '1';
+    var r = dp.getBoundingClientRect();
+    softMask(dp, Math.min(4, 2000 / Math.max(r.width, 1)), Math.min(6, 3200 / Math.max(r.height, 1)));
   });
 
   /* широкое фото «Можно задержаться»: сверху крем, снизу вино */
