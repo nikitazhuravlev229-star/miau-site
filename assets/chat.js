@@ -26,7 +26,7 @@
       '<div class="ch-log" role="log" aria-live="polite"></div>' +
       '<form class="ch-in"><textarea rows="1" name="q" placeholder="Напиши вопрос" maxlength="600" aria-label="Сообщение"></textarea>' +
       '<button type="submit" class="ch-send" aria-label="Отправить"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></form>' +
-      '<p class="ch-note">Отвечает бот. Время подтвердит администратор.</p>';
+      '<p class="ch-note">Отвечает ИИ-ассистент. Время подтвердит администратор.</p>';
     D.body.appendChild(btn); D.body.appendChild(box);
     log = box.querySelector('.ch-log'); form = box.querySelector('.ch-in'); inp = form.querySelector('textarea');
     box.querySelector('.ch-x').addEventListener('click', function () { toggle(false); });
