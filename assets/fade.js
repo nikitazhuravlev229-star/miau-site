@@ -46,6 +46,13 @@
 
   var blocks = [].filter.call(D.querySelectorAll('section, footer.ft'), function (s) { return !s.parentElement.closest('section, footer') && s.getBoundingClientRect().height > 40; });
   var col = blocks.map(bg), band = vb();
+  /* кремовые блоки с фото становятся тёмными, как первый экран: без бежевых полей по бокам */
+  function bigImgs(s) { return [].filter.call(s.querySelectorAll('img'), function (m) { return !m.closest('.site-head, .ch, .bk, .intro') && (m.getBoundingClientRect().width || m.offsetWidth) > 200; }); }
+  blocks.forEach(function (s, i) {
+    if (i === 0 || col[i] !== 'c' || s.matches('.zr-sec, .map-sec, footer') || s.querySelector('.zr-sec, .mapx')) return;
+    if (!bigImgs(s).length) return;
+    col[i] = 'w'; s.classList.add('vf-dark');
+  });
   blocks.forEach(function (s, i) { s.dataset.vfc = col[i]; });
   function colorOf(el) { var s = el.closest('[data-vfc]'); return RGB[s ? s.dataset.vfc : 'c']; }
 
@@ -100,7 +107,7 @@
   /* блок направлений: края перетекают в крем (маска; панель перерисовывается только при клике) */
   [].forEach.call(D.querySelectorAll('.dpanels .dp'), function (dp) {
     var r = dp.getBoundingClientRect();
-    softMask(dp, Math.min(4, 2000 / Math.max(r.width, 1)), Math.min(6, 3200 / Math.max(r.height, 1)));
+    softMask(dp, dp.closest('.vf-dark') ? 0 : Math.min(4, 2000 / Math.max(r.width, 1)), Math.min(6, 3200 / Math.max(r.height, 1)));
   });
 
   /* широкое фото «Можно задержаться»: сверху крем, снизу вино */
@@ -112,4 +119,47 @@
   [].forEach.call(D.querySelectorAll('.mapx'), function (m) {
     var c = colorOf(m); film(m, null, fadeTo(c, '180deg', 0, 14) + ',' + fadeTo(c, '0deg', 0, 14)).style.zIndex = '500';
   });
+
+  /* фото рядом с текстом → фон блока до края экрана: к тексту, вверх и вниз уходит в вино, в полосах перехода прозрачно */
+  function pxMask(dir, total, a0, a1, b0, b1) {   /* прозрачно до a0, плавно до a1, сплошь до b0, плавно гаснет к b1 (всё в px) */
+    var st = ['transparent 0', 'transparent ' + a0 + 'px'], k, t;
+    for (k = 1; k <= 8; k++) { t = k / 8; st.push('rgba(0,0,0,' + ease(t).toFixed(3) + ') ' + (a0 + (a1 - a0) * t).toFixed(1) + 'px'); }
+    for (k = 1; k <= 8; k++) { t = k / 8; st.push('rgba(0,0,0,' + (1 - ease(t)).toFixed(3) + ') ' + (b0 + (b1 - b0) * t).toFixed(1) + 'px'); }
+    st.push('transparent ' + total + 'px');
+    return 'linear-gradient(' + dir + ',' + st.join(',') + ')';
+  }
+  var bleeds = [];
+  [].forEach.call(D.querySelectorAll('.vf-dark'), function (s) {
+    var imgs = bigImgs(s); if (imgs.length !== 1) return;
+    var im = imgs[0], P = im.closest('.zoom, .quote-ph, .svc-ph') || im.parentElement;
+    if (P.closest('.dpanels, .rc, .light-rail') || P === s) return;
+    var L = D.createElement('div'); L.className = 'vf-bg'; L.setAttribute('aria-hidden', 'true');
+    L.style.backgroundImage = 'url("' + (im.currentSrc || im.src) + '")';
+    s.insertBefore(L, s.firstChild); P.style.visibility = 'hidden';
+    bleeds.push([s, P, L, im]);
+  });
+  function layout() {
+    bleeds.forEach(function (b) {
+      var s = b[0], P = b[1], L = b[2], im = b[3];
+      if (im.currentSrc && L.style.backgroundImage.indexOf(im.currentSrc) < 0) L.style.backgroundImage = 'url("' + im.currentSrc + '")';
+      var sr = s.getBoundingClientRect(), pr = P.getBoundingClientRect(), H = s.offsetHeight;
+      var topT = s.classList.contains('vf-in') ? band : 0, botT = s.classList.contains('vf-out') ? band : 0;
+      var top = 0, h = H;
+      if (H > pr.height * 1.8) { top = Math.max(0, pr.top - sr.top - 140); h = Math.min(H - top, pr.height + 280); topT = top ? 0 : topT; botT = top + h < H - 1 ? 0 : botT; }
+      var st = L.style; st.top = top + 'px'; st.height = h + 'px';
+      var vm = pxMask('180deg', h, topT, topT + Math.max(120, h * .22), h - botT - Math.max(120, h * .22), h - botT), hm;
+      if (pr.width > sr.width * .7) {                                   /* телефон: фото сверху, текст под ним */
+        st.left = '0'; st.right = '0'; st.width = 'auto';
+        h = Math.min(H, pr.bottom - sr.top + 140); st.height = h + 'px';
+        vm = pxMask('180deg', h, topT, topT + 120, h - 220, h); hm = 'linear-gradient(#000,#000)';
+      } else {
+        var left = pr.left + pr.width / 2 < sr.left + sr.width / 2, w = left ? pr.right - sr.left + 140 : sr.right - pr.left + 140;
+        st.width = w + 'px'; st.left = left ? '0' : 'auto'; st.right = left ? 'auto' : '0';
+        hm = pxMask(left ? '90deg' : '270deg', w, 0, 0, w * .62, w);
+      }
+      st.webkitMaskImage = st.maskImage = hm + ',' + vm;
+      st.webkitMaskComposite = 'source-in'; st.maskComposite = 'intersect';
+    });
+  }
+  if (bleeds.length) { layout(); addEventListener('load', layout); var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(layout, 150); }); }
 })();

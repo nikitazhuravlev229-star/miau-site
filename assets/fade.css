@@ -15,3 +15,18 @@
 .v-fade .vf-mask{will-change:transform}
 /* в перетекании блоки идут без границ: убираем линии-разделители между секциями */
 .v-fade main > section{border-top:0!important;border-bottom:0!important}
+/* кремовые блоки с фото в перетекании — тёмные, как первый экран */
+.v-fade .vf-dark{background:#2A030C;color:#EFE4D6;position:relative;overflow:hidden}
+.v-fade .vf-dark > :not(.vf-bg){position:relative;z-index:1}
+.v-fade .vf-dark :is(h1,h2,h3,h4,p,span,b,li,a,small,label,.quote-k,.go):not(.btn){color:inherit}
+.v-fade .vf-dark .dp :is(h1,h2,h3,h4,p,span,b,li,small,label){color:#EFE4D6}
+.v-fade .vf-dark .btn-wine{background:#EFE4D6;border-color:#EFE4D6;color:#2A030C}
+.v-fade .vf-dark .btn-wine:hover{background:transparent;color:#EFE4D6}
+.v-fade .vf-dark .btn-ghost-d:hover{background:rgba(239,228,214,.12)}
+.v-fade .vf-dark .go:hover i{background:#EFE4D6;color:#2A030C}
+.v-fade .vf-dark .quote-k::before,.v-fade .vf-dark .svc-list li::before{background:#EFE4D6}
+.v-fade .vf-dark [style*="border"]{border-color:rgba(239,228,214,.25)!important}
+.v-fade .vf-bg{position:absolute;z-index:0;pointer-events:none;background-size:cover;background-position:center;filter:brightness(.82)}
+/* панели направлений — от края до края, без бежевых полей */
+.v-fade .fl-pan.vf-dark .wrap{max-width:none;padding-inline:0}
+.v-fade .fl-pan.vf-dark .dpanels{-webkit-mask-image:none;mask-image:none}
