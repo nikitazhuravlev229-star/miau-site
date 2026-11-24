@@ -74,7 +74,7 @@ async function chat(messages) {
       body: JSON.stringify({ model: 'GigaChat', temperature: 0.3, max_tokens: 400, messages: all })
     });
   }
-  if (!r.ok) throw new Error('llm ' + r.status);
+  if (!r.ok) throw new Error('llm ' + r.status + ' ' + (await r.text()).slice(0, 200));
   const j = await r.json();
   if (!j.choices || !j.choices[0]) throw new Error('llm ' + JSON.stringify(j).slice(0, 200)); /* Kie отдаёт ошибки и с кодом 200 */
   let text = j.choices[0].message.content || '';
@@ -101,7 +101,17 @@ function lead(p) {
   return fetch(`https://api.telegram.org/bot${process.env.TG_TOKEN}/sendMessage`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: process.env.TG_CHAT, text: L.join('\n'), disable_web_page_preview: true })
-  }).then(r => { if (!r.ok) throw new Error('telegram ' + r.status); });
+  }).then(async r => { if (!r.ok) throw new Error('telegram ' + r.status + ' ' + (await r.text()).slice(0, 200)); });
+}
+
+/* проверка связи: {"diag":true} — доступны ли модель и Telegram из функции */
+async function diag() {
+  const t = async (name, fn) => { const t0 = Date.now(); try { const r = await fn(); return name + ': ' + r.status + ' ' + (await r.text()).slice(0, 120) + ' (' + (Date.now() - t0) + ' мс)'; } catch (e) { return name + ': ' + (e.cause && e.cause.code || e.message) + ' (' + (Date.now() - t0) + ' мс)'; } };
+  const out = [];
+  if (process.env.LLM_URL) out.push(await t('llm', () => fetch(process.env.LLM_URL.replace(/chat\/completions$/, 'models'), { headers: { Authorization: 'Bearer ' + process.env.LLM_KEY }, signal: AbortSignal.timeout(10000) })));
+  out.push(await t('telegram', () => fetch(`https://api.telegram.org/bot${process.env.TG_TOKEN}/getMe`, { signal: AbortSignal.timeout(10000) })));
+  out.push('env: ' + ['LLM_URL', 'LLM_KEY', 'LLM_MODEL', 'TG_TOKEN', 'TG_CHAT', 'ALLOW_ORIGIN'].map(k => k + (process.env[k] ? '✓' : '✗')).join(' '));
+  return { diag: out.map(x => x.replace(/bot\d+:[\w-]+/g, 'bot***')) };
 }
 
 module.exports.handler = async function (event) {
@@ -115,12 +125,14 @@ module.exports.handler = async function (event) {
   let p;
   try { p = JSON.parse(event.isBase64Encoded ? Buffer.from(event.body, 'base64').toString() : event.body); } catch (e) { return res(400, { error: 'json' }); }
   try {
+    if (p.diag) return res(200, await diag());
     if (p.messages) return res(200, await chat(p.messages));
     if (!p.consent || !p.data || !p.data.phone) return res(400, { error: 'lead' });
     await lead(p);
     return res(200, { ok: true });
   } catch (e) {
     console.error(e);
-    return res(502, { error: 'upstream' });
+    /* причина без ключей и токенов: код ответа и текст ошибки сервиса */
+    return res(502, { error: 'upstream', detail: String(e && e.message || e).replace(/bot\d+:[\w-]+/g, 'bot***').slice(0, 300) });
   }
 };
