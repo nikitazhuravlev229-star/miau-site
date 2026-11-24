@@ -45,21 +45,22 @@
   }
 
   var blocks = [].filter.call(D.querySelectorAll('section, footer.ft'), function (s) { return !s.parentElement.closest('section, footer') && s.getBoundingClientRect().height > 40; });
-  var col = blocks.map(bg), band = vb(), colB;
-  colB = col.slice();
-  /* кремовые блоки с фото становятся тёмными, как первый экран: без бежевых полей по бокам */
+  /* Строгое чередование по всему сайту: бордовый, бежевый, бордовый, бежевый… начиная с первого экрана.
+     Блок, чей родной цвет не совпал с очередью, перекрашивается: vf-dark (беж → вино) или vf-lite (вино → беж).
+     Подвал всегда бордовый: если перед ним по очереди тоже бордовый — между ними бежевый перелив (vf-glow). */
+  if (!blocks.length) return;
+  var nat = blocks.map(bg), band = vb(), col = [], colB, glow = -1, n = blocks.length;
+  blocks.forEach(function (s, i) { col[i] = i === 0 ? nat[0] : (col[i - 1] === 'w' ? 'c' : 'w'); });
+  if (blocks[n - 1].matches('footer') && col[n - 1] !== 'w') { col[n - 1] = 'w'; glow = n - 1; }
   function bigImgs(s) { return [].filter.call(s.querySelectorAll('img'), function (m) { return !m.closest('.site-head, .ch, .bk, .intro') && (m.getBoundingClientRect().width || m.offsetWidth) > 200; }); }
   blocks.forEach(function (s, i) {
-    if (i === 0 || col[i] !== 'c' || s.matches('.zr-sec, .map-sec, footer') || s.querySelector('.zr-sec, .mapx')) return;
-    var bi = bigImgs(s); if (!bi.length) return;
-    col[i] = 'w'; s.classList.add('vf-dark');
-    /* длинный блок, где фото только в начале (например, «Команда»): верх тёмный, затем переход в беж, ниже — на беже */
-    var ph = bi[0].getBoundingClientRect();
-    if (bi.length === 1 && s.offsetHeight > ph.height * 1.8) { colB[i] = 'c'; s.classList.add('vf-split'); }
+    if (i === 0) return;
+    if (col[i] === 'w' && nat[i] === 'c') s.classList.add('vf-dark');
+    if (col[i] === 'c' && nat[i] === 'w') s.classList.add('vf-lite');
+    s.dataset.vfc = col[i];
   });
-  /* «Можно задержаться» заканчивается широким фото, уходящим в вино: если следующий блок тёмный — продолжаем вино без бежевой полосы */
-  blocks.forEach(function (s, i) { if (s.classList.contains('zr-sec') && i < blocks.length - 1 && col[i + 1] === 'w') { colB[i] = 'w'; s.classList.add('vf-zr-dark'); } });
-  blocks.forEach(function (s, i) { if (!s.classList.contains('vf-split') && !s.classList.contains('vf-zr-dark')) colB[i] = col[i]; s.dataset.vfc = col[i]; });
+  blocks[0].dataset.vfc = col[0];
+  colB = col.slice();
   function colorOf(el) { var s = el.closest('[data-vfc]'); return RGB[s ? s.dataset.vfc : 'c']; }
 
   blocks.forEach(function (s, i) {
@@ -88,16 +89,25 @@
         s.classList.add('vf-out');
         [].forEach.call(s.children, function (t) {
           if (!t.textContent.trim() || media.indexOf(t) > -1) return;
-          var pb = parseFloat(getComputedStyle(t).paddingBottom) || 0; t.style.paddingBottom = (pb + band * 1.05) + 'px';
+          var pb = parseFloat(getComputedStyle(t).paddingBottom) || 0; t.style.setProperty('padding-bottom', (pb + band * 1.05) + 'px', 'important');
         });
       }
       return;
     }
     if (col[i] !== 'w') return;
     var cs = getComputedStyle(s);
-    if (i > 0 && colB[i - 1] === 'w' && s.classList.contains('vf-dark') && !blocks[i - 1].classList.contains('vf-hero')) s.style.paddingTop = ((parseFloat(cs.paddingTop) || 0) + band * .5) + 'px';  /* два тёмных блока подряд — немного воздуха между ними */
-    if (i > 0 && colB[i - 1] === 'c') { s.classList.add('vf-in'); s.style.paddingTop = ((parseFloat(cs.paddingTop) || 0) + band * .8) + 'px'; }
-    if (i < blocks.length - 1 && colB[i] === 'w' && col[i + 1] === 'c') { s.classList.add('vf-out'); s.style.paddingBottom = ((parseFloat(cs.paddingBottom) || 0) + band * .8) + 'px'; }
+    if (i === glow) {                      /* бежевый перелив между двумя бордовыми: вино → беж → вино */
+      var gs = ['#2A030C 0'], kk, tt, ee;
+      for (kk = 1; kk <= 12; kk++) { tt = kk / 12; ee = ease(tt); gs.push('rgb(' + [42 + 197 * ee, 3 + 225 * ee, 12 + 202 * ee].map(Math.round).join(',') + ') ' + Math.round(band * tt) + 'px'); }
+      gs.push('#EFE4D6 ' + Math.round(band * 1.15) + 'px');
+      for (kk = 1; kk <= 12; kk++) { tt = kk / 12; ee = 1 - ease(tt); gs.push('rgb(' + [42 + 197 * ee, 3 + 225 * ee, 12 + 202 * ee].map(Math.round).join(',') + ') ' + Math.round(band * 1.15 + band * tt) + 'px'); }
+      s.classList.add('vf-glow'); s.style.setProperty('background', 'linear-gradient(180deg,' + gs.join(',') + ',#2A030C 100%)', 'important');
+      s.style.setProperty('padding-top', ((parseFloat(cs.paddingTop) || 0) + band * 2.15) + 'px', 'important');
+      return;
+    }
+    var kIn = s.querySelector('.mapx') ? 1.05 : .8;   /* карта растворяется в чистое вино — начинаем её после полосы перехода */
+    if (i > 0 && colB[i - 1] === 'c') { s.classList.add('vf-in'); s.style.setProperty('padding-top', ((parseFloat(cs.paddingTop) || 0) + band * kIn) + 'px', 'important'); }
+    if (i < blocks.length - 1 && colB[i] === 'w' && col[i + 1] === 'c') { s.classList.add('vf-out'); s.style.setProperty('padding-bottom', ((parseFloat(cs.paddingBottom) || 0) + band * kIn) + 'px', 'important'); }
   });
 
   /* фото внутри блоков: мягкие края маской */
@@ -119,7 +129,7 @@
 
   /* широкое фото «Можно задержаться»: сверху крем, снизу вино */
   [].forEach.call(D.querySelectorAll('.zr-sec .zr-frame'), function (f) {
-    film(f, null, fadeTo(RGB.c, '180deg', 0, 22) + ',' + fadeTo(RGB.w, '0deg', 0, 20));
+    var zc = colorOf(f); film(f, null, fadeTo(zc, '180deg', 0, 22) + ',' + fadeTo(zc, '0deg', 0, 20));
   });
 
   /* карта: растворяется сверху и снизу */
@@ -136,13 +146,14 @@
     return 'linear-gradient(' + dir + ',' + st.join(',') + ')';
   }
   var bleeds = [];
-  [].forEach.call(D.querySelectorAll('.vf-dark'), function (s) {
+  blocks.forEach(function (s, i) {
+    if (i === 0 || s.matches('.zr-sec, .map-sec, footer, .vf-hero') || s.querySelector('.zr-sec, .mapx')) return;
     var imgs = bigImgs(s); if (imgs.length !== 1) return;
     var im = imgs[0], P = im.closest('.zoom, .quote-ph, .svc-ph') || im.parentElement;
     if (P.closest('.dpanels, .rc, .light-rail') || P === s) return;
     var L = D.createElement('div'); L.className = 'vf-bg'; L.setAttribute('aria-hidden', 'true');
     L.style.backgroundImage = 'url("' + (im.currentSrc || im.src) + '")';
-    s.insertBefore(L, s.firstChild); P.style.visibility = 'hidden';
+    s.insertBefore(L, s.firstChild); P.style.visibility = 'hidden'; s.classList.add('vf-bleed');
     bleeds.push([s, P, L, im]);
   });
   function markLight(el, absY) {      /* всё, что ниже границы, — на беже: тёмный текст */
