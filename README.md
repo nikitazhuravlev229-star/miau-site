@@ -146,3 +146,8 @@ Leaflet + тайлы OpenStreetMap, тонированы фильтром в п�
 - Ссылка `…/index.html?fade` включает вариант, где фото растворяются в фон, а винные блоки перетекают в крем. Выбор запоминается в браузере (localStorage `miauFade`), `?flat` возвращает основной вид.
 - Файлы: `assets/fade.css` (все правила под `.v-fade`), `assets/fade.js` (расставляет классы `vf-in`, `vf-out`, `vf-hero`, `vf-m`, `vf-soft`). Класс `v-fade` ставит короткий скрипт в `<head>` каждой страницы.
 - Без `?fade` сайт выглядит как раньше: сплошные блоки без градиентов.
+
+## Доставка заявок (ноябрь 2026)
+- Из Яндекс-облака недоступны и api.telegram.org, и зарубежный VPS. Поэтому схема обратная: функция кладёт заявку в закрытый бакет `miau-leads-b1go8917` (переменная `LEADS_BUCKET`, у сервисного аккаунта `miau-ai` роль `storage.editor`), а VPS (Hostinger, сервис `miau-poller`, код `tools/assistant/vps/poller.py`) раз в 10 секунд забирает заявки (`{pull, secret}`) и после доставки в Telegram подтверждает (`{ack}`).
+- На VPS ещё стоит `miau-relay` (`tools/assistant/vps/relay.py`, Caddy, https://srv2151203.hstgr.cloud/miau-relay) — запасной путь «функция → VPS → Telegram», сейчас из Яндекса не используется.
+- Секрет общий: `RELAY_SECRET` в функции = переменная окружения сервисов на VPS.
