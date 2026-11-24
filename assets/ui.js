@@ -45,14 +45,20 @@
     }
     return '<div class="chips bk-dates" data-name="date">' + out.join('') + '</div>';
   }
-  var contactStep =
-    '<div class="bk-step" data-step="contacts"><p class="bk-q">Как с тобой связаться</p>' +
+  /* ник в Telegram: по номеру человека в Telegram часто не найти */
+  function tgNick(v) { v = String(v || '').trim().replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, ''); return /^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(v) ? '@' + v : ''; }
+  function contactStep(health) {
+    return '<div class="bk-step" data-step="contacts"><p class="bk-q">Как с тобой связаться</p>' +
     '<label class="fld"><span class="bk-l">Имя</span><input name="name" autocomplete="given-name" required><span class="msg"></span></label>' +
     '<label class="fld"><span class="bk-l">Телефон</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 ___ ___-__-__" required><span class="msg"></span></label>' +
     '<div><p class="bk-l">Удобнее</p>' + chips('channel', ['Позвонить', 'Telegram', 'WhatsApp']) + '</div>' +
+    '<label class="fld" data-tg hidden><span class="bk-l">Ник в Telegram</span><input name="tg" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="@username" maxlength="40"><span class="msg"></span></label>' +
+    (health ? '<label class="fld"><span class="bk-l">Здоровье — что важно знать мастеру</span><textarea name="health" rows="2" maxlength="300" placeholder="По желанию: беременность, травмы, давление, аллергия на масла"></textarea></label>' : '') +
     '<label class="fld"><span class="bk-l">Комментарий</span><textarea name="comment" rows="3" placeholder="Пожелания, вопросы"></textarea></label>' +
     '<label class="ok-box"><input type="checkbox" name="consent"><span>Даю <a href="dokumenty.html#soglasie" target="_blank">согласие на обработку персональных данных</a></span></label>' +
+    (health ? '<label class="ok-box" data-hc hidden><input type="checkbox" name="hconsent"><span>Даю <a href="dokumenty.html#zdorovie" target="_blank">согласие на обработку сведений о здоровье</a></span></label>' : '') +
     '</div>';
+  }
 
   var FLOWS = {
     book: {
@@ -65,7 +71,7 @@
         '<div><p class="bk-l">Время</p>' + chips('time', ['Утро, 10–13', 'День, 13–17', 'Вечер, 17–21', ['own', 'Другое']]) + '</div>' +
         '<label class="fld" data-own-time hidden><span class="bk-l">Своё время</span><input name="owntime" placeholder="Например, 19:30 или после 20" maxlength="40"></label>' +
         '<div><p class="bk-l">Специалист</p>' + chips('master', ['Любой свободный', 'Уже знаю, к кому — напишу в комментарии']) + '</div></div>',
-        contactStep
+        contactStep(true)
       ],
       done: 'Администратор свяжется с тобой, чтобы подтвердить время.'
     },
@@ -81,7 +87,7 @@
         '<label class="fld"><span class="bk-l">От кого</span><input name="from" maxlength="40"></label>' +
         '<label class="fld"><span class="bk-l">Пожелание</span><textarea name="wish" rows="2" maxlength="140" placeholder="Пара тёплых слов — впишем от руки"></textarea></label>' +
         '<div><p class="bk-l">Как получить</p>' + chips('get', ['Заберу на Фрунзенской, 46', 'Электронный — в мессенджер']) + '</div></div>',
-        contactStep
+        contactStep(false)
       ],
       done: 'Администратор свяжется с тобой, чтобы подтвердить сертификат и оплату.'
     }
@@ -110,6 +116,7 @@
       c.setAttribute('aria-pressed', on ? 'true' : 'false');
       state.v[name] = multi ? [].filter.call(g.children, function (x) { return x.getAttribute('aria-pressed') === 'true'; }).map(function (x) { return x.dataset.v; }).join(',') : (on ? c.dataset.v : '');
       if (name === 'dir' && kind === 'book') svc(state.v.dir);
+      if (name === 'channel') { var tg = bk.querySelector('[data-tg]'); tg.hidden = state.v.channel !== 'Telegram'; if (!tg.hidden) tg.querySelector('input').focus(); }
       if (name === 'time') { var ot = bk.querySelector('[data-own-time]'); ot.hidden = state.v.time !== 'own'; if (!ot.hidden) ot.querySelector('input').focus(); }
       if (kind === 'cert') {
         if (name === 'sum') { state.v.dir = ''; clearGroup('dir'); }
@@ -124,9 +131,10 @@
       if (t.name === 'own') t.value = t.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
       state.v[t.name] = t.value;
       t.closest('.fld') && t.closest('.fld').classList.remove('err');
+      if (t.name === 'health') { var hc = bk.querySelector('[data-hc]'); if (hc) hc.hidden = !t.value.trim(); }
       if (kind === 'cert') preview();
     });
-    form.addEventListener('change', function (e) { if (e.target.name === 'consent') { state.v.consent = e.target.checked; e.target.closest('.ok-box').classList.remove('err'); } });
+    form.addEventListener('change', function (e) { if (e.target.name === 'consent' || e.target.name === 'hconsent') { state.v[e.target.name] = e.target.checked; e.target.closest('.ok-box').classList.remove('err'); } });
     form.addEventListener('submit', function (e) { e.preventDefault(); next(); });
     bk.querySelector('.bk-x').addEventListener('click', function () { close(); });
     ov.addEventListener('click', function () { close(); });
@@ -189,6 +197,10 @@
       if (!nm.value.trim()) { mark(nm, 'Как к тебе обращаться?'); ok = false; }
       if (ph.value.replace(/\D/g, '').length !== 11) { mark(ph, 'Нужен номер целиком'); ok = false; }
       if (!cs.checked) { cs.closest('.ok-box').classList.add('err'); ok = false; }
+      var tg = step.querySelector('[name=tg]');
+      if (state.v.channel === 'Telegram' && !tgNick(tg.value)) { mark(tg, tg.value.trim() ? 'Ник — латиницей, от 5 символов, например @anna_m' : 'Напиши ник — по номеру в Telegram могут не найти'); ok = false; }
+      var hl = step.querySelector('[name=health]'), hcb = step.querySelector('[name=hconsent]');
+      if (hl && hl.value.trim() && !hcb.checked) { hcb.closest('.ok-box').classList.add('err'); ok = false; }
     }
     return ok;
   }
@@ -207,14 +219,17 @@
       sum = v.sum === 'own' ? (v.own || '') + ' ₽' : v.sum ? money(+v.sum) : '';
       rows = [['Сертификат', v.dir ? 'На направление ' + DIRS[v.dir].name : sum], ['Кому', v.to || '—'], ['От кого', v.from || '—'], ['Получение', v.get || 'Уточним']];
     }
-    rows = rows.concat([['Имя', v.name], ['Телефон', v.phone], ['Связь', v.channel || 'Позвонить']]);
+    rows = rows.concat([['Имя', v.name], ['Телефон', v.phone], ['Связь', v.channel === 'Telegram' ? 'Telegram ' + tgNick(v.tg) : (v.channel || 'Позвонить')]]);
+    if (state.kind === 'book' && (v.health || '').trim()) rows.push(['Здоровье', v.health.trim()]);
     bk.querySelector('[data-sum]').innerHTML = rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1] || '—') + '</dd></div>'; }).join('');
     [].forEach.call(bk.querySelectorAll('.bk-step'), function (s) { s.classList.remove('cur'); });
     bk.querySelector('.bk-done').classList.add('cur');
     bk.querySelector('.bk-steps').style.visibility = 'hidden';
     bk.querySelector('.bk-back').style.visibility = 'hidden';
     var nb = bk.querySelector('.bk-next'); nb.textContent = 'Готово'; nb.onclick = function (e) { e.stopImmediatePropagation(); close(); };
-    var data = {}; Object.keys(v).forEach(function (k) { if (k !== 'consent') data[k] = v[k]; });
+    var data = {}; Object.keys(v).forEach(function (k) { if (k !== 'consent' && k !== 'hconsent') data[k] = v[k]; });
+    if (v.channel === 'Telegram') data.tg = tgNick(v.tg); else delete data.tg;
+    if (!(data.health || '').trim() || !v.hconsent) delete data.health; else data.health = data.health.trim();
     if (state.kind === 'cert') data.sum = sum || '';                       /* «Своя сумма» → число, а не «own» */
     if (data.time === 'own') { data.time = data.owntime || 'Своё — уточним'; delete data.owntime; }
     var payload = { type: state.kind, source: 'form', data: data, consent: true, page: location.pathname, at: new Date().toISOString() };

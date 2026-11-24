@@ -109,6 +109,13 @@
   function askName() { flow.wait = 'name'; bot('Как к тебе обращаться?'); inp.placeholder = 'Имя'; }
   function askPhone() { flow.wait = 'phone'; bot('Телефон для связи?'); inp.placeholder = '+7 ___ ___-__-__'; inp.setAttribute('inputmode', 'tel'); }
   function askChannel() { bot('Как удобнее связаться?'); chips([['Позвонить', 'Позвонить'], ['Telegram', 'Telegram'], ['WhatsApp', 'WhatsApp']], 'channel'); }
+  function tgNick(v) { v = String(v || '').trim().replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, ''); return /^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(v) ? '@' + v : ''; }
+  function askTg() { flow.wait = 'tg'; bot('Напиши свой ник в Telegram, например @anna_m — по номеру там могут не найти.'); inp.placeholder = '@username'; chips([['notg', 'Ника нет — лучше позвонить']], 'tg'); }
+  function askHealth() {
+    bot('Есть что-то о здоровье, что важно знать мастеру? Например, беременность, травмы, давление, аллергия на масла. Это по желанию.');
+    chips([['no', 'Нет, всё хорошо'], ['yes', 'Есть — напишу'], ['later', 'Обсужу с администратором']], 'health');
+  }
+  function afterContacts() { return flow.kind === 'book' ? askHealth() : askConsent(); }
   function askConsent() {
     var v = flow.v, rows = [];
     if (flow.kind === 'book') {
@@ -117,18 +124,21 @@
     } else {
       rows = [['Сертификат', v.dir ? 'На направление ' + (DIRS[v.dir] ? DIRS[v.dir].name : v.dir) : (v.sum ? money(+v.sum) : '—')], ['Кому', v.to || '—']];
     }
-    rows = rows.concat([['Имя', v.name], ['Телефон', v.phone], ['Связь', v.channel]]);
+    rows = rows.concat([['Имя', v.name], ['Телефон', v.phone], ['Связь', v.channel === 'Telegram' && v.tg ? 'Telegram ' + v.tg : v.channel]]);
+    if (v.health) rows.push(['Здоровье', v.health]);
     add('ch-act', '<dl class="ch-sum">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1] || '—') + '</dd></div>'; }).join('') + '</dl>' +
       '<label class="ok-box ch-cs"><input type="checkbox" name="consent"><span>Даю <a href="dokumenty.html#soglasie" target="_blank">согласие на обработку персональных данных</a></span></label>' +
+      (v.health ? '<label class="ok-box ch-cs"><input type="checkbox" name="hconsent"><span>Даю <a href="dokumenty.html#zdorovie" target="_blank">согласие на обработку сведений о здоровье</a></span></label>' : '') +
       '<div class="ch-row"><button type="button" class="btn btn-wine" data-send>Отправить заявку</button><button type="button" class="btn" data-redo>Заново</button></div>');
     var a = log.lastChild;
     a.querySelector('[data-redo]').addEventListener('click', function () { lock(a); var k = flow.kind; flow = null; k === 'book' ? startBook() : startCert(); });
     a.querySelector('[data-send]').addEventListener('click', function () {
       var cs = a.querySelector('[name=consent]');
       if (!cs.checked) { cs.closest('.ok-box').classList.add('err'); return; }
+      var hc = a.querySelector('[name=hconsent]'); if (hc && !hc.checked) { hc.closest('.ok-box').classList.add('err'); return; }
       lock(a); submit();
     });
-    a.querySelector('[name=consent]').addEventListener('change', function (e) { e.target.closest('.ok-box').classList.remove('err'); });
+    [].forEach.call(a.querySelectorAll('[name=consent],[name=hconsent]'), function (x) { x.addEventListener('change', function (e) { e.target.closest('.ok-box').classList.remove('err'); }); });
   }
   function submit() {
     var v = flow.v, data = {};
@@ -160,7 +170,13 @@
       v.sum = val; flow.wait = 'to'; bot('Кому сертификат? Имя для открытки.'); inp.placeholder = 'Имя получательницы'; return;
     }
     if (key === 'certdir') { v.dir = val; flow.wait = 'to'; bot('Кому сертификат? Имя для открытки.'); inp.placeholder = 'Имя получательницы'; return; }
-    if (key === 'channel') { v.channel = val; return askConsent(); }
+    if (key === 'channel') { v.channel = val; return val === 'Telegram' ? askTg() : afterContacts(); }
+    if (key === 'tg') { flow.wait = null; inp.placeholder = 'Напиши вопрос'; v.channel = 'Позвонить'; return afterContacts(); }
+    if (key === 'health') {
+      if (val === 'yes') { flow.wait = 'health'; bot('Напиши коротко — это увидят только администратор и мастер.'); inp.placeholder = 'Например: беременность 20 недель'; return; }
+      if (val === 'later') v.healthNote = 'Обсудит с администратором';
+      return askConsent();
+    }
   }
   function typed(t) {
     var w = flow.wait; flow.wait = null; inp.placeholder = 'Напиши вопрос'; inp.removeAttribute('inputmode');
@@ -168,6 +184,8 @@
     if (w === 'time') { v.time = t; return askName(); }
     if (w === 'sum') { var n = +t.replace(/[^\d]/g, ''); if (!n || n < 1000) { flow.wait = 'sum'; inp.setAttribute('inputmode', 'numeric'); return bot('Нужна сумма от 1 000 ₽.'); } v.sum = String(n); flow.wait = 'to'; bot('Кому сертификат? Имя для открытки.'); inp.placeholder = 'Имя получательницы'; return; }
     if (w === 'to') { v.to = t.slice(0, 28); return askName(); }
+    if (w === 'tg') { var nk = tgNick(t); if (!nk) { flow.wait = 'tg'; inp.placeholder = '@username'; return bot('Ник пишется латиницей, от 5 символов, например @anna_m. Если ника нет — нажми «Ника нет».'); } v.tg = nk; return afterContacts(); }
+    if (w === 'health') { v.health = t.slice(0, 300); return askConsent(); }
     if (w === 'name') { v.name = t.slice(0, 40); return askPhone(); }
     if (w === 'phone') {
       var d = t.replace(/\D/g, ''); if (d.length === 10) d = '7' + d; if (d[0] === '8') d = '7' + d.slice(1);

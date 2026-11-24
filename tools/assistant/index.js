@@ -122,7 +122,11 @@ function lead(p, context) {
   const add = (k, v) => { if (v) L.push(`${k}: ${String(v).slice(0, 300)}`); };
   if (p.type === 'cert') { add('Сумма', d.sum); add('Направление', dirName(d.dir)); add('Кому', d.to); add('От кого', d.from); add('Пожелание', d.wish); add('Получение', d.get); }
   else { add('Направления', dirName(d.dir)); add('Услуги', d.svc); add('День', d.date); add('Время', d.time === 'own' ? d.owntime : d.time); add('Специалист', d.master); }
-  add('Имя', d.name); add('Телефон', d.phone); add('Связь', d.channel); add('Комментарий', d.comment);
+  add('Имя', d.name); add('Телефон', d.phone); add('Связь', d.channel);
+  const nick = /^@[A-Za-z][A-Za-z0-9_]{4,31}$/.test(d.tg || '') ? d.tg : '';
+  add('Telegram', nick && `${nick} — https://t.me/${nick.slice(1)}`);
+  add('⚕️ Здоровье', d.health || d.healthNote);   /* особая категория персданных: отправляется только с отдельным согласием */
+  add('Комментарий', d.comment);
   if (p.dialog) L.push('\nДиалог:\n' + String(p.dialog).slice(0, 2500));
   return process.env.LEADS_BUCKET ? queueLead(L.join('\n'), context) : sendTelegram(L.join('\n'));
 }
