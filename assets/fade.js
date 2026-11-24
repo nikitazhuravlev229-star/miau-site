@@ -57,7 +57,9 @@
     var ph = bi[0].getBoundingClientRect();
     if (bi.length === 1 && s.offsetHeight > ph.height * 1.8) { colB[i] = 'c'; s.classList.add('vf-split'); }
   });
-  blocks.forEach(function (s, i) { if (!s.classList.contains('vf-split')) colB[i] = col[i]; s.dataset.vfc = col[i]; });
+  /* «Можно задержаться» заканчивается широким фото, уходящим в вино: если следующий блок тёмный — продолжаем вино без бежевой полосы */
+  blocks.forEach(function (s, i) { if (s.classList.contains('zr-sec') && i < blocks.length - 1 && col[i + 1] === 'w') { colB[i] = 'w'; s.classList.add('vf-zr-dark'); } });
+  blocks.forEach(function (s, i) { if (!s.classList.contains('vf-split') && !s.classList.contains('vf-zr-dark')) colB[i] = col[i]; s.dataset.vfc = col[i]; });
   function colorOf(el) { var s = el.closest('[data-vfc]'); return RGB[s ? s.dataset.vfc : 'c']; }
 
   blocks.forEach(function (s, i) {
@@ -93,6 +95,7 @@
     }
     if (col[i] !== 'w') return;
     var cs = getComputedStyle(s);
+    if (i > 0 && colB[i - 1] === 'w' && s.classList.contains('vf-dark') && !blocks[i - 1].classList.contains('vf-hero')) s.style.paddingTop = ((parseFloat(cs.paddingTop) || 0) + band * .5) + 'px';  /* два тёмных блока подряд — немного воздуха между ними */
     if (i > 0 && colB[i - 1] === 'c') { s.classList.add('vf-in'); s.style.paddingTop = ((parseFloat(cs.paddingTop) || 0) + band * .8) + 'px'; }
     if (i < blocks.length - 1 && colB[i] === 'w' && col[i + 1] === 'c') { s.classList.add('vf-out'); s.style.paddingBottom = ((parseFloat(cs.paddingBottom) || 0) + band * .8) + 'px'; }
   });
@@ -174,7 +177,9 @@
       var vm = pxMask('180deg', h, topT, topT + Math.max(120, h * .22), h - botT - Math.max(120, h * .22), h - botT), hm;
       if (pr.width > sr.width * .7) {                                   /* телефон: фото сверху, текст под ним */
         st.left = '0'; st.right = '0'; st.width = 'auto';
-        h = Math.min(H, pr.bottom - sr.top + 140); st.height = h + 'px';
+        /* фон начинается там, где стоит само фото: если текст над фото — текст остаётся на чистом вине */
+        top = Math.max(0, Math.round(pr.top - sr.top - 100)); if (top) topT = 0;
+        h = Math.min(H - top, Math.round(pr.bottom - sr.top + 140 - top)); st.top = top + 'px'; st.height = h + 'px';
         vm = pxMask('180deg', h, topT, topT + 120, h - 220, h); hm = 'linear-gradient(#000,#000)';
       } else {
         var left = pr.left + pr.width / 2 < sr.left + sr.width / 2, w = left ? pr.right - sr.left + 140 : sr.right - pr.left + 140;
